@@ -1,4 +1,4 @@
-const STORAGE_KEY="packtrail_v4";
+const STORAGE_KEY="packtrail_v5";
 
 const defaultData={
 trips:[],
@@ -44,7 +44,8 @@ const packingDatabase={
 "Theme Park":[{name:"Tickets",qty:1},{name:"Portable charger",qty:1},{name:"Water bottle",qty:"people"},{name:"Comfortable shoes",qty:"people"},{name:"Small backpack",qty:1}],
 "Cycling":[{name:"Bike helmet",qty:"people"},{name:"Bike gloves",qty:"people"},{name:"Water bottle",qty:"people"},{name:"Bike repair kit",qty:1}],
 "Pets":[{name:"Pet food",qty:1},{name:"Water bowl",qty:1},{name:"Leash",qty:1},{name:"Waste bags",qty:1},{name:"Pet bed / blanket",qty:1,minNights:1}],
-"Kids":[{name:"Kids clothing",qty:1},{name:"Favorite toy",qty:1},{name:"Kids snacks",qty:1},{name:"Wipes",qty:1},{name:"Entertainment",qty:1}]
+"Kids":[{name:"Kids clothing",qty:1},{name:"Favorite toy",qty:1},{name:"Kids snacks",qty:1},{name:"Wipes",qty:1},{name:"Entertainment",qty:1}],
+"Other":[]
 };
 
 let data=loadData();
@@ -58,6 +59,9 @@ const backButton=document.getElementById("backBtn");
 const topTitle=document.getElementById("topTitle");
 const toast=document.getElementById("toast");
 const modalOverlay=document.getElementById("modalOverlay");
+
+const gearMenuButton=document.querySelector('[data-nav="gear"]');
+if(gearMenuButton)gearMenuButton.style.display="none";
 
 function loadData(){
  const s=localStorage.getItem(STORAGE_KEY);
@@ -74,7 +78,7 @@ menuButton.onclick=()=>{drawer.classList.add("open");drawerOverlay.classList.rem
 drawerOverlay.onclick=closeMenu;
 document.querySelectorAll("[data-nav]").forEach(b=>b.onclick=()=>{closeMenu();state.history=[];state.page=b.dataset.nav;render()});
 function navigate(p){if(state.page!==p)state.history.push(state.page);state.page=p;render()}
-backButton.onclick=()=>{if(state.page==="packing"){const t=activeTrip();if(t){state.newTrip=structuredClone(t);state.editingExistingTrip=true;state.page="categories";render();return}}state.page=state.history.length?state.history.pop():"home";render()};
+backButton.onclick=()=>{if(state.page==="packing"){state.history=[];state.newTrip=null;state.editingExistingTrip=false;state.page="home";render();return}state.page=state.history.length?state.history.pop():"home";render()};
 
 function allCategoryNames(){return [...new Set([...Object.keys(packingDatabase),...Object.keys(data.customLibrary||{})])]}
 function libraryForCategory(c){return [...(packingDatabase[c]||[]),...(data.customLibrary[c]||[])]}
@@ -83,6 +87,10 @@ function render(){
  window.scrollTo(0,0);
  const noBack=["home","trips","gear","shopping","settings","about"];
  backButton.classList.toggle("hidden",noBack.includes(state.page));
+ const isPacking=state.page==="packing";
+ backButton.textContent=isPacking?"✓":"←";
+ backButton.classList.toggle("finish-button",isPacking);
+ backButton.setAttribute("aria-label",isPacking?"Finish and return home":"Go back");
  topTitle.textContent={home:"PackTrail",tripType:"New Trip",tripDetails:"Trip Details",categories:"Categories",packing:"Packing List",trips:"My Trips",gear:"My Gear",shopping:"Shopping List",settings:"Settings",about:"About"}[state.page]||"PackTrail";
  ({home:renderHome,tripType:renderTripTypes,tripDetails:renderTripDetails,categories:renderCategories,packing:renderPackingList,trips:renderTrips,gear:renderGear,shopping:renderShopping,settings:renderSettings,about:renderAbout}[state.page]||renderHome)();
  setTimeout(()=>window.scrollTo(0,0),0)
@@ -226,28 +234,16 @@ function openBuy(t,c,x){
 
 function openEditor(t,currentCategory,x){
  let d={name:x?.name||"",required:x?.required||1,packed:x?.packed||0,needToBuy:x?.needToBuy||0};
- const cats=allCategoryNames();
- const currentOptions=[...new Set([...Object.keys(t.items),...cats])];
+ const currentOptions=[...new Set([...Object.keys(t.items),...allCategoryNames()])];
  modalOverlay.innerHTML=`<div class="modal-sheet"><h2 class="modal-title">${x?"Edit Item":"Add Item"}</h2>
  <div class="modal-field"><label class="field-label">Item name</label><input id="en" class="text-input" value="${esc(d.name)}"></div>
  <div class="modal-field"><label class="field-label">Required quantity</label><div class="modal-counter"><button id="rm">−</button><div id="rv" class="modal-counter-value">${d.required}</div><button id="rp">+</button></div></div>
- <div class="modal-field"><label class="field-label">Category</label><select id="ec" class="select-input">
- <option value="__new__">+ New category</option>${currentOptions.map(n=>`<option value="${esc(n)}" ${n===currentCategory?"selected":""}>${n}</option>`).join("")}</select></div>
+ <div class="modal-field"><label class="field-label">Category</label><select id="ec" class="select-input"><option value="__new__">+ New Category</option>${currentOptions.map(n=>`<option value="${esc(n)}" ${n===currentCategory?"selected":""}>${n}</option>`).join("")}</select></div>
  <div class="button-row"><button id="cancel" class="secondary-button">Cancel</button><button id="save" class="primary-button">Save</button></div></div>`;
  modalOverlay.classList.remove("hidden");
  const ref=()=>rv.textContent=d.required;rm.onclick=()=>{d.required=Math.max(1,d.required-1);d.packed=Math.min(d.packed,d.required);ref()};rp.onclick=()=>{d.required++;ref()};cancel.onclick=closeModal;
- save.onclick=()=>{
-   const n=en.value.trim();if(!n)return showToast("Enter an item name");
-   let target=ec.value;
-   if(target==="__new__"){target=prompt("New category name");if(!target)return}
-   if(!t.items[target])t.items[target]=[];
-   if(x)t.items[currentCategory]=t.items[currentCategory].filter(i=>i.id!==x.id);
-   const newItem={...(x||{}),id:x?.id||String(Date.now())+Math.random(),name:n,required:d.required,packed:Math.min(d.packed,d.required),needToBuy:d.needToBuy,bought:Math.min(x?.bought||0,d.needToBuy)};
-   t.items[target].push(newItem);
-   if(t.items[currentCategory]&&t.items[currentCategory].length===0)delete t.items[currentCategory];
-   persistCustomItem(target,n,d.required);
-   t.categories=Object.keys(t.items);saveData();closeModal();renderPackingList()
- }
+ ec.onchange=()=>{if(ec.value!=="__new__")return;const newName=prompt("New category name");if(!newName){ec.value=currentCategory&&currentOptions.includes(currentCategory)?currentCategory:"Other";return}if(!data.customLibrary[newName])data.customLibrary[newName]=[];if(!t.items[newName])t.items[newName]=[];const option=document.createElement("option");option.value=newName;option.textContent=newName;ec.appendChild(option);ec.value=newName;saveData()};
+ save.onclick=()=>{const n=en.value.trim();if(!n)return showToast("Enter an item name");let target=ec.value;if(target==="__new__"){const newName=prompt("New category name");if(!newName)return;target=newName;if(!data.customLibrary[target])data.customLibrary[target]=[]}if(!target)target="Other";if(!t.items[target])t.items[target]=[];if(x)t.items[currentCategory]=t.items[currentCategory].filter(i=>i.id!==x.id);const newItem={...(x||{}),id:x?.id||String(Date.now())+Math.random(),name:n,required:d.required,packed:Math.min(d.packed,d.required),needToBuy:d.needToBuy,bought:Math.min(x?.bought||0,d.needToBuy)};t.items[target].push(newItem);if(t.items[currentCategory]&&t.items[currentCategory].length===0)delete t.items[currentCategory];persistCustomItem(target,n,d.required);t.categories=Object.keys(t.items);saveData();closeModal();renderPackingList()}
 }
 
 function persistCustomItem(category,name,required){
@@ -259,33 +255,19 @@ function persistCustomItem(category,name,required){
 }
 
 function openAddCategory(t){
- const unused=allCategoryNames().filter(c=>!Object.keys(t.items).includes(c));
- modalOverlay.innerHTML=`<div class="modal-sheet"><h2 class="modal-title">Add Category</h2><div class="option-list">
- <button class="option-button new-category" id="newCategoryChoice">+ New Category</button>
- ${unused.map(c=>`<button class="option-button" data-category-choice="${esc(c)}">${c}</button>`).join("")}
- </div><div class="button-row"><button id="cancelCategory" class="secondary-button">Cancel</button></div></div>`;
- modalOverlay.classList.remove("hidden");
- cancelCategory.onclick=closeModal;
- newCategoryChoice.onclick=()=>{
-   const name=prompt("New category name");if(!name)return;
-   if(!data.customLibrary[name])data.customLibrary[name]=[];
-   if(!t.items[name])t.items[name]=[];
-   t.categories=Object.keys(t.items);saveData();closeModal();openEditor(t,name,null)
- };
- document.querySelectorAll("[data-category-choice]").forEach(b=>b.onclick=()=>{
-   const c=b.dataset.categoryChoice;
-   if(!t.items[c])t.items[c]=libraryForCategory(c).filter(d=>includeItem(d,t)).map(d=>({id:String(Date.now())+Math.random(),name:d.name,required:qty(d.qty,t),packed:0,needToBuy:0,bought:0}));
-   t.categories=Object.keys(t.items);saveData();closeModal();renderPackingList()
- })
+ const unused=allCategoryNames().filter(c=>!Object.keys(t.items).includes(c)&&c!=="Other");
+ modalOverlay.innerHTML=`<div class="modal-sheet"><h2 class="modal-title">Add Category</h2><div class="option-list"><button class="option-button new-category" id="newCategoryChoice">+ New Category</button>${!Object.keys(t.items).includes("Other")?'<button class="option-button" data-category-choice="Other">Other</button>':""}${unused.map(c=>`<button class="option-button" data-category-choice="${esc(c)}">${c}</button>`).join("")}</div><div class="button-row"><button id="cancelCategory" class="secondary-button">Cancel</button></div></div>`;
+ modalOverlay.classList.remove("hidden");cancelCategory.onclick=closeModal;
+ newCategoryChoice.onclick=()=>{const name=prompt("New category name");if(!name)return;if(!data.customLibrary[name])data.customLibrary[name]=[];if(!t.items[name])t.items[name]=[];t.categories=Object.keys(t.items);saveData();closeModal();openEditor(t,name,null)};
+ document.querySelectorAll("[data-category-choice]").forEach(b=>b.onclick=()=>{const c=b.dataset.categoryChoice;if(c==="Other"){if(!t.items[c])t.items[c]=[];t.categories=Object.keys(t.items);saveData();closeModal();openEditor(t,c,null);return}if(!t.items[c])t.items[c]=libraryForCategory(c).filter(d=>includeItem(d,t)).map(d=>({id:String(Date.now())+Math.random(),name:d.name,required:qty(d.qty,t),packed:0,needToBuy:0,bought:0}));if(t.items[c].length===0){t.categories=Object.keys(t.items);saveData();closeModal();openEditor(t,c,null);return}t.categories=Object.keys(t.items);saveData();closeModal();renderPackingList()})
 }
 
 function closeModal(){modalOverlay.classList.add("hidden");modalOverlay.innerHTML=""}
 
 function renderTrips(){
- screen.innerHTML=`<h1 class="page-title">My Trips</h1><p class="page-subtitle">Open any trip and continue packing.</p>
- ${data.trips.length?`<div class="stack">${data.trips.map(t=>{const z=totals(t);return`<div class="trip-row" data-trip="${t.id}"><div class="trip-icon">${t.emoji}</div><div class="trip-main"><div class="trip-name">${t.name}</div><div class="trip-small">${t.duration} ${t.duration===1?"day":"days"} · ${t.season} · ${z.packed} / ${z.required} packed</div></div><span class="badge">${z.required&&z.packed===z.required?"Done":"Active"}</span></div>`}).join("")}</div>`:'<div class="empty">No saved trips yet.</div>'}
- <div class="button-row"><button id="newTripFromTrips" class="primary-button">+ New Trip</button></div>`;
+ screen.innerHTML=`<h1 class="page-title">My Trips</h1><p class="page-subtitle">Open any trip and continue packing.</p>${data.trips.length?`<div class="stack">${data.trips.map(t=>{const z=totals(t);return`<div class="trip-row"><div class="trip-icon" data-trip="${t.id}">${t.emoji}</div><div class="trip-main" data-trip="${t.id}"><div class="trip-name">${t.name}</div><div class="trip-small">${t.duration} ${t.duration===1?"day":"days"} · ${t.season} · ${z.packed} / ${z.required} packed</div></div><div class="trip-row-actions"><span class="badge" data-trip="${t.id}">${z.required&&z.packed===z.required?"Done":"Active"}</span><button class="trip-delete-button" data-delete-trip="${t.id}">🗑</button></div></div>`}).join("")}</div>`:'<div class="empty">No saved trips yet.</div>'}<div class="button-row"><button id="newTripFromTrips" class="primary-button">+ New Trip</button></div>`;
  document.querySelectorAll("[data-trip]").forEach(r=>r.onclick=()=>{state.activeTripId=r.dataset.trip;state.page="packing";render()});
+ document.querySelectorAll("[data-delete-trip]").forEach(b=>b.onclick=e=>{e.stopPropagation();const trip=data.trips.find(t=>t.id===b.dataset.deleteTrip);if(!trip)return;if(!confirm(`Delete "${trip.name}"?`))return;data.trips=data.trips.filter(t=>t.id!==trip.id);if(state.activeTripId===trip.id)state.activeTripId=null;saveData();showToast("Trip deleted");renderTrips()});
  newTripFromTrips.onclick=()=>{state.newTrip=null;state.editingExistingTrip=false;state.history=["trips"];state.page="tripType";render()}
 }
 
