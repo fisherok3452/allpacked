@@ -112,7 +112,7 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 }
 
 
-/* AllPacked v0.11 â restore simple top navigation icons */
+/* AllPacked v0.11 — restore simple top navigation icons */
 .menu-button,
 .back-button,
 .back-button.finish-button{
@@ -152,7 +152,7 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 }
 
 
-/* AllPacked v0.12 â unified drawer typography and branding */
+/* AllPacked v0.12 — unified drawer typography and branding */
 .drawer{
   padding:
     calc(26px + env(safe-area-inset-top))
@@ -231,7 +231,7 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 }
 
 
-/* AllPacked v0.13 â final navigation/drawer class alignment */
+/* AllPacked v0.13 — final navigation/drawer class alignment */
 .icon-btn{
   display:none !important;
 }
@@ -313,4 +313,51 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 .drawer-footer{
   font-size:12px;
   font-weight:400;
+}
+
+
+/* AllPacked v0.14 */
+.buy-status-button{
+  appearance:none;
+  -webkit-appearance:none;
+  border:none;
+  font:inherit;
+  cursor:pointer;
+}
+.buy-status-button:active{
+  opacity:.6;
+}
+.about-feature{
+  display:grid;
+  grid-template-columns:38px 1fr;
+  gap:12px;
+  padding:15px 0;
+  border-top:1px solid #eeece6;
+}
+.about-feature:first-child{
+  padding-top:0;
+  border-top:0;
+}
+.about-feature:last-child{
+  padding-bottom:0;
+}
+.about-icon{
+  width:36px;
+  height:36px;
+  display:grid;
+  place-items:center;
+  border-radius:11px;
+  background:#f1f0ea;
+  font-size:18px;
+}
+.about-feature strong{
+  display:block;
+  margin-top:1px;
+  font-size:16px;
+}
+.about-feature p{
+  margin:5px 0 0;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.45;
 }
