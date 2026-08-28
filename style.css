@@ -14,6 +14,9 @@
   --green: #263829;
   --light-green: #dce5d8;
 
+  --orange-soft: #fff0d8;
+  --orange: #a96100;
+
   --red: #a33c3c;
 
   --radius: 20px;
@@ -23,9 +26,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-
   min-height: 100%;
-
   background: var(--background);
   color: var(--text);
 
@@ -47,25 +48,17 @@ button {
 }
 
 
-/* -------------------------
-   TOP BAR
-------------------------- */
+/* TOP BAR */
 
 .topbar {
   position: sticky;
-
   top: 0;
-
   z-index: 30;
 
   height: 64px;
 
   display: grid;
-
-  grid-template-columns:
-    50px
-    1fr
-    50px;
+  grid-template-columns: 50px 1fr 50px;
 
   align-items: center;
 
@@ -74,27 +67,19 @@ button {
     14px
     8px;
 
-  background:
-    rgba(247,245,239,0.94);
-
+  background: rgba(247,245,239,0.94);
   backdrop-filter: blur(14px);
 }
 
-
 .top-title {
   text-align: center;
-
   font-weight: 700;
-
   font-size: 17px;
 }
 
-
 .menu-button,
 .back-button {
-
   border: none;
-
   background: transparent;
 
   width: 44px;
@@ -103,13 +88,9 @@ button {
   border-radius: 14px;
 }
 
-
 .menu-button {
-
   display: flex;
-
   flex-direction: column;
-
   justify-content: center;
 
   gap: 5px;
@@ -117,11 +98,8 @@ button {
   padding: 10px;
 }
 
-
 .menu-button span {
-
   width: 23px;
-
   height: 2px;
 
   background: var(--text);
@@ -129,66 +107,48 @@ button {
   border-radius: 5px;
 }
 
-
 .back-button {
-
   grid-column: 3;
-
   font-size: 27px;
 }
 
 
-/* -------------------------
-   SCREEN
-------------------------- */
+/* SCREEN */
 
 .screen {
-
   max-width: 720px;
 
   margin: auto;
 
   padding:
-
     18px
     18px
     calc(40px + env(safe-area-inset-bottom));
 }
 
 
-/* -------------------------
-   HOME
-------------------------- */
+/* HOME */
 
 .home {
-
-  min-height:
-    calc(100vh - 110px);
+  min-height: calc(100vh - 110px);
 
   display: flex;
-
   justify-content: center;
-
   align-items: center;
 }
 
-
 .pack-button {
-
   width: min(78vw, 330px);
 
   padding: 25px;
 
   border: none;
-
   border-radius: 24px;
 
   background: var(--green);
-
   color: white;
 
   font-size: 22px;
-
   font-weight: 750;
 
   box-shadow:
@@ -197,93 +157,58 @@ button {
 }
 
 
-/* -------------------------
-   TEXT
-------------------------- */
+/* TEXT */
 
 .page-title {
-
-  margin:
-
-    4px
-    0
-    8px;
+  margin: 4px 0 8px;
 
   font-size: 30px;
-
   letter-spacing: -1px;
 }
 
-
 .page-subtitle {
-
-  margin:
-
-    0
-    0
-    22px;
+  margin: 0 0 22px;
 
   color: var(--muted);
 
   line-height: 1.5;
 }
 
-
 .section-title {
-
-  margin:
-
-    27px
-    0
-    10px;
+  margin: 27px 0 10px;
 
   color: var(--muted);
 
   font-size: 13px;
-
   font-weight: 700;
 
   text-transform: uppercase;
-
   letter-spacing: 1px;
 }
 
 
-/* -------------------------
-   CARDS
-------------------------- */
+/* CARDS */
 
 .card {
-
   background: var(--card);
 
   border:
+    1px solid var(--border);
 
-    1px
-    solid
-    var(--border);
-
-  border-radius:
-    var(--radius);
+  border-radius: var(--radius);
 
   padding: 16px;
 }
 
-
 .stack {
-
   display: grid;
-
   gap: 13px;
 }
 
 
-/* -------------------------
-   TRIP TYPES
-------------------------- */
+/* TRIP TYPES */
 
 .trip-grid {
-
   display: grid;
 
   grid-template-columns:
@@ -292,18 +217,13 @@ button {
   gap: 12px;
 }
 
-
 .trip-type {
-
   min-height: 120px;
 
   padding: 20px 14px;
 
   border:
-
-    1px
-    solid
-    var(--border);
+    1px solid var(--border);
 
   border-radius: 20px;
 
@@ -312,9 +232,7 @@ button {
   text-align: left;
 }
 
-
 .trip-emoji {
-
   display: block;
 
   margin-bottom: 14px;
@@ -322,21 +240,15 @@ button {
   font-size: 31px;
 }
 
-
 .trip-label {
-
   font-size: 17px;
-
   font-weight: 700;
 }
 
 
-/* -------------------------
-   INPUTS
-------------------------- */
+/* INPUTS */
 
 .field-label {
-
   display: block;
 
   margin-bottom: 8px;
@@ -344,56 +256,40 @@ button {
   font-weight: 700;
 }
 
-
 .text-input,
 .select-input {
-
   width: 100%;
 
   padding: 14px;
 
   border:
-
-    1px
-    solid
-    var(--border);
+    1px solid var(--border);
 
   border-radius: 15px;
 
   background: white;
-
   outline: none;
 }
 
 
-/* -------------------------
-   COUNTERS
-------------------------- */
+/* COUNTERS */
 
 .counter {
-
   display: grid;
 
   grid-template-columns:
-    52px
-    1fr
-    52px;
+    52px 1fr 52px;
 
   align-items: center;
 
   gap: 10px;
 }
 
-
 .counter button {
-
   height: 48px;
 
   border:
-
-    1px
-    solid
-    var(--border);
+    1px solid var(--border);
 
   border-radius: 14px;
 
@@ -402,50 +298,33 @@ button {
   font-size: 25px;
 }
 
-
 .counter-value {
-
   text-align: center;
-
   font-weight: 750;
 }
 
 
-/* -------------------------
-   CHIPS
-------------------------- */
+/* CHIPS */
 
 .chips {
-
   display: flex;
-
   flex-wrap: wrap;
 
   gap: 9px;
 }
 
-
 .chip {
-
-  padding:
-
-    10px
-    13px;
+  padding: 10px 13px;
 
   border:
-
-    1px
-    solid
-    var(--border);
+    1px solid var(--border);
 
   border-radius: 100px;
 
   background: white;
 }
 
-
 .chip.active {
-
   background: var(--green);
 
   color: white;
@@ -454,12 +333,9 @@ button {
 }
 
 
-/* -------------------------
-   BUTTONS
-------------------------- */
+/* BUTTONS */
 
 .button-row {
-
   display: flex;
 
   gap: 10px;
@@ -467,57 +343,37 @@ button {
   margin-top: 22px;
 }
 
-
 .primary-button,
 .secondary-button,
 .delete-button {
-
-  padding:
-
-    14px
-    17px;
+  padding: 14px 17px;
 
   border-radius: 15px;
 
   font-weight: 700;
 }
 
-
 .primary-button {
-
   flex: 1;
 
   border:
-
-    1px
-    solid
-    var(--green);
+    1px solid var(--green);
 
   background: var(--green);
 
   color: white;
 }
 
-
 .secondary-button {
-
   border:
-
-    1px
-    solid
-    var(--border);
+    1px solid var(--border);
 
   background: white;
 }
 
-
 .delete-button {
-
   border:
-
-    1px
-    solid
-    #e8caca;
+    1px solid #e8caca;
 
   background: #fff5f4;
 
@@ -525,14 +381,10 @@ button {
 }
 
 
-/* -------------------------
-   CATEGORY SELECTION
-------------------------- */
+/* CATEGORY SELECTION */
 
 .category-option {
-
   display: flex;
-
   align-items: center;
 
   gap: 12px;
@@ -540,47 +392,32 @@ button {
   padding: 14px;
 
   border:
-
-    1px
-    solid
-    var(--border);
+    1px solid var(--border);
 
   border-radius: 16px;
 
   background: white;
 }
 
-
 .category-option input {
-
   width: 20px;
-
   height: 20px;
 }
 
-
 .category-name {
-
   flex: 1;
-
   font-weight: 650;
 }
 
 
-/* -------------------------
-   PACKING LIST
-------------------------- */
+/* PACKING LIST */
 
 .trip-info {
-
   color: var(--muted);
-
   font-size: 14px;
 }
 
-
 .progress {
-
   height: 10px;
 
   margin-top: 15px;
@@ -592,21 +429,15 @@ button {
   border-radius: 100px;
 }
 
-
 .progress-bar {
-
   height: 100%;
 
   background: var(--green);
 
-  transition:
-    width
-    0.2s;
+  transition: width 0.2s;
 }
 
-
 .progress-text {
-
   margin-top: 7px;
 
   color: var(--muted);
@@ -614,63 +445,212 @@ button {
   font-size: 13px;
 }
 
-
 .pack-category {
-
   margin: 14px 0;
 
   overflow: hidden;
 
   border:
-
-    1px
-    solid
-    var(--border);
+    1px solid var(--border);
 
   border-radius: 18px;
 
   background: white;
 }
 
-
 .pack-category-header {
-
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
 
   padding: 15px;
 }
 
-
 .pack-category-title {
-
   font-weight: 750;
 }
 
-
 .category-count {
+  color: var(--muted);
+
+  font-size: 13px;
+}
+
+.pack-items {
+  border-top:
+    1px solid var(--border);
+}
+
+.pack-item {
+  display: grid;
+
+  grid-template-columns:
+    1fr auto;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 13px 15px;
+
+  border-top:
+    1px solid #eeece6;
+}
+
+.pack-item:first-child {
+  border-top: none;
+}
+
+.pack-item-main {
+  min-width: 0;
+}
+
+.item-name {
+  font-weight: 650;
+}
+
+.item-meta {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 7px;
+
+  margin-top: 5px;
+}
+
+.item-pill {
+  padding: 4px 8px;
+
+  border-radius: 100px;
+
+  background: #f0eee8;
+
+  color: var(--muted);
+
+  font-size: 12px;
+}
+
+.item-pill.buy {
+  background: var(--orange-soft);
+  color: var(--orange);
+}
+
+.item-pill.complete {
+  background: var(--light-green);
+  color: var(--green);
+}
+
+.item-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 7px;
+}
+
+.qty-button {
+  width: 34px;
+  height: 34px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 10px;
+
+  background: white;
+
+  font-size: 20px;
+}
+
+.edit-item-button {
+  width: 36px;
+  height: 36px;
+
+  border: none;
+
+  border-radius: 10px;
+
+  background: #f2f0ea;
+
+  font-size: 18px;
+}
+
+.add-item {
+  width: 100%;
+
+  padding: 13px 15px 15px;
+
+  border: none;
+
+  background: transparent;
+
+  color: var(--green);
+
+  font-weight: 750;
+
+  text-align: left;
+}
+
+
+/* TRIPS / GEAR */
+
+.trip-row,
+.gear-row {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  padding: 14px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 16px;
+
+  background: white;
+}
+
+.trip-icon {
+  font-size: 28px;
+}
+
+.trip-main {
+  flex: 1;
+}
+
+.trip-name {
+  font-weight: 750;
+}
+
+.trip-small {
+  margin-top: 3px;
 
   color: var(--muted);
 
   font-size: 13px;
 }
 
+.badge {
+  padding: 6px 9px;
 
-.pack-items {
+  border-radius: 100px;
 
-  border-top:
+  background: var(--light-green);
 
-    1px
-    solid
-    var(--border);
+  color: var(--green);
+
+  font-size: 12px;
+  font-weight: 750;
 }
 
 
-.pack-item {
+/* SHOPPING */
 
+.shopping-trip {
+  margin-bottom: 22px;
+}
+
+.shopping-item {
   display: grid;
 
   grid-template-columns:
@@ -680,171 +660,55 @@ button {
 
   align-items: center;
 
-  gap: 9px;
-
-  padding:
-
-    12px
-    15px;
-}
-
-
-.pack-item + .pack-item {
-
-  border-top:
-
-    1px
-    solid
-    #eeece6;
-}
-
-
-.pack-item input {
-
-  width: 20px;
-
-  height: 20px;
-}
-
-
-.pack-item.packed .item-name {
-
-  color: var(--muted);
-
-  text-decoration: line-through;
-}
-
-
-.quantity {
-
-  margin-top: 2px;
-
-  color: var(--muted);
-
-  font-size: 12px;
-}
-
-
-.item-actions {
-
-  display: flex;
-
-  gap: 4px;
-}
-
-
-.item-action {
-
-  padding: 5px;
-
-  border: none;
-
-  background: transparent;
-
-  color: var(--muted);
-
-  font-size: 17px;
-}
-
-
-.add-item {
-
-  padding:
-
-    13px
-    15px
-    15px;
-
-  border: none;
-
-  background: transparent;
-
-  color: var(--green);
-
-  font-weight: 750;
-}
-
-
-/* -------------------------
-   TRIPS / GEAR
-------------------------- */
-
-.trip-row,
-.gear-row {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
+  gap: 10px;
 
   padding: 14px;
 
   border:
+    1px solid var(--border);
 
-    1px
-    solid
-    var(--border);
-
-  border-radius: 16px;
+  border-radius: 15px;
 
   background: white;
 }
 
-
-.trip-icon {
-
-  font-size: 28px;
+.shopping-item + .shopping-item {
+  margin-top: 8px;
 }
 
-
-.trip-main {
-
-  flex: 1;
+.shopping-item input {
+  width: 20px;
+  height: 20px;
 }
 
-
-.trip-name {
-
-  font-weight: 750;
+.shopping-name {
+  font-weight: 650;
 }
 
-
-.trip-small {
-
-  margin-top: 3px;
+.shopping-small {
+  margin-top: 4px;
 
   color: var(--muted);
 
-  font-size: 13px;
+  font-size: 12px;
 }
 
-
-.badge {
-
-  padding:
-
-    6px
-    9px;
-
-  border-radius: 100px;
-
-  background: var(--light-green);
-
-  color: var(--green);
-
-  font-size: 12px;
-
+.shopping-qty {
   font-weight: 750;
 }
 
+.shopping-item.bought {
+  opacity: 0.55;
+}
 
-/* -------------------------
-   DRAWER
-------------------------- */
+.shopping-item.bought .shopping-name {
+  text-decoration: line-through;
+}
+
+
+/* DRAWER */
 
 .drawer-overlay {
-
   position: fixed;
 
   inset: 0;
@@ -855,30 +719,23 @@ button {
     rgba(0,0,0,0.27);
 }
 
-
 .drawer {
-
   position: fixed;
 
   z-index: 60;
 
   top: 0;
-
   bottom: 0;
-
   left: 0;
 
-  width:
-    min(82vw,320px);
+  width: min(82vw,320px);
 
   padding:
-
     calc(25px + env(safe-area-inset-top))
     18px
     calc(20px + env(safe-area-inset-bottom));
 
   display: flex;
-
   flex-direction: column;
 
   background: white;
@@ -887,28 +744,19 @@ button {
     translateX(-105%);
 
   transition:
-    transform
-    0.22s;
+    transform 0.22s;
 
   box-shadow:
-    12px
-    0
-    40px
-    rgba(0,0,0,0.16);
+    12px 0 40px rgba(0,0,0,0.16);
 }
 
-
 .drawer.open {
-
   transform:
     translateX(0);
 }
 
-
 .drawer-header {
-
   display: flex;
-
   align-items: center;
 
   gap: 12px;
@@ -916,21 +764,14 @@ button {
   padding-bottom: 22px;
 
   border-bottom:
-
-    1px
-    solid
-    var(--border);
+    1px solid var(--border);
 }
 
-
 .logo {
-
   width: 44px;
-
   height: 44px;
 
   display: grid;
-
   place-items: center;
 
   border-radius: 14px;
@@ -942,37 +783,25 @@ button {
   font-weight: 900;
 }
 
-
 .drawer-title {
-
   font-size: 20px;
-
   font-weight: 800;
 }
 
-
 .drawer-subtitle {
-
   color: var(--muted);
 
   font-size: 13px;
 }
 
-
 .drawer-nav {
-
   display: grid;
 
   margin-top: 15px;
 }
 
-
 .drawer-nav button {
-
-  padding:
-
-    15px
-    8px;
+  padding: 15px 8px;
 
   border: none;
 
@@ -985,9 +814,15 @@ button {
   font-weight: 650;
 }
 
+.drawer-divider {
+  height: 1px;
+
+  margin: 8px 0;
+
+  background: var(--border);
+}
 
 .drawer-footer {
-
   margin-top: auto;
 
   color: var(--muted);
@@ -996,64 +831,87 @@ button {
 }
 
 
-/* -------------------------
-   MODAL
-------------------------- */
+/* MODAL */
 
-.modal-background {
-
+.modal-overlay {
   position: fixed;
-
-  z-index: 80;
 
   inset: 0;
 
-  display: grid;
+  z-index: 100;
 
-  align-items: end;
+  display: flex;
+
+  align-items: flex-end;
 
   background:
-    rgba(0,0,0,0.3);
+    rgba(0,0,0,0.35);
 }
 
-
-.modal {
-
+.modal-sheet {
   width: 100%;
-
   max-width: 720px;
-
-  max-height: 85vh;
 
   margin: auto;
 
   padding:
-
     20px
     18px
     calc(25px + env(safe-area-inset-bottom));
 
-  overflow-y: auto;
-
   border-radius:
-    24px
-    24px
-    0
-    0;
+    24px 24px 0 0;
 
   background: white;
 }
 
+.modal-title {
+  margin: 0 0 18px;
 
-/* -------------------------
-   TOAST
-------------------------- */
+  font-size: 22px;
+}
+
+.modal-field {
+  margin-top: 16px;
+}
+
+.modal-counter {
+  display: grid;
+
+  grid-template-columns:
+    52px 1fr 52px;
+
+  gap: 10px;
+
+  align-items: center;
+}
+
+.modal-counter button {
+  height: 46px;
+
+  border:
+    1px solid var(--border);
+
+  border-radius: 14px;
+
+  background: white;
+
+  font-size: 24px;
+}
+
+.modal-counter-value {
+  text-align: center;
+
+  font-weight: 750;
+}
+
+
+/* TOAST */
 
 .toast {
-
   position: fixed;
 
-  z-index: 100;
+  z-index: 150;
 
   bottom:
     calc(25px + env(safe-area-inset-bottom));
@@ -1063,10 +921,7 @@ button {
   transform:
     translateX(-50%);
 
-  padding:
-
-    10px
-    15px;
+  padding: 10px 15px;
 
   border-radius: 100px;
 
@@ -1078,12 +933,9 @@ button {
 }
 
 
-/* -------------------------
-   OTHER
-------------------------- */
+/* OTHER */
 
 .empty {
-
   padding: 45px 20px;
 
   text-align: center;
@@ -1091,9 +943,7 @@ button {
   color: var(--muted);
 }
 
-
 .small-note {
-
   color: var(--muted);
 
   font-size: 13px;
@@ -1101,9 +951,7 @@ button {
   line-height: 1.5;
 }
 
-
 .hidden {
-
   display: none !important;
 }
 
@@ -1111,7 +959,6 @@ button {
 @media (min-width: 650px) {
 
   .trip-grid {
-
     grid-template-columns:
       repeat(4,1fr);
   }
