@@ -1,4 +1,5 @@
-const STORAGE_KEY="allpacked_v14";
+const STORAGE_KEY="allpacked_v15";
+const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
 trips:[],
@@ -101,6 +102,23 @@ function loadData(){
  }catch{return structuredClone(defaultData)}
 }
 function saveData(){localStorage.setItem(STORAGE_KEY,JSON.stringify(data))}
+
+function getOnboardingState(){
+ try{
+   return JSON.parse(localStorage.getItem(ONBOARDING_KEY)||"{}");
+ }catch{
+   return {};
+ }
+}
+function setOnboardingFlag(key,value=true){
+ const state=getOnboardingState();
+ state[key]=value;
+ localStorage.setItem(ONBOARDING_KEY,JSON.stringify(state));
+}
+function hasOnboardingFlag(key){
+ return !!getOnboardingState()[key];
+}
+
 function closeMenu(){drawer.classList.remove("open");drawerOverlay.classList.add("hidden")}
 menuButton.onclick=()=>{drawer.classList.add("open");drawerOverlay.classList.remove("hidden")};
 drawerOverlay.onclick=closeMenu;
@@ -110,6 +128,104 @@ backButton.onclick=()=>{if(state.page==="packing"){state.history=[];state.newTri
 
 function allCategoryNames(){return [...new Set([...Object.keys(packingDatabase),...Object.keys(data.customLibrary||{})])]}
 function libraryForCategory(c){return [...(packingDatabase[c]||[]),...(data.customLibrary[c]||[])]}
+
+
+function showFirstLaunchOnboarding(){
+ if(hasOnboardingFlag("welcomeDone"))return;
+
+ let step=0;
+ const steps=[
+   {
+     icon:"✓",
+     title:"Welcome to AllPacked",
+     text:"Never forget what to pack again. Create smart packing lists for vacations, camping, road trips, picnics, and more.",
+     button:"Next"
+   },
+   {
+     icon:"🧳",
+     title:"Smart Packing Lists",
+     text:"Tell us about your trip and AllPacked will suggest what to bring based on the trip type, season, duration, activities, and number of people.",
+     button:"Next"
+   },
+   {
+     icon:"🛒",
+     title:"Everything Stays Organized",
+     text:"Track what you packed, what you still need, and everything you need to buy — all in one place.",
+     button:"Start Planning"
+   }
+ ];
+
+ function draw(){
+   const s=steps[step];
+   modalOverlay.innerHTML=`<div class="modal-sheet onboarding-sheet">
+     <div class="onboarding-icon">${s.icon}</div>
+     <div class="onboarding-progress">${steps.map((_,i)=>`<span class="${i===step?"active":""}"></span>`).join("")}</div>
+     <h2 class="modal-title onboarding-title">${s.title}</h2>
+     <p class="onboarding-text">${s.text}</p>
+     <div class="button-row">
+       ${step>0?'<button id="onboardingBack" class="secondary-button">Back</button>':""}
+       <button id="onboardingNext" class="primary-button">${s.button}</button>
+     </div>
+   </div>`;
+   modalOverlay.classList.remove("hidden");
+
+   if(step>0){
+     onboardingBack.onclick=()=>{step--;draw()};
+   }
+   onboardingNext.onclick=()=>{
+     if(step<steps.length-1){
+       step++;
+       draw();
+     }else{
+       setOnboardingFlag("welcomeDone");
+       closeModal();
+     }
+   };
+ }
+
+ draw();
+}
+
+function showOneTimeTip(flag,title,text,buttonText="Got it",afterClose=null){
+ if(hasOnboardingFlag(flag)){
+   if(afterClose)afterClose();
+   return false;
+ }
+ modalOverlay.innerHTML=`<div class="modal-sheet tip-sheet">
+   <div class="tip-icon">💡</div>
+   <h2 class="modal-title">${title}</h2>
+   <p class="modal-description">${text}</p>
+   <div class="button-row"><button id="tipConfirm" class="primary-button">${buttonText}</button></div>
+ </div>`;
+ modalOverlay.classList.remove("hidden");
+ tipConfirm.onclick=()=>{
+   setOnboardingFlag(flag);
+   closeModal();
+   if(afterClose)afterClose();
+ };
+ return true;
+}
+
+function maybeCelebrateTrip(t){
+ if(!t)return false;
+ const z=totals(t);
+ if(!z.required||z.packed<z.required)return false;
+ const flag="celebrated_"+t.id;
+ if(hasOnboardingFlag(flag))return false;
+
+ modalOverlay.innerHTML=`<div class="modal-sheet celebration-sheet">
+   <div class="celebration-icon">🎉</div>
+   <h2 class="modal-title">You're AllPacked!</h2>
+   <p class="modal-description">${t.name} is 100% packed. Have a great time!</p>
+   <div class="button-row"><button id="celebrationDone" class="primary-button">Done</button></div>
+ </div>`;
+ modalOverlay.classList.remove("hidden");
+ celebrationDone.onclick=()=>{
+   setOnboardingFlag(flag);
+   closeModal();
+ };
+ return true;
+}
 
 function render(){
  window.scrollTo(0,0);
@@ -285,10 +401,30 @@ function attachPacking(t){
  document.querySelectorAll("[data-check-pack]").forEach(b=>b.onchange=()=>{
    const x=findItem(t,b.dataset.category,b.dataset.id);if(!x)return;
    if(!b.checked){x.packed=0;saveData();renderPackingList();return}
-   if(x.required===1){x.packed=1;saveData();renderPackingList();return}
-   openPackedQuantity(t,b.dataset.category,x)
+   if(x.required===1){x.packed=1;saveData();renderPackingList();setTimeout(()=>maybeCelebrateTrip(t),0);return}
+   if(!hasOnboardingFlag("quantityTip")){
+     showOneTimeTip(
+       "quantityTip",
+       "Packing More Than One?",
+       `Track exactly how many you packed. For example: 2 of ${x.required} packed.`,
+       "Got it",
+       ()=>openPackedQuantity(t,b.dataset.category,x)
+     );
+   }else{
+     openPackedQuantity(t,b.dataset.category,x)
+   }
  });
- document.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>openBuy(t,b.dataset.category,findItem(t,b.dataset.category,b.dataset.id)));
+ document.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>{
+   const item=findItem(t,b.dataset.category,b.dataset.id);
+   const open=()=>openBuy(t,b.dataset.category,item);
+   showOneTimeTip(
+     "shoppingButtonTip",
+     "Need to Buy?",
+     "Use the shopping cart when you do not have an item yet. It will also appear in your Shopping List.",
+     "Got it",
+     open
+   );
+ });
  document.querySelectorAll("[data-bought-status]").forEach(b=>b.onclick=()=>openBoughtStatus(t,b.dataset.category,findItem(t,b.dataset.category,b.dataset.id)));
  document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEditor(t,b.dataset.category,findItem(t,b.dataset.category,b.dataset.id)));
  document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
@@ -308,26 +444,34 @@ function openPackedQuantity(t,c,x){
  const ref=()=>qv.textContent=q+" of "+x.required+" packed";
  qm.onclick=()=>{q=Math.max(0,q-1);ref()};qp.onclick=()=>{q=Math.min(x.required,q+1);ref()};
  qc.onclick=()=>{closeModal();renderPackingList()};
- qs.onclick=()=>{x.packed=q;saveData();closeModal();renderPackingList()}
+ qs.onclick=()=>{x.packed=q;saveData();closeModal();renderPackingList();setTimeout(()=>maybeCelebrateTrip(t),0)}
 }
 
 function openBoughtStatus(t,c,x){
  if(!x||!x.needToBuy)return;
+ const allBought=(x.bought||0)>=x.needToBuy;
  modalOverlay.innerHTML=`<div class="modal-sheet">
  <h2 class="modal-title">Is this item available now?</h2>
  <p class="modal-description">${x.name}</p>
- <p class="small-note">Choose Yes if you bought it or otherwise have it available now. All ${x.needToBuy} needed ${x.needToBuy===1?"item":"items"} will be marked as bought.</p>
- <div class="button-row"><button id="availableNo" class="secondary-button">No</button><button id="availableYes" class="primary-button">Yes</button></div>
+ <p class="small-note">${allBought
+   ?"This item is already marked as bought."
+   :`Choose Yes if you bought it or otherwise have it available now. All ${x.needToBuy} needed ${x.needToBuy===1?"item":"items"} will be marked as bought.`}</p>
+ <div class="button-row">
+   <button id="availableNo" class="secondary-button">${allBought?"Close":"No"}</button>
+   ${allBought?"":'<button id="availableYes" class="primary-button">Yes</button>'}
+ </div>
  </div>`;
  modalOverlay.classList.remove("hidden");
  availableNo.onclick=closeModal;
- availableYes.onclick=()=>{
-   x.bought=x.needToBuy;
-   saveData();
-   closeModal();
-   showToast(x.needToBuy===1?"Marked as bought":`${x.needToBuy} marked as bought`);
-   renderPackingList()
- };
+ if(!allBought){
+   availableYes.onclick=()=>{
+     x.bought=x.needToBuy;
+     saveData();
+     closeModal();
+     showToast(x.needToBuy===1?"Marked as bought":`${x.needToBuy} marked as bought`);
+     renderPackingList()
+   };
+ }
 }
 
 function openBuy(t,c,x){
@@ -366,7 +510,22 @@ function openAddCategory(t){
  const unused=allCategoryNames().filter(c=>!Object.keys(t.items).includes(c)&&c!=="Other");
  modalOverlay.innerHTML=`<div class="modal-sheet"><h2 class="modal-title">Add Category</h2><div class="option-list"><button class="option-button new-category" id="newCategoryChoice">+ New Category</button>${!Object.keys(t.items).includes("Other")?'<button class="option-button" data-category-choice="Other">Other</button>':""}${unused.map(c=>`<button class="option-button" data-category-choice="${esc(c)}">${c}</button>`).join("")}</div><div class="button-row"><button id="cancelCategory" class="secondary-button">Cancel</button></div></div>`;
  modalOverlay.classList.remove("hidden");cancelCategory.onclick=closeModal;
- newCategoryChoice.onclick=()=>{const name=prompt("New category name");if(!name)return;if(!data.customLibrary[name])data.customLibrary[name]=[];if(!t.items[name])t.items[name]=[];t.categories=Object.keys(t.items);saveData();closeModal();openEditor(t,name,null)};
+ newCategoryChoice.onclick=()=>{
+   const name=prompt("New category name");
+   if(!name)return;
+   if(!data.customLibrary[name])data.customLibrary[name]=[];
+   if(!t.items[name])t.items[name]=[];
+   t.categories=Object.keys(t.items);
+   saveData();
+   closeModal();
+   showOneTimeTip(
+     "customCategoryTip",
+     "Saved for Future Trips",
+     "Your custom category will be available again when you plan another trip.",
+     "Great",
+     ()=>openEditor(t,name,null)
+   )
+ };
  document.querySelectorAll("[data-category-choice]").forEach(b=>b.onclick=()=>{const c=b.dataset.categoryChoice;if(c==="Other"){if(!t.items[c])t.items[c]=[];t.categories=Object.keys(t.items);saveData();closeModal();openEditor(t,c,null);return}if(!t.items[c])t.items[c]=libraryForCategory(c).filter(d=>includeItem(d,t)).map(d=>({id:String(Date.now())+Math.random(),name:d.name,required:qty(d.qty,t),packed:0,needToBuy:0,bought:0}));if(t.items[c].length===0){t.categories=Object.keys(t.items);saveData();closeModal();openEditor(t,c,null);return}t.categories=Object.keys(t.items);saveData();closeModal();renderPackingList()})
 }
 
@@ -380,9 +539,17 @@ function renderTrips(){
 }
 
 function renderShopping(){
+ if(!hasOnboardingFlag("shoppingListTip")){
+   setTimeout(()=>showOneTimeTip(
+     "shoppingListTip",
+     "Shopping Tip",
+     "Tap a trip name here whenever you want to jump straight back to that trip's Packing List."
+   ),0);
+ }
+
  const groups=data.trips.map(t=>({t,items:Object.entries(t.items).flatMap(([c,a])=>a.filter(x=>x.needToBuy>0).map(x=>({c,x})))})).filter(g=>g.items.length);
  screen.innerHTML=`<h1 class="page-title">Shopping List</h1><p class="page-subtitle">Check items while shopping. Buying does not automatically mark them packed.</p>
- ${groups.length?groups.map(g=>`<section class="shopping-trip"><div class="section-title shopping-trip-title-link" data-open-shopping-trip="${g.t.id}">${g.t.emoji} ${g.t.name}</div>${g.items.map(({c,x})=>`<div class="shopping-item ${x.bought>=x.needToBuy?"bought":""}"><input type="checkbox" data-check data-trip="${g.t.id}" data-category="${esc(c)}" data-id="${x.id}" ${x.bought>=x.needToBuy?"checked":""}><div><div class="shopping-name">${x.name}</div><div class="shopping-small">${c}</div></div><div class="shopping-qty">×${x.needToBuy}</div></div>`).join("")}</section>`).join(""):'<div class="empty">Nothing to buy right now.</div>'}`;
+ ${groups.length?groups.map(g=>{const shoppingDone=g.items.every(({x})=>(x.bought||0)>=x.needToBuy);return`<section class="shopping-trip"><div class="section-title shopping-trip-title-link ${shoppingDone?"shopping-trip-complete":""}" data-open-shopping-trip="${g.t.id}">${shoppingDone?"✓ ":""}${g.t.emoji} ${g.t.name}</div>${g.items.map(({c,x})=>`<div class="shopping-item ${x.bought>=x.needToBuy?"bought":""}"><input type="checkbox" data-check data-trip="${g.t.id}" data-category="${esc(c)}" data-id="${x.id}" ${x.bought>=x.needToBuy?"checked":""}><div><div class="shopping-name">${x.name}</div><div class="shopping-small">${c}</div></div><div class="shopping-qty">×${x.needToBuy}</div></div>`).join("")}</section>`}).join(""):'<div class="empty">Nothing to buy right now.</div>'}`;
  document.querySelectorAll("[data-open-shopping-trip]").forEach(b=>b.onclick=()=>{
    state.activeTripId=b.dataset.openShoppingTrip;
    state.history=["shopping"];
@@ -401,19 +568,37 @@ function renderGear(){
 
 function renderSettings(){
  screen.innerHTML='<h1 class="page-title">Settings</h1><div class="card"><p>Prototype settings.</p><p class="small-note">Resetting clears all test data, custom categories and custom items.</p><button id="resetPrototype" class="delete-button">Reset Prototype</button></div>';
- resetPrototype.onclick=()=>{if(confirm("Delete all saved trips and reset?")){localStorage.removeItem(STORAGE_KEY);data=structuredClone(defaultData);state={page:"home",history:[],newTrip:null,activeTripId:null,editingExistingTrip:false};render()}}
+ resetPrototype.onclick=()=>{if(confirm("Delete all saved trips and reset?")){localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(ONBOARDING_KEY);data=structuredClone(defaultData);state={page:"home",history:[],newTrip:null,activeTripId:null,editingExistingTrip:false};render()}}
 }
 function renderAbout(){
  screen.innerHTML=`<h1 class="page-title">About AllPacked</h1>
  <p class="page-subtitle">Plan what you need, pack with confidence, and keep shopping in the same place.</p>
  <div class="stack">
    <div class="card">
-     <div class="about-feature"><span class="about-icon">✓</span><div><strong>Smart Packing Lists</strong><p>Get relevant suggestions based on your trip type, duration, season, activities, and number of people.</p></div></div>
-     <div class="about-feature"><span class="about-icon">🧳</span><div><strong>Flexible Trips</strong><p>Add, edit, remove, or reorganize items and categories so every list fits your plans.</p></div></div>
-     <div class="about-feature"><span class="about-icon">🛒</span><div><strong>Shopping List</strong><p>Keep everything you still need to buy in one place, then tap a trip name to return directly to its packing list.</p></div></div>
-     <div class="about-feature"><span class="about-icon">🔢</span><div><strong>Quantity Tracking</strong><p>Track partial progress such as 2 of 3 packed or 1 of 2 bought.</p></div></div>
-     <div class="about-feature"><span class="about-icon">＋</span><div><strong>Fully Customizable</strong><p>Add your own categories and items, rename trips, move items, and remove anything you do not need.</p></div></div>
-     <div class="about-feature"><span class="about-icon">↻</span><div><strong>Reusable</strong><p>Your custom categories and items are available again when planning future trips.</p></div></div>
+     <div class="about-feature">
+       <span class="about-icon">✓</span>
+       <div><strong>Smart Packing Lists</strong><p>Get relevant suggestions based on your trip type, duration, season, activities, and number of people.</p></div>
+     </div>
+     <div class="about-feature">
+       <span class="about-icon">🧳</span>
+       <div><strong>Flexible Trips</strong><p>Add, edit, move, or remove items and categories so each packing list fits your plans.</p></div>
+     </div>
+     <div class="about-feature">
+       <span class="about-icon">🛒</span>
+       <div><strong>Shopping List</strong><p>Keep everything you still need to buy in one place and jump directly back to the related trip.</p></div>
+     </div>
+     <div class="about-feature">
+       <span class="about-icon">🔢</span>
+       <div><strong>Quantity Tracking</strong><p>Track partial progress such as 2 of 3 packed or 1 of 2 bought.</p></div>
+     </div>
+     <div class="about-feature">
+       <span class="about-icon">＋</span>
+       <div><strong>Fully Customizable</strong><p>Create your own categories and items, rename trips, and remove anything you do not need.</p></div>
+     </div>
+     <div class="about-feature">
+       <span class="about-icon">↻</span>
+       <div><strong>Reusable</strong><p>Your custom categories and items are available again when you plan future trips.</p></div>
+     </div>
    </div>
  </div>`;
 }
@@ -421,3 +606,4 @@ function renderAbout(){
 function showToast(m){toast.textContent=m;toast.classList.remove("hidden");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toast.classList.add("hidden"),1800)}
 function esc(v){return String(v||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
 render();
+setTimeout(showFirstLaunchOnboarding,0);
