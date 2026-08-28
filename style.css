@@ -110,3 +110,122 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
   align-self:start;
   margin-top:2px;
 }
+
+
+/* AllPacked v0.11 â restore simple top navigation icons */
+.menu-button,
+.back-button,
+.back-button.finish-button{
+  width:44px;
+  height:44px;
+  padding:0;
+  border:none;
+  border-radius:14px;
+  background:transparent;
+  color:var(--text);
+  box-shadow:none;
+}
+
+.menu-button{
+  padding:10px;
+}
+
+.back-button{
+  grid-column:3;
+  font-size:27px;
+  font-weight:400;
+  line-height:1;
+}
+
+.back-button.finish-button{
+  font-size:25px;
+  font-weight:600;
+  background:transparent;
+  color:var(--text);
+}
+
+.menu-button:active,
+.back-button:active,
+.back-button.finish-button:active{
+  background:transparent;
+  opacity:.55;
+}
+
+
+/* AllPacked v0.12 â unified drawer typography and branding */
+.drawer{
+  padding:
+    calc(26px + env(safe-area-inset-top))
+    20px
+    calc(22px + env(safe-area-inset-bottom));
+}
+
+.drawer-header{
+  gap:14px;
+  padding-bottom:20px;
+}
+
+.logo{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  font-size:24px;
+  font-weight:800;
+  line-height:1;
+  background:var(--green);
+  color:#fff;
+}
+
+.drawer-title{
+  font-size:24px;
+  line-height:1.1;
+  font-weight:800;
+  letter-spacing:-0.6px;
+  color:var(--text);
+}
+
+.drawer-subtitle{
+  margin-top:4px;
+  font-size:13px;
+  line-height:1.3;
+  color:var(--muted);
+}
+
+.drawer-nav{
+  gap:2px;
+  margin-top:18px;
+}
+
+.drawer-nav button{
+  padding:14px 10px;
+  border:none;
+  border-radius:12px;
+  background:transparent;
+  color:var(--text);
+  text-align:left;
+  font-size:17px;
+  line-height:1.2;
+  font-weight:650;
+  letter-spacing:-0.15px;
+}
+
+.drawer-nav button:active{
+  background:#f1efe9;
+}
+
+.drawer-divider{
+  margin:9px 0;
+}
+
+.drawer-footer{
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* Keep top app title visually consistent with drawer title */
+.top-title{
+  font-size:18px;
+  font-weight:750;
+  letter-spacing:-0.25px;
+  color:var(--text);
+}
