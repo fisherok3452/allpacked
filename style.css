@@ -229,3 +229,88 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
   letter-spacing:-0.25px;
   color:var(--text);
 }
+
+
+/* AllPacked v0.13 â final navigation/drawer class alignment */
+.icon-btn{
+  display:none !important;
+}
+
+.menu-button{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:5px;
+  width:44px;
+  height:44px;
+  padding:10px;
+  border:none;
+  border-radius:14px;
+  background:transparent;
+  box-shadow:none;
+}
+
+.menu-button span{
+  display:block;
+  width:23px;
+  height:2px;
+  border-radius:5px;
+  background:var(--text);
+}
+
+.back-button,
+.back-button.finish-button{
+  grid-column:3;
+  width:44px;
+  height:44px;
+  padding:0;
+  border:none;
+  border-radius:14px;
+  background:transparent;
+  box-shadow:none;
+  color:var(--text);
+  font-size:27px;
+  font-weight:400;
+  line-height:1;
+}
+
+.back-button.finish-button{
+  font-size:25px;
+  font-weight:600;
+}
+
+.drawer-header .logo{
+  flex:0 0 46px;
+  width:46px;
+  height:46px;
+  display:grid;
+  place-items:center;
+  border-radius:14px;
+  background:var(--green);
+  color:#fff;
+  font-size:23px;
+  font-weight:800;
+}
+
+.drawer-title{
+  margin:0;
+  color:var(--text);
+  font-size:24px;
+  line-height:1.1;
+  font-weight:800;
+  letter-spacing:-0.6px;
+}
+
+.drawer-nav button{
+  padding:14px 10px;
+  color:var(--text);
+  font-size:17px;
+  line-height:1.2;
+  font-weight:600;
+  letter-spacing:-0.15px;
+}
+
+.drawer-footer{
+  font-size:12px;
+  font-weight:400;
+}
