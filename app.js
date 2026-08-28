@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v10";
+const STORAGE_KEY="allpacked_v11";
 
 const defaultData={
 trips:[],
