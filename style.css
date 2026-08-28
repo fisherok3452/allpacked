@@ -83,25 +83,30 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 }
 
 
-/* AllPacked v0.9 - Shopping List trip navigation */
-.shopping-trip-link{
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin:22px 0 10px;
-  padding:13px 14px;
-  border:1px solid var(--border);
-  border-radius:15px;
-  background:#fff;
-  color:var(--text);
-  text-align:left;
-  font-weight:750;
-  font-size:16px;
+/* AllPacked v0.10 */
+.shopping-trip-title-link{
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
 }
-.shopping-trip-link span{
-  color:var(--muted);
-  font-size:24px;
-  line-height:1;
+
+.shopping-trip-title-link:active{
+  opacity:.55;
+}
+
+/* Keep trip title and edit icon on one horizontal row */
+.trip-title-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:start;
+  column-gap:8px;
+}
+
+.trip-title-row .page-title{
+  margin:4px 0 8px;
+  min-width:0;
+}
+
+.trip-name-edit{
+  align-self:start;
+  margin-top:2px;
 }
