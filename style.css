@@ -50,3 +50,9 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 .trip-row-actions{display:flex;align-items:center;gap:7px}
 .trip-delete-button{width:36px;height:36px;display:grid;place-items:center;padding:0;border:1px solid #edd0d0;border-radius:10px;background:var(--red-soft);color:var(--red);font-size:16px}
 .back-button.finish-button{background:var(--green);color:#fff;font-size:20px;font-weight:800}
+
+/* v0.6 home shortcut */
+.home-actions{width:min(82vw,360px);display:grid;gap:14px}
+.home-actions .pack-button{width:100%}
+.trips-home-button{width:100%;padding:16px 20px;border:1px solid var(--green);border-radius:20px;background:#fff;color:var(--green);font-weight:750;font-size:17px;box-shadow:0 7px 20px rgba(30,35,28,.06)}
+.trips-home-button span{display:inline-grid;place-items:center;min-width:25px;height:25px;margin-left:7px;padding:0 7px;border-radius:999px;background:var(--light-green);font-size:13px}
