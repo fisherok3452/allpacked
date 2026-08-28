@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v9";
+const STORAGE_KEY="allpacked_v10";
 
 const defaultData={
 trips:[],
@@ -362,7 +362,7 @@ function renderTrips(){
 function renderShopping(){
  const groups=data.trips.map(t=>({t,items:Object.entries(t.items).flatMap(([c,a])=>a.filter(x=>x.needToBuy>0).map(x=>({c,x})))})).filter(g=>g.items.length);
  screen.innerHTML=`<h1 class="page-title">Shopping List</h1><p class="page-subtitle">Check items while shopping. Buying does not automatically mark them packed.</p>
- ${groups.length?groups.map(g=>`<section class="shopping-trip"><button class="shopping-trip-link" data-open-shopping-trip="${g.t.id}">${g.t.emoji} ${g.t.name}<span>›</span></button>${g.items.map(({c,x})=>`<div class="shopping-item ${x.bought>=x.needToBuy?"bought":""}"><input type="checkbox" data-check data-trip="${g.t.id}" data-category="${esc(c)}" data-id="${x.id}" ${x.bought>=x.needToBuy?"checked":""}><div><div class="shopping-name">${x.name}</div><div class="shopping-small">${c}</div></div><div class="shopping-qty">×${x.needToBuy}</div></div>`).join("")}</section>`).join(""):'<div class="empty">Nothing to buy right now.</div>'}`;
+ ${groups.length?groups.map(g=>`<section class="shopping-trip"><div class="section-title shopping-trip-title-link" data-open-shopping-trip="${g.t.id}">${g.t.emoji} ${g.t.name}</div>${g.items.map(({c,x})=>`<div class="shopping-item ${x.bought>=x.needToBuy?"bought":""}"><input type="checkbox" data-check data-trip="${g.t.id}" data-category="${esc(c)}" data-id="${x.id}" ${x.bought>=x.needToBuy?"checked":""}><div><div class="shopping-name">${x.name}</div><div class="shopping-small">${c}</div></div><div class="shopping-qty">×${x.needToBuy}</div></div>`).join("")}</section>`).join(""):'<div class="empty">Nothing to buy right now.</div>'}`;
  document.querySelectorAll("[data-open-shopping-trip]").forEach(b=>b.onclick=()=>{
    state.activeTripId=b.dataset.openShoppingTrip;
    state.history=["shopping"];
