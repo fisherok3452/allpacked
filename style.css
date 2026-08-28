@@ -56,3 +56,52 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 .home-actions .pack-button{width:100%}
 .trips-home-button{width:100%;padding:16px 20px;border:1px solid var(--green);border-radius:20px;background:#fff;color:var(--green);font-weight:750;font-size:17px;box-shadow:0 7px 20px rgba(30,35,28,.06)}
 .trips-home-button span{display:inline-grid;place-items:center;min-width:25px;height:25px;margin-left:7px;padding:0 7px;border-radius:999px;background:var(--light-green);font-size:13px}
+
+
+/* AllPacked v0.8 */
+.trip-title-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.trip-title-row .page-title{
+  flex:1;
+  min-width:0;
+}
+.trip-name-edit{
+  flex:0 0 auto;
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:#f1f0ea;
+  color:var(--text);
+  font-size:17px;
+}
+
+
+/* AllPacked v0.9 - Shopping List trip navigation */
+.shopping-trip-link{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:22px 0 10px;
+  padding:13px 14px;
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:#fff;
+  color:var(--text);
+  text-align:left;
+  font-weight:750;
+  font-size:16px;
+}
+.shopping-trip-link span{
+  color:var(--muted);
+  font-size:24px;
+  line-height:1;
+}
