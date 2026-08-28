@@ -1,4 +1,5 @@
-const STORAGE_KEY = "packtrail_v2";
+const STORAGE_KEY =
+  "packtrail_v3";
 
 
 /* ==========================================
@@ -13,6 +14,7 @@ const defaultData = {
 
     {
       category: "Camping",
+
       items: [
         "Tent",
         "Air mattress",
@@ -25,6 +27,7 @@ const defaultData = {
 
     {
       category: "Fishing",
+
       items: [
         "Fishing rod",
         "Tackle box",
@@ -34,6 +37,7 @@ const defaultData = {
 
     {
       category: "Electronics",
+
       items: [
         "Power bank",
         "Flashlight",
@@ -134,6 +138,13 @@ const activities = [
 
 /* ==========================================
    PACKING DATABASE
+
+   minNights:
+   minimum number of nights required
+   before item is suggested.
+
+   Example:
+   minNights: 1 means overnight only.
 ========================================== */
 
 const packingDatabase = {
@@ -141,330 +152,1001 @@ const packingDatabase = {
 
   "Shelter & Sleeping": [
 
-    ["Tent", 1],
-    ["Rainfly", 1],
-    ["Tent stakes", 1],
-    ["Ground tarp", 1],
-    ["Sleeping bag", "people"],
-    ["Pillow", "people"],
-    ["Air mattress", 1],
-    ["Air pump", 1],
-    ["Camping chair", "people"],
-    ["Mallet", 1]
+    {
+      name: "Tent",
+      qty: 1
+    },
+
+    {
+      name: "Rainfly",
+      qty: 1
+    },
+
+    {
+      name: "Tent stakes",
+      qty: 1
+    },
+
+    {
+      name: "Ground tarp",
+      qty: 1
+    },
+
+    {
+      name: "Sleeping bag",
+      qty: "people",
+      minNights: 1
+    },
+
+    {
+      name: "Pillow",
+      qty: "people",
+      minNights: 1
+    },
+
+    {
+      name: "Air mattress",
+      qty: 1,
+      minNights: 1
+    },
+
+    {
+      name: "Air pump",
+      qty: 1,
+      minNights: 1
+    },
+
+    {
+      name: "Camping chair",
+      qty: "people"
+    },
+
+    {
+      name: "Mallet",
+      qty: 1
+    }
 
   ],
 
 
   "Clothing": [
 
-    ["T-shirts", "days"],
-    ["Underwear", "days"],
-    ["Socks", "days"],
-    ["Pants / shorts", 2],
-    ["Hoodie / sweater", 1],
-    ["Rain jacket", 1],
-    ["Hat", 1],
-    ["Sleepwear", 1]
+    {
+      name: "T-shirt",
+      qty: "shirts",
+      minNights: 1
+    },
+
+    {
+      name: "Underwear",
+      qty: "underwear",
+      minNights: 1
+    },
+
+    {
+      name: "Socks",
+      qty: "socks",
+      minNights: 1
+    },
+
+    {
+      name: "Pants / shorts",
+      qty: "pants",
+      minNights: 1
+    },
+
+    {
+      name: "Hoodie / sweater",
+      qty: 1
+    },
+
+    {
+      name: "Rain jacket",
+      qty: 1
+    },
+
+    {
+      name: "Hat",
+      qty: 1
+    },
+
+    {
+      name: "Sleepwear",
+      qty: 1,
+      minNights: 1
+    }
 
   ],
 
 
   "Personal Hygiene": [
 
-    ["Toothbrush", "people"],
-    ["Toothpaste", 1],
-    ["Deodorant", "people"],
-    ["Soap / body wash", 1],
-    ["Shampoo", 1],
-    ["Towel", "people"],
-    ["Sunscreen", 1],
-    ["Bug spray", 1],
-    ["Toilet paper", 1]
+    {
+      name: "Toothbrush",
+      qty: "people",
+      minNights: 1
+    },
+
+    {
+      name: "Toothpaste",
+      qty: 1,
+      minNights: 1
+    },
+
+    {
+      name: "Deodorant",
+      qty: "people",
+      minNights: 1
+    },
+
+    {
+      name: "Soap / body wash",
+      qty: 1,
+      minNights: 2
+    },
+
+    {
+      name: "Shampoo",
+      qty: 1,
+      minNights: 2
+    },
+
+    {
+      name: "Towel",
+      qty: "people",
+      minNights: 1
+    },
+
+    {
+      name: "Sunscreen",
+      qty: 1
+    },
+
+    {
+      name: "Bug spray",
+      qty: 1,
+      campingUseful: true
+    },
+
+    {
+      name: "Toilet paper",
+      qty: 1,
+      campingOnly: true
+    }
 
   ],
 
 
   "Cooking": [
 
-    ["Camp stove", 1],
-    ["Fuel / propane", 1],
-    ["Lighter", 2],
-    ["Frying pan", 1],
-    ["Pot", 1],
-    ["Plate", "people"],
-    ["Cup / mug", "people"],
-    ["Cutlery", "people"],
-    ["Knife", 1],
-    ["Cutting board", 1],
-    ["Aluminum foil", 1]
+    {
+      name: "Camp stove",
+      qty: 1
+    },
+
+    {
+      name: "Fuel / propane",
+      qty: 1
+    },
+
+    {
+      name: "Lighter",
+      qty: 2
+    },
+
+    {
+      name: "Frying pan",
+      qty: 1
+    },
+
+    {
+      name: "Pot",
+      qty: 1
+    },
+
+    {
+      name: "Plate",
+      qty: "people"
+    },
+
+    {
+      name: "Cup / mug",
+      qty: "people"
+    },
+
+    {
+      name: "Cutlery",
+      qty: "people"
+    },
+
+    {
+      name: "Knife",
+      qty: 1
+    },
+
+    {
+      name: "Cutting board",
+      qty: 1
+    },
+
+    {
+      name: "Aluminum foil",
+      qty: 1
+    }
 
   ],
 
 
   "Food & Drinks": [
 
-    ["Drinking water", 1],
-    ["Coffee / tea", 1],
-    ["Breakfast food", 1],
-    ["Lunch food", 1],
-    ["Dinner food", 1],
-    ["Snacks", 1],
-    ["Cooler ice", 1]
+    {
+      name: "Drinking water",
+      qty: 1
+    },
+
+    {
+      name: "Coffee / tea",
+      qty: 1
+    },
+
+    {
+      name: "Breakfast food",
+      qty: 1,
+      minNights: 1
+    },
+
+    {
+      name: "Lunch food",
+      qty: 1
+    },
+
+    {
+      name: "Dinner food",
+      qty: 1
+    },
+
+    {
+      name: "Snacks",
+      qty: 1
+    },
+
+    {
+      name: "Cooler ice",
+      qty: 1
+    }
 
   ],
 
 
   "Electronics": [
 
-    ["Phone", "people"],
-    ["Phone charger", "people"],
-    ["Power bank", 1],
-    ["Flashlight", 1],
-    ["Headlamp", 1],
-    ["Portable power station", 1]
+    {
+      name: "Phone",
+      qty: "people"
+    },
+
+    {
+      name: "Phone charger",
+      qty: "people",
+      minNights: 1
+    },
+
+    {
+      name: "Power bank",
+      qty: 1
+    },
+
+    {
+      name: "Flashlight",
+      qty: 1,
+      outdoorsUseful: true
+    },
+
+    {
+      name: "Headlamp",
+      qty: 1,
+      outdoorsUseful: true
+    },
+
+    {
+      name: "Portable power station",
+      qty: 1,
+      campingOnly: true
+    }
 
   ],
 
 
   "Health & Safety": [
 
-    ["First aid kit", 1],
-    ["Prescription medication", 1],
-    ["Pain reliever", 1],
-    ["Hand sanitizer", 1],
-    ["Emergency blanket", 1],
-    ["Whistle", 1]
+    {
+      name: "First aid kit",
+      qty: 1
+    },
+
+    {
+      name: "Prescription medication",
+      qty: 1
+    },
+
+    {
+      name: "Pain reliever",
+      qty: 1
+    },
+
+    {
+      name: "Hand sanitizer",
+      qty: 1
+    },
+
+    {
+      name: "Emergency blanket",
+      qty: 1,
+      outdoorsUseful: true
+    },
+
+    {
+      name: "Whistle",
+      qty: 1,
+      outdoorsUseful: true
+    }
 
   ],
 
 
   "Fishing": [
 
-    ["Fishing rod", 1],
-    ["Tackle box", 1],
-    ["Landing net", 1],
-    ["Fishing licence", 1],
-    ["Bait / lures", 1],
-    ["Pliers", 1]
+    {
+      name: "Fishing rod",
+      qty: 1
+    },
+
+    {
+      name: "Tackle box",
+      qty: 1
+    },
+
+    {
+      name: "Landing net",
+      qty: 1
+    },
+
+    {
+      name: "Fishing licence",
+      qty: 1
+    },
+
+    {
+      name: "Bait / lures",
+      qty: 1
+    },
+
+    {
+      name: "Pliers",
+      qty: 1
+    }
 
   ],
 
 
   "Hiking": [
 
-    ["Daypack", 1],
-    ["Hiking boots", "people"],
-    ["Water bottle", "people"],
-    ["Trail snacks", 1],
-    ["Trekking poles", 1],
-    ["Offline map", 1]
+    {
+      name: "Daypack",
+      qty: 1
+    },
+
+    {
+      name: "Hiking boots",
+      qty: "people"
+    },
+
+    {
+      name: "Water bottle",
+      qty: "people"
+    },
+
+    {
+      name: "Trail snacks",
+      qty: 1
+    },
+
+    {
+      name: "Trekking poles",
+      qty: 1
+    },
+
+    {
+      name: "Offline map",
+      qty: 1
+    }
 
   ],
 
 
   "Swimming": [
 
-    ["Swimsuit", "people"],
-    ["Beach towel", "people"],
-    ["Water shoes", "people"],
-    ["Dry bag", 1]
+    {
+      name: "Swimsuit",
+      qty: "people"
+    },
+
+    {
+      name: "Beach towel",
+      qty: "people"
+    },
+
+    {
+      name: "Water shoes",
+      qty: "people"
+    },
+
+    {
+      name: "Dry bag",
+      qty: 1
+    }
 
   ],
 
 
   "Ski / Snowboard": [
 
-    ["Ski jacket", "people"],
-    ["Snow pants", "people"],
-    ["Ski socks", "people"],
-    ["Thermal base layer", "people"],
-    ["Gloves", "people"],
-    ["Goggles", "people"],
-    ["Helmet", "people"],
-    ["Ski / snowboard equipment", "people"],
-    ["Lift pass", "people"],
-    ["Equipment rental confirmation", 1]
+    {
+      name: "Ski jacket",
+      qty: "people"
+    },
+
+    {
+      name: "Snow pants",
+      qty: "people"
+    },
+
+    {
+      name: "Ski socks",
+      qty: "people"
+    },
+
+    {
+      name: "Thermal base layer",
+      qty: "people"
+    },
+
+    {
+      name: "Gloves",
+      qty: "people"
+    },
+
+    {
+      name: "Goggles",
+      qty: "people"
+    },
+
+    {
+      name: "Helmet",
+      qty: "people"
+    },
+
+    {
+      name: "Ski / snowboard equipment",
+      qty: "people"
+    },
+
+    {
+      name: "Lift pass",
+      qty: "people"
+    },
+
+    {
+      name: "Equipment rental confirmation",
+      qty: 1
+    }
 
   ],
 
 
   "Diving / Snorkeling": [
 
-    ["Mask", "people"],
-    ["Snorkel", "people"],
-    ["Fins", "people"],
-    ["Rash guard", "people"],
-    ["Dry bag", 1],
-    ["Dive certification card", 1],
-    ["Dive computer", 1],
-    ["Underwater camera", 1],
-    ["Dive booking confirmation", 1]
+    {
+      name: "Mask",
+      qty: "people"
+    },
+
+    {
+      name: "Snorkel",
+      qty: "people"
+    },
+
+    {
+      name: "Fins",
+      qty: "people"
+    },
+
+    {
+      name: "Rash guard",
+      qty: "people"
+    },
+
+    {
+      name: "Dry bag",
+      qty: 1
+    },
+
+    {
+      name: "Dive certification card",
+      qty: 1
+    },
+
+    {
+      name: "Dive computer",
+      qty: 1
+    },
+
+    {
+      name: "Underwater camera",
+      qty: 1
+    },
+
+    {
+      name: "Dive booking confirmation",
+      qty: 1
+    }
 
   ],
 
 
   "Rental Car": [
 
-    ["Driver's licence", 1],
-    ["Credit card", 1],
-    ["Rental confirmation", 1],
-    ["Insurance documents", 1],
-    ["Phone mount", 1],
-    ["Car charger", 1],
-    ["Offline map", 1],
-    ["Child seat", 1]
+    {
+      name: "Driver's licence",
+      qty: 1
+    },
+
+    {
+      name: "Credit card",
+      qty: 1
+    },
+
+    {
+      name: "Rental confirmation",
+      qty: 1
+    },
+
+    {
+      name: "Insurance documents",
+      qty: 1
+    },
+
+    {
+      name: "Phone mount",
+      qty: 1
+    },
+
+    {
+      name: "Car charger",
+      qty: 1
+    },
+
+    {
+      name: "Offline map",
+      qty: 1
+    },
+
+    {
+      name: "Child seat",
+      qty: 1
+    }
 
   ],
 
 
   "Cruise": [
 
-    ["Cruise documents", 1],
-    ["Passport", "people"],
-    ["Formal clothing", "people"],
-    ["Swimsuit", "people"],
-    ["Motion sickness medication", 1],
-    ["Small day bag", 1]
+    {
+      name: "Cruise documents",
+      qty: 1
+    },
+
+    {
+      name: "Passport",
+      qty: "people"
+    },
+
+    {
+      name: "Formal clothing",
+      qty: "people"
+    },
+
+    {
+      name: "Swimsuit",
+      qty: "people"
+    },
+
+    {
+      name: "Motion sickness medication",
+      qty: 1
+    },
+
+    {
+      name: "Small day bag",
+      qty: 1
+    }
 
   ],
 
 
   "City Trip": [
 
-    ["Comfortable walking shoes", "people"],
-    ["Small backpack", 1],
-    ["Transit card", 1],
-    ["Offline map", 1],
-    ["Reusable water bottle", "people"]
+    {
+      name: "Comfortable walking shoes",
+      qty: "people"
+    },
+
+    {
+      name: "Small backpack",
+      qty: 1
+    },
+
+    {
+      name: "Transit card",
+      qty: 1
+    },
+
+    {
+      name: "Offline map",
+      qty: 1
+    },
+
+    {
+      name: "Reusable water bottle",
+      qty: "people"
+    }
 
   ],
 
 
   "Business Trip": [
 
-    ["Laptop", 1],
-    ["Laptop charger", 1],
-    ["Work documents", 1],
-    ["Business clothing", 2],
-    ["Notebook", 1]
+    {
+      name: "Laptop",
+      qty: 1
+    },
+
+    {
+      name: "Laptop charger",
+      qty: 1
+    },
+
+    {
+      name: "Work documents",
+      qty: 1
+    },
+
+    {
+      name: "Business clothing",
+      qty: 2
+    },
+
+    {
+      name: "Notebook",
+      qty: 1
+    }
 
   ],
 
 
   "Formal Event": [
 
-    ["Formal outfit", "people"],
-    ["Dress shoes", "people"],
-    ["Accessories", "people"],
-    ["Garment bag", 1]
+    {
+      name: "Formal outfit",
+      qty: "people"
+    },
+
+    {
+      name: "Dress shoes",
+      qty: "people"
+    },
+
+    {
+      name: "Accessories",
+      qty: "people"
+    },
+
+    {
+      name: "Garment bag",
+      qty: 1
+    }
 
   ],
 
 
   "Photography": [
 
-    ["Camera", 1],
-    ["Camera charger", 1],
-    ["Memory card", 1],
-    ["Tripod", 1],
-    ["Camera batteries", 2]
+    {
+      name: "Camera",
+      qty: 1
+    },
+
+    {
+      name: "Camera charger",
+      qty: 1,
+      minNights: 1
+    },
+
+    {
+      name: "Memory card",
+      qty: 1
+    },
+
+    {
+      name: "Tripod",
+      qty: 1
+    },
+
+    {
+      name: "Camera batteries",
+      qty: 2
+    }
 
   ],
 
 
   "Theme Park": [
 
-    ["Tickets", 1],
-    ["Portable charger", 1],
-    ["Water bottle", "people"],
-    ["Comfortable shoes", "people"],
-    ["Small backpack", 1]
+    {
+      name: "Tickets",
+      qty: 1
+    },
+
+    {
+      name: "Portable charger",
+      qty: 1
+    },
+
+    {
+      name: "Water bottle",
+      qty: "people"
+    },
+
+    {
+      name: "Comfortable shoes",
+      qty: "people"
+    },
+
+    {
+      name: "Small backpack",
+      qty: 1
+    }
 
   ],
 
 
   "Cycling": [
 
-    ["Bike helmet", "people"],
-    ["Bike gloves", "people"],
-    ["Water bottle", "people"],
-    ["Bike repair kit", 1]
+    {
+      name: "Bike helmet",
+      qty: "people"
+    },
+
+    {
+      name: "Bike gloves",
+      qty: "people"
+    },
+
+    {
+      name: "Water bottle",
+      qty: "people"
+    },
+
+    {
+      name: "Bike repair kit",
+      qty: 1
+    }
 
   ],
 
 
   "Pets": [
 
-    ["Pet food", 1],
-    ["Water bowl", 1],
-    ["Leash", 1],
-    ["Waste bags", 1],
-    ["Pet bed / blanket", 1]
+    {
+      name: "Pet food",
+      qty: 1
+    },
+
+    {
+      name: "Water bowl",
+      qty: 1
+    },
+
+    {
+      name: "Leash",
+      qty: 1
+    },
+
+    {
+      name: "Waste bags",
+      qty: 1
+    },
+
+    {
+      name: "Pet bed / blanket",
+      qty: 1,
+      minNights: 1
+    }
 
   ],
 
 
   "Kids": [
 
-    ["Kids clothing", 1],
-    ["Favorite toy", 1],
-    ["Kids snacks", 1],
-    ["Wipes", 1],
-    ["Entertainment", 1]
+    {
+      name: "Kids clothing",
+      qty: 1
+    },
+
+    {
+      name: "Favorite toy",
+      qty: 1
+    },
+
+    {
+      name: "Kids snacks",
+      qty: 1
+    },
+
+    {
+      name: "Wipes",
+      qty: 1
+    },
+
+    {
+      name: "Entertainment",
+      qty: 1
+    }
 
   ],
 
 
   "Beach": [
 
-    ["Beach blanket", 1],
-    ["Umbrella / shade", 1],
-    ["Sunglasses", "people"],
-    ["Flip-flops", "people"],
-    ["Swimsuit", "people"]
+    {
+      name: "Beach blanket",
+      qty: 1
+    },
+
+    {
+      name: "Umbrella / shade",
+      qty: 1
+    },
+
+    {
+      name: "Sunglasses",
+      qty: "people"
+    },
+
+    {
+      name: "Flip-flops",
+      qty: "people"
+    },
+
+    {
+      name: "Swimsuit",
+      qty: "people"
+    }
 
   ],
 
 
   "Winter Gear": [
 
-    ["Winter jacket", "people"],
-    ["Warm boots", "people"],
-    ["Gloves", "people"],
-    ["Warm hat", "people"],
-    ["Thermal base layer", "people"],
-    ["Hand warmers", 1]
+    {
+      name: "Winter jacket",
+      qty: "people"
+    },
+
+    {
+      name: "Warm boots",
+      qty: "people"
+    },
+
+    {
+      name: "Gloves",
+      qty: "people"
+    },
+
+    {
+      name: "Warm hat",
+      qty: "people"
+    },
+
+    {
+      name: "Thermal base layer",
+      qty: "people"
+    },
+
+    {
+      name: "Hand warmers",
+      qty: 1
+    }
 
   ],
 
 
   "Road Trip": [
 
-    ["Driver's licence", 1],
-    ["Vehicle insurance", 1],
-    ["Car charger", 1],
-    ["Emergency roadside kit", 1],
-    ["Phone mount", 1],
-    ["Reusable water bottle", "people"]
+    {
+      name: "Driver's licence",
+      qty: 1
+    },
+
+    {
+      name: "Vehicle insurance",
+      qty: 1
+    },
+
+    {
+      name: "Car charger",
+      qty: 1
+    },
+
+    {
+      name: "Emergency roadside kit",
+      qty: 1
+    },
+
+    {
+      name: "Phone mount",
+      qty: 1
+    },
+
+    {
+      name: "Reusable water bottle",
+      qty: "people"
+    }
 
   ],
 
 
   "Travel Documents": [
 
-    ["Passport / ID", "people"],
-    ["Booking confirmations", 1],
-    ["Travel insurance", 1],
-    ["Wallet", "people"]
+    {
+      name: "Passport / ID",
+      qty: "people"
+    },
+
+    {
+      name: "Booking confirmations",
+      qty: 1
+    },
+
+    {
+      name: "Travel insurance",
+      qty: 1
+    },
+
+    {
+      name: "Wallet",
+      qty: "people"
+    }
 
   ],
 
 
   "Entertainment": [
 
-    ["Book / e-reader", 1],
-    ["Playing cards", 1],
-    ["Headphones", "people"]
+    {
+      name: "Book / e-reader",
+      qty: 1
+    },
+
+    {
+      name: "Playing cards",
+      qty: 1
+    },
+
+    {
+      name: "Headphones",
+      qty: "people"
+    }
 
   ]
 
@@ -473,21 +1155,29 @@ const packingDatabase = {
 
 
 /* ==========================================
-   APP STATE
+   STATE
 ========================================== */
 
-let data = loadData();
+let data =
+  loadData();
 
 
 let state = {
 
-  page: "home",
+  page:
+    "home",
 
-  history: [],
+  history:
+    [],
 
-  newTrip: null,
+  newTrip:
+    null,
 
-  activeTripId: null
+  activeTripId:
+    null,
+
+  editingExistingTrip:
+    false
 
 };
 
@@ -498,28 +1188,51 @@ let state = {
 ========================================== */
 
 const screen =
-  document.getElementById("screen");
+  document.getElementById(
+    "screen"
+  );
+
 
 const menuButton =
-  document.getElementById("menuBtn");
+  document.getElementById(
+    "menuBtn"
+  );
+
 
 const drawer =
-  document.getElementById("drawer");
+  document.getElementById(
+    "drawer"
+  );
+
 
 const drawerOverlay =
-  document.getElementById("drawerOverlay");
+  document.getElementById(
+    "drawerOverlay"
+  );
+
 
 const backButton =
-  document.getElementById("backBtn");
+  document.getElementById(
+    "backBtn"
+  );
+
 
 const topTitle =
-  document.getElementById("topTitle");
+  document.getElementById(
+    "topTitle"
+  );
+
 
 const toast =
-  document.getElementById("toast");
+  document.getElementById(
+    "toast"
+  );
+
 
 const modalOverlay =
-  document.getElementById("modalOverlay");
+  document.getElementById(
+    "modalOverlay"
+  );
 
 
 
@@ -530,13 +1243,17 @@ const modalOverlay =
 function loadData() {
 
   const saved =
-    localStorage.getItem(STORAGE_KEY);
+    localStorage.getItem(
+      STORAGE_KEY
+    );
 
 
   if (!saved) {
 
     return JSON.parse(
-      JSON.stringify(defaultData)
+      JSON.stringify(
+        defaultData
+      )
     );
 
   }
@@ -544,14 +1261,18 @@ function loadData() {
 
   try {
 
-    return JSON.parse(saved);
+    return JSON.parse(
+      saved
+    );
 
   }
 
   catch {
 
     return JSON.parse(
-      JSON.stringify(defaultData)
+      JSON.stringify(
+        defaultData
+      )
     );
 
   }
@@ -563,8 +1284,13 @@ function loadData() {
 function saveData() {
 
   localStorage.setItem(
+
     STORAGE_KEY,
-    JSON.stringify(data)
+
+    JSON.stringify(
+      data
+    )
+
   );
 
 }
@@ -575,13 +1301,18 @@ function saveData() {
    MENU
 ========================================== */
 
-menuButton.onclick = function () {
+menuButton.onclick =
+  function () {
 
-  drawer.classList.add("open");
+    drawer.classList.add(
+      "open"
+    );
 
-  drawerOverlay.classList.remove("hidden");
+    drawerOverlay.classList.remove(
+      "hidden"
+    );
 
-};
+  };
 
 
 drawerOverlay.onclick =
@@ -590,30 +1321,43 @@ drawerOverlay.onclick =
 
 function closeMenu() {
 
-  drawer.classList.remove("open");
+  drawer.classList.remove(
+    "open"
+  );
 
-  drawerOverlay.classList.add("hidden");
+  drawerOverlay.classList.add(
+    "hidden"
+  );
 
 }
 
 
 
 document
-  .querySelectorAll("[data-nav]")
-  .forEach(function (button) {
+  .querySelectorAll(
+    "[data-nav]"
+  )
+  .forEach(
 
-    button.onclick =
-      function () {
+    function (button) {
 
-        closeMenu();
+      button.onclick =
+        function () {
 
-        navigate(
-          button.dataset.nav
-        );
+          closeMenu();
 
-      };
+          state.history = [];
 
-  });
+          state.page =
+            button.dataset.nav;
+
+          render();
+
+        };
+
+    }
+
+  );
 
 
 
@@ -621,9 +1365,16 @@ document
    NAVIGATION
 ========================================== */
 
-function navigate(page) {
+function navigate(
+  page,
+  addHistory = true
+) {
 
-  if (state.page !== page) {
+  if (
+    addHistory
+    &&
+    state.page !== page
+  ) {
 
     state.history.push(
       state.page
@@ -631,7 +1382,10 @@ function navigate(page) {
 
   }
 
-  state.page = page;
+
+  state.page =
+    page;
+
 
   render();
 
@@ -642,18 +1396,59 @@ function navigate(page) {
 backButton.onclick =
   function () {
 
-    if (state.history.length > 0) {
+
+    if (
+      state.page ===
+      "packing"
+    ) {
+
+      const trip =
+        activeTrip();
+
+
+      if (trip) {
+
+        state.newTrip =
+          JSON.parse(
+            JSON.stringify(
+              trip
+            )
+          );
+
+
+        state.editingExistingTrip =
+          true;
+
+
+        state.page =
+          "categories";
+
+
+        render();
+
+        return;
+
+      }
+
+    }
+
+
+    if (
+      state.history.length > 0
+    ) {
 
       state.page =
         state.history.pop();
 
-    }
+      render();
 
-    else {
-
-      state.page = "home";
+      return;
 
     }
+
+
+    state.page =
+      "home";
 
     render();
 
@@ -667,7 +1462,14 @@ backButton.onclick =
 
 function render() {
 
-  const pagesWithoutBack = [
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: "instant"
+  });
+
+
+  const noBack = [
 
     "home",
     "trips",
@@ -683,7 +1485,7 @@ function render() {
 
     "hidden",
 
-    pagesWithoutBack.includes(
+    noBack.includes(
       state.page
     )
 
@@ -726,49 +1528,125 @@ function render() {
 
 
   topTitle.textContent =
-    titles[state.page]
-    || "PackTrail";
+    titles[
+      state.page
+    ]
+    ||
+    "PackTrail";
 
 
-  if (state.page === "home") {
+  if (
+    state.page ===
+    "home"
+  ) {
+
     renderHome();
+
   }
 
-  if (state.page === "tripType") {
+
+  else if (
+    state.page ===
+    "tripType"
+  ) {
+
     renderTripTypes();
+
   }
 
-  if (state.page === "tripDetails") {
+
+  else if (
+    state.page ===
+    "tripDetails"
+  ) {
+
     renderTripDetails();
+
   }
 
-  if (state.page === "categories") {
+
+  else if (
+    state.page ===
+    "categories"
+  ) {
+
     renderCategories();
+
   }
 
-  if (state.page === "packing") {
+
+  else if (
+    state.page ===
+    "packing"
+  ) {
+
     renderPackingList();
+
   }
 
-  if (state.page === "trips") {
+
+  else if (
+    state.page ===
+    "trips"
+  ) {
+
     renderTrips();
+
   }
 
-  if (state.page === "gear") {
+
+  else if (
+    state.page ===
+    "gear"
+  ) {
+
     renderGear();
+
   }
 
-  if (state.page === "shopping") {
+
+  else if (
+    state.page ===
+    "shopping"
+  ) {
+
     renderShopping();
+
   }
 
-  if (state.page === "settings") {
+
+  else if (
+    state.page ===
+    "settings"
+  ) {
+
     renderSettings();
+
   }
 
-  if (state.page === "about") {
+
+  else if (
+    state.page ===
+    "about"
+  ) {
+
     renderAbout();
+
   }
+
+
+  setTimeout(
+    function () {
+
+      window.scrollTo(
+        0,
+        0
+      );
+
+    },
+
+    0
+  );
 
 }
 
@@ -799,15 +1677,30 @@ function renderHome() {
 
 
   document
-    .getElementById("newTripButton")
+    .getElementById(
+      "newTripButton"
+    )
     .onclick =
       function () {
 
-        state.newTrip = null;
 
-        navigate(
-          "tripType"
-        );
+        state.newTrip =
+          null;
+
+
+        state.editingExistingTrip =
+          false;
+
+
+        state.history =
+          ["home"];
+
+
+        state.page =
+          "tripType";
+
+
+        render();
 
       };
 
@@ -816,7 +1709,7 @@ function renderHome() {
 
 
 /* ==========================================
-   TRIP TYPES
+   TRIP TYPE
 ========================================== */
 
 function renderTripTypes() {
@@ -824,8 +1717,11 @@ function renderTripTypes() {
   screen.innerHTML = `
 
     <h1 class="page-title">
+
       What kind of trip?
+
     </h1>
+
 
     <p class="page-subtitle">
 
@@ -838,6 +1734,7 @@ function renderTripTypes() {
     <div class="trip-grid">
 
       ${tripTypes.map(
+
         function (trip) {
 
           return `
@@ -848,11 +1745,15 @@ function renderTripTypes() {
             >
 
               <span class="trip-emoji">
+
                 ${trip.emoji}
+
               </span>
 
               <span class="trip-label">
+
                 ${trip.name}
+
               </span>
 
             </button>
@@ -860,6 +1761,7 @@ function renderTripTypes() {
           `;
 
         }
+
       ).join("")}
 
     </div>
@@ -872,13 +1774,16 @@ function renderTripTypes() {
       "[data-trip-type]"
     )
     .forEach(
+
       function (button) {
 
         button.onclick =
           function () {
 
+
             const type =
               tripTypes.find(
+
                 function (trip) {
 
                   return (
@@ -887,6 +1792,7 @@ function renderTripTypes() {
                   );
 
                 }
+
               );
 
 
@@ -906,8 +1812,10 @@ function renderTripTypes() {
 
               name:
                 "My "
-                + type.name
-                + " Trip",
+                +
+                type.name
+                +
+                " Trip",
 
               duration:
                 3,
@@ -934,6 +1842,7 @@ function renderTripTypes() {
           };
 
       }
+
     );
 
 }
@@ -948,6 +1857,18 @@ function renderTripDetails() {
 
   const trip =
     state.newTrip;
+
+
+  if (!trip) {
+
+    state.page =
+      "tripType";
+
+    render();
+
+    return;
+
+  }
 
 
   screen.innerHTML = `
@@ -974,13 +1895,16 @@ function renderTripDetails() {
       <div class="card">
 
         <label class="field-label">
+
           Trip name
+
         </label>
+
 
         <input
           id="tripName"
           class="text-input"
-          value="${trip.name}"
+          value="${escapeHtml(trip.name)}"
         >
 
       </div>
@@ -989,7 +1913,9 @@ function renderTripDetails() {
       <div class="card">
 
         <label class="field-label">
+
           Duration
+
         </label>
 
 
@@ -1003,10 +1929,18 @@ function renderTripDetails() {
           <div class="counter-value">
 
             <span id="durationNumber">
+
               ${trip.duration}
+
             </span>
 
-            nights
+            ${
+              trip.duration === 1
+              ?
+              "day"
+              :
+              "days"
+            }
 
           </div>
 
@@ -1017,13 +1951,38 @@ function renderTripDetails() {
 
         </div>
 
+
+        ${
+          trip.duration === 1
+
+          ?
+
+          `
+
+          <p class="small-note">
+
+            1-day trip is treated as
+            no overnight stay.
+
+          </p>
+
+          `
+
+          :
+
+          ""
+
+        }
+
       </div>
 
 
       <div class="card">
 
         <label class="field-label">
+
           Season
+
         </label>
 
 
@@ -1035,6 +1994,7 @@ function renderTripDetails() {
             "Fall",
             "Winter"
           ].map(
+
             function (season) {
 
               return `
@@ -1043,8 +2003,10 @@ function renderTripDetails() {
                   class="chip
                   ${
                     trip.season === season
-                    ? "active"
-                    : ""
+                    ?
+                    "active"
+                    :
+                    ""
                   }"
                   data-season="${season}"
                 >
@@ -1056,6 +2018,7 @@ function renderTripDetails() {
               `;
 
             }
+
           ).join("")}
 
         </div>
@@ -1066,7 +2029,9 @@ function renderTripDetails() {
       <div class="card">
 
         <label class="field-label">
+
           People
+
         </label>
 
 
@@ -1078,7 +2043,6 @@ function renderTripDetails() {
 
 
           <div
-            id="peopleNumber"
             class="counter-value"
           >
 
@@ -1100,7 +2064,8 @@ function renderTripDetails() {
 
         <label class="field-label">
 
-          What will you do on this trip?
+          What will you do
+          on this trip?
 
         </label>
 
@@ -1108,6 +2073,7 @@ function renderTripDetails() {
         <div class="chips">
 
           ${activities.map(
+
             function (activity) {
 
               return `
@@ -1115,9 +2081,13 @@ function renderTripDetails() {
                 <button
                   class="chip
                   ${
-                    trip.activities.includes(activity)
-                    ? "active"
-                    : ""
+                    trip.activities.includes(
+                      activity
+                    )
+                    ?
+                    "active"
+                    :
+                    ""
                   }"
                   data-activity="${activity}"
                 >
@@ -1129,6 +2099,7 @@ function renderTripDetails() {
               `;
 
             }
+
           ).join("")}
 
         </div>
@@ -1154,11 +2125,33 @@ function renderTripDetails() {
   `;
 
 
+  function preserveName() {
+
+    const input =
+      document.getElementById(
+        "tripName"
+      );
+
+
+    if (input) {
+
+      trip.name =
+        input.value;
+
+    }
+
+  }
+
+
 
   document
-    .getElementById("minusDuration")
+    .getElementById(
+      "minusDuration"
+    )
     .onclick =
       function () {
+
+        preserveName();
 
         trip.duration =
           Math.max(
@@ -1172,9 +2165,13 @@ function renderTripDetails() {
 
 
   document
-    .getElementById("plusDuration")
+    .getElementById(
+      "plusDuration"
+    )
     .onclick =
       function () {
+
+        preserveName();
 
         trip.duration++;
 
@@ -1184,9 +2181,13 @@ function renderTripDetails() {
 
 
   document
-    .getElementById("minusPeople")
+    .getElementById(
+      "minusPeople"
+    )
     .onclick =
       function () {
+
+        preserveName();
 
         trip.people =
           Math.max(
@@ -1200,9 +2201,13 @@ function renderTripDetails() {
 
 
   document
-    .getElementById("plusPeople")
+    .getElementById(
+      "plusPeople"
+    )
     .onclick =
       function () {
+
+        preserveName();
 
         trip.people++;
 
@@ -1216,10 +2221,13 @@ function renderTripDetails() {
       "[data-season]"
     )
     .forEach(
+
       function (button) {
 
         button.onclick =
           function () {
+
+            preserveName();
 
             trip.season =
               button.dataset.season;
@@ -1229,6 +2237,7 @@ function renderTripDetails() {
           };
 
       }
+
     );
 
 
@@ -1237,10 +2246,13 @@ function renderTripDetails() {
       "[data-activity]"
     )
     .forEach(
+
       function (button) {
 
         button.onclick =
           function () {
+
+            preserveName();
 
             const activity =
               button.dataset.activity;
@@ -1254,6 +2266,7 @@ function renderTripDetails() {
 
               trip.activities =
                 trip.activities.filter(
+
                   function (item) {
 
                     return (
@@ -1261,6 +2274,7 @@ function renderTripDetails() {
                     );
 
                   }
+
                 );
 
             }
@@ -1273,11 +2287,13 @@ function renderTripDetails() {
 
             }
 
+
             renderTripDetails();
 
           };
 
       }
+
     );
 
 
@@ -1288,12 +2304,16 @@ function renderTripDetails() {
     .onclick =
       function () {
 
+
         trip.name =
           document
-            .getElementById("tripName")
+            .getElementById(
+              "tripName"
+            )
             .value
             .trim()
-          || "My Trip";
+          ||
+          "My Trip";
 
 
         trip.categories =
@@ -1331,7 +2351,8 @@ function suggestedCategories(
 
 
   if (
-    trip.type === "camping"
+    trip.type ===
+    "camping"
   ) {
 
     categories.unshift(
@@ -1350,7 +2371,8 @@ function suggestedCategories(
 
 
   if (
-    trip.type === "roadtrip"
+    trip.type ===
+    "roadtrip"
   ) {
 
     categories.push(
@@ -1365,7 +2387,8 @@ function suggestedCategories(
 
 
   if (
-    trip.type === "vacation"
+    trip.type ===
+    "vacation"
   ) {
 
     categories.push(
@@ -1376,7 +2399,8 @@ function suggestedCategories(
 
 
   if (
-    trip.type === "fishing"
+    trip.type ===
+    "fishing"
   ) {
 
     categories.push(
@@ -1387,7 +2411,8 @@ function suggestedCategories(
 
 
   if (
-    trip.type === "hiking"
+    trip.type ===
+    "hiking"
   ) {
 
     categories.push(
@@ -1398,7 +2423,8 @@ function suggestedCategories(
 
 
   if (
-    trip.type === "beach"
+    trip.type ===
+    "beach"
   ) {
 
     categories.push(
@@ -1409,9 +2435,11 @@ function suggestedCategories(
 
 
   if (
-    trip.type === "winter"
+    trip.type ===
+    "winter"
     ||
-    trip.season === "Winter"
+    trip.season ===
+    "Winter"
   ) {
 
     categories.push(
@@ -1422,6 +2450,7 @@ function suggestedCategories(
 
 
   trip.activities.forEach(
+
     function (activity) {
 
       if (
@@ -1437,11 +2466,14 @@ function suggestedCategories(
       }
 
     }
+
   );
 
 
   return [
-    ...new Set(categories)
+    ...new Set(
+      categories
+    )
   ];
 
 }
@@ -1449,7 +2481,7 @@ function suggestedCategories(
 
 
 /* ==========================================
-   CATEGORY SCREEN
+   CATEGORIES SCREEN
 ========================================== */
 
 function renderCategories() {
@@ -1458,10 +2490,36 @@ function renderCategories() {
     state.newTrip;
 
 
+  if (!trip) {
+
+    state.page =
+      "tripType";
+
+    render();
+
+    return;
+
+  }
+
+
   const recommended =
     suggestedCategories(
       trip
     );
+
+
+  const selected =
+    trip.categories
+    &&
+    trip.categories.length
+
+      ?
+
+      trip.categories
+
+      :
+
+      recommended;
 
 
   const allCategories =
@@ -1481,8 +2539,8 @@ function renderCategories() {
 
     <p class="page-subtitle">
 
-      We selected categories
-      that fit your trip.
+      Remove anything you do not need
+      before generating the list.
 
     </p>
 
@@ -1497,14 +2555,21 @@ function renderCategories() {
     <div class="stack">
 
       ${recommended.map(
+
         function (category) {
 
           return categoryOption(
+
             category,
-            true
+
+            selected.includes(
+              category
+            )
+
           );
 
         }
+
       ).join("")}
 
     </div>
@@ -1520,7 +2585,9 @@ function renderCategories() {
     <div class="stack">
 
       ${allCategories
+
         .filter(
+
           function (category) {
 
             return (
@@ -1530,17 +2597,27 @@ function renderCategories() {
             );
 
           }
+
         )
+
         .map(
+
           function (category) {
 
             return categoryOption(
+
               category,
-              false
+
+              selected.includes(
+                category
+              )
+
             );
 
           }
+
         )
+
         .join("")
       }
 
@@ -1554,7 +2631,13 @@ function renderCategories() {
         class="primary-button"
       >
 
-        Create List
+        ${
+          state.editingExistingTrip
+          ?
+          "Update List"
+          :
+          "Create List"
+        }
 
       </button>
 
@@ -1573,44 +2656,143 @@ function renderCategories() {
 
         trip.categories =
           Array.from(
+
             document.querySelectorAll(
               ".category-checkbox:checked"
             )
+
           )
           .map(
+
             function (checkbox) {
 
               return checkbox.value;
 
             }
+
           );
 
 
-        trip.items =
+        if (
+          trip.categories.length === 0
+        ) {
+
+          showToast(
+            "Choose at least one category"
+          );
+
+          return;
+
+        }
+
+
+        const generatedItems =
           createItems(
             trip
           );
 
 
-        data.trips.unshift(
-          trip
-        );
+        if (
+          state.editingExistingTrip
+        ) {
+
+          const existing =
+            data.trips.find(
+
+              function (savedTrip) {
+
+                return (
+                  savedTrip.id ===
+                  trip.id
+                );
+
+              }
+
+            );
+
+
+          if (existing) {
+
+            preserveExistingProgress(
+
+              existing,
+
+              generatedItems
+
+            );
+
+
+            existing.type =
+              trip.type;
+
+            existing.typeName =
+              trip.typeName;
+
+            existing.emoji =
+              trip.emoji;
+
+            existing.name =
+              trip.name;
+
+            existing.duration =
+              trip.duration;
+
+            existing.season =
+              trip.season;
+
+            existing.people =
+              trip.people;
+
+            existing.activities =
+              trip.activities;
+
+            existing.categories =
+              trip.categories;
+
+            existing.items =
+              generatedItems;
+
+
+            state.activeTripId =
+              existing.id;
+
+          }
+
+        }
+
+        else {
+
+          trip.items =
+            generatedItems;
+
+
+          data.trips.unshift(
+            trip
+          );
+
+
+          state.activeTripId =
+            trip.id;
+
+        }
 
 
         saveData();
 
 
-        state.activeTripId =
-          trip.id;
+        state.editingExistingTrip =
+          false;
 
 
         state.newTrip =
           null;
 
 
-        navigate(
-          "packing"
-        );
+        state.page =
+          "packing";
+
+
+        render();
 
       };
 
@@ -1630,7 +2812,7 @@ function categoryOption(
       <input
         type="checkbox"
         class="category-checkbox"
-        value="${category}"
+        value="${escapeHtml(category)}"
         ${checked ? "checked" : ""}
       >
 
@@ -1649,8 +2831,196 @@ function categoryOption(
 
 
 /* ==========================================
-   CREATE ITEMS
+   ITEM GENERATION
 ========================================== */
+
+function shouldIncludeItem(
+  definition,
+  trip
+) {
+
+  const nights =
+    Math.max(
+      0,
+      trip.duration - 1
+    );
+
+
+  if (
+    definition.minNights
+    &&
+    nights <
+    definition.minNights
+  ) {
+
+    return false;
+
+  }
+
+
+  if (
+    definition.campingOnly
+    &&
+    trip.type !==
+    "camping"
+  ) {
+
+    return false;
+
+  }
+
+
+  if (
+    definition.campingUseful
+    &&
+    trip.duration === 1
+    &&
+    trip.type !==
+    "camping"
+  ) {
+
+    return false;
+
+  }
+
+
+  if (
+    definition.outdoorsUseful
+  ) {
+
+    const outdoor =
+      [
+        "camping",
+        "hiking",
+        "fishing"
+      ]
+      .includes(
+        trip.type
+      );
+
+
+    if (
+      !outdoor
+      &&
+      trip.duration === 1
+    ) {
+
+      return false;
+
+    }
+
+  }
+
+
+  return true;
+
+}
+
+
+
+function resolveQuantity(
+  qty,
+  trip
+) {
+
+  const nights =
+    Math.max(
+      0,
+      trip.duration - 1
+    );
+
+
+  if (
+    qty ===
+    "people"
+  ) {
+
+    return trip.people;
+
+  }
+
+
+  if (
+    qty ===
+    "shirts"
+  ) {
+
+    return Math.max(
+      1,
+      Math.min(
+        nights + 1,
+        7
+      )
+    );
+
+  }
+
+
+  if (
+    qty ===
+    "underwear"
+  ) {
+
+    return Math.max(
+      1,
+      Math.min(
+        nights + 1,
+        8
+      )
+    );
+
+  }
+
+
+  if (
+    qty ===
+    "socks"
+  ) {
+
+    return Math.max(
+      1,
+      Math.min(
+        nights + 1,
+        8
+      )
+    );
+
+  }
+
+
+  if (
+    qty ===
+    "pants"
+  ) {
+
+    if (
+      trip.duration <= 2
+    ) {
+
+      return 1;
+
+    }
+
+
+    if (
+      trip.duration <= 5
+    ) {
+
+      return 2;
+
+    }
+
+
+    return 3;
+
+  }
+
+
+  return qty || 1;
+
+}
+
+
 
 function createItems(
   trip
@@ -1660,77 +3030,161 @@ function createItems(
 
 
   trip.categories.forEach(
+
     function (category) {
 
 
-      const items =
+      const definitions =
         packingDatabase[
           category
         ]
-        || [];
+        ||
+        [];
 
 
-      result[category] =
-        items.map(
-          function (item) {
+      result[
+        category
+      ] =
+        definitions
 
+          .filter(
 
-            let quantity =
-              item[1];
+            function (definition) {
 
+              return shouldIncludeItem(
 
-            if (
-              quantity === "people"
-            ) {
+                definition,
 
-              quantity =
-                trip.people;
+                trip
 
-            }
-
-
-            if (
-              quantity === "days"
-            ) {
-
-              quantity =
-                trip.duration;
+              );
 
             }
 
+          )
 
-            return {
+          .map(
 
-              id:
-                Date.now().toString()
-                +
-                Math.random(),
+            function (definition) {
 
-              name:
-                item[0],
+              return {
 
-              required:
-                quantity,
+                id:
+                  Date.now().toString()
+                  +
+                  Math.random(),
 
-              packed:
-                0,
+                name:
+                  definition.name,
 
-              needToBuy:
-                0,
+                required:
+                  resolveQuantity(
+                    definition.qty,
+                    trip
+                  ),
 
-              bought:
-                0
+                packed:
+                  0,
 
-            };
+                needToBuy:
+                  0,
 
-          }
-        );
+                bought:
+                  0
+
+              };
+
+            }
+
+          );
 
     }
+
   );
 
 
   return result;
+
+}
+
+
+
+function preserveExistingProgress(
+  oldTrip,
+  newItems
+) {
+
+  Object.keys(
+    newItems
+  ).forEach(
+
+    function (category) {
+
+
+      newItems[
+        category
+      ].forEach(
+
+        function (newItem) {
+
+
+          const oldCategory =
+            oldTrip.items[
+              category
+            ]
+            ||
+            [];
+
+
+          const oldItem =
+            oldCategory.find(
+
+              function (candidate) {
+
+                return (
+                  candidate.name ===
+                  newItem.name
+                );
+
+              }
+
+            );
+
+
+          if (oldItem) {
+
+            newItem.packed =
+              Math.min(
+
+                oldItem.packed || 0,
+
+                newItem.required
+
+              );
+
+
+            newItem.needToBuy =
+              oldItem.needToBuy || 0;
+
+
+            newItem.bought =
+              Math.min(
+
+                oldItem.bought || 0,
+
+                newItem.needToBuy
+
+              );
+
+          }
+
+        }
+
+      );
+
+    }
+
+  );
 
 }
 
@@ -1743,6 +3197,7 @@ function createItems(
 function activeTrip() {
 
   return data.trips.find(
+
     function (trip) {
 
       return (
@@ -1751,6 +3206,7 @@ function activeTrip() {
       );
 
     }
+
   );
 
 }
@@ -1769,9 +3225,10 @@ function renderPackingList() {
 
   if (!trip) {
 
-    navigate(
-      "trips"
-    );
+    state.page =
+      "trips";
+
+    render();
 
     return;
 
@@ -1787,15 +3244,21 @@ function renderPackingList() {
   const percent =
     totals.totalRequired === 0
 
-      ? 0
+      ?
 
-      : Math.round(
-          totals.totalPacked
-          /
-          totals.totalRequired
-          *
-          100
-        );
+      0
+
+      :
+
+      Math.round(
+
+        totals.totalPacked
+        /
+        totals.totalRequired
+        *
+        100
+
+      );
 
 
   screen.innerHTML = `
@@ -1810,7 +3273,15 @@ function renderPackingList() {
 
     <div class="trip-info">
 
-      ${trip.duration} nights
+      ${trip.duration}
+
+      ${
+        trip.duration === 1
+        ?
+        "day"
+        :
+        "days"
+      }
 
       ·
 
@@ -1822,8 +3293,10 @@ function renderPackingList() {
 
       ${
         trip.people === 1
-        ? "person"
-        : "people"
+        ?
+        "person"
+        :
+        "people"
       }
 
     </div>
@@ -1847,7 +3320,7 @@ function renderPackingList() {
 
       ${totals.totalRequired}
 
-      items packed
+      packed
 
       ·
 
@@ -1861,14 +3334,19 @@ function renderPackingList() {
       ${Object.keys(
         trip.items
       ).map(
+
         function (category) {
 
           return renderPackCategory(
+
             trip,
+
             category
+
           );
 
         }
+
       ).join("")}
 
     </div>
@@ -1902,6 +3380,7 @@ function renderPackingList() {
     .onclick =
       function () {
 
+
         const name =
           prompt(
             "Category name"
@@ -1915,7 +3394,17 @@ function renderPackingList() {
         }
 
 
-        trip.items[name] = [];
+        if (
+          !trip.items[
+            name
+          ]
+        ) {
+
+          trip.items[
+            name
+          ] = [];
+
+        }
 
 
         saveData();
@@ -1945,25 +3434,38 @@ function renderPackCategory(
 
   const packed =
     items.reduce(
-      function (sum, item) {
+
+      function (
+        sum,
+        item
+      ) {
 
         return (
           sum
           +
           Math.min(
+
             item.packed,
+
             item.required
+
           )
         );
 
       },
+
       0
+
     );
 
 
   const required =
     items.reduce(
-      function (sum, item) {
+
+      function (
+        sum,
+        item
+      ) {
 
         return (
           sum
@@ -1972,7 +3474,9 @@ function renderPackCategory(
         );
 
       },
+
       0
+
     );
 
 
@@ -1992,7 +3496,9 @@ function renderPackCategory(
 
         <div class="category-count">
 
-          ${packed}/${required}
+          ${packed}
+          /
+          ${required}
 
         </div>
 
@@ -2002,131 +3508,214 @@ function renderPackCategory(
       <div class="pack-items">
 
 
-        ${items.map(
-          function (item) {
+        ${
+          items.length === 0
+
+          ?
+
+          `
+
+          <div class="empty">
+
+            No items in this category.
+
+          </div>
+
+          `
+
+          :
+
+          items.map(
+
+            function (item) {
 
 
-            const completed =
-              item.packed >=
-              item.required;
+              const completed =
+                item.packed >=
+                item.required;
 
 
-            return `
+              return `
 
-              <div class="pack-item">
+                <div
+                  class="
+                    pack-item
+                    ${
+                      completed
+                      ?
+                      "completed"
+                      :
+                      ""
+                    }
+                  "
+                >
 
-                <div class="pack-item-main">
 
-                  <div class="item-name">
+                  <div class="pack-item-main">
 
-                    ${item.name}
+                    <div class="item-name">
 
-                  </div>
-
-
-                  <div class="item-meta">
-
-                    <span
-                      class="item-pill
                       ${
                         completed
-                        ? "complete"
-                        : ""
-                      }"
-                    >
+                        ?
+                        "✓ "
+                        :
+                        ""
+                      }
 
-                      Packed
-                      ${item.packed}
-                      /
-                      ${item.required}
+                      ${item.name}
 
-                    </span>
+                    </div>
 
 
-                    ${
-                      item.needToBuy > 0
-
-                      ?
-
-                      `
+                    <div class="item-meta">
 
                       <span
-                        class="item-pill buy"
+                        class="
+                          item-pill
+                          ${
+                            completed
+                            ?
+                            "complete"
+                            :
+                            ""
+                          }
+                        "
                       >
 
-                        🛒
-                        ${item.bought}
+                        ${
+                          completed
+                          ?
+                          "✓ Packed"
+                          :
+                          "Packed"
+                        }
+
+                        ${item.packed}
                         /
-                        ${item.needToBuy}
-                        bought
+                        ${item.required}
 
                       </span>
 
-                      `
 
-                      :
+                      ${
+                        item.needToBuy > 0
 
-                      ""
+                        ?
 
-                    }
+                        `
+
+                        <span
+                          class="item-pill buy"
+                        >
+
+                          🛒
+
+                          ${item.bought}
+                          /
+                          ${item.needToBuy}
+
+                          bought
+
+                        </span>
+
+                        `
+
+                        :
+
+                        ""
+
+                      }
+
+                    </div>
+
+                  </div>
+
+
+                  <div class="item-actions">
+
+
+                    <button
+                      class="qty-button"
+                      data-pack-minus
+                      data-category="${escapeHtml(category)}"
+                      data-id="${item.id}"
+                      aria-label="Decrease packed quantity"
+                    >
+
+                      −
+
+                    </button>
+
+
+                    <button
+                      class="qty-button"
+                      data-pack-plus
+                      data-category="${escapeHtml(category)}"
+                      data-id="${item.id}"
+                      aria-label="Increase packed quantity"
+                    >
+
+                      +
+
+                    </button>
+
+
+                    <button
+                      class="quick-action-button shopping"
+                      data-quick-buy
+                      data-category="${escapeHtml(category)}"
+                      data-id="${item.id}"
+                      aria-label="Add to shopping list"
+                    >
+
+                      🛒
+
+                    </button>
+
+
+                    <button
+                      class="quick-action-button edit"
+                      data-edit-item
+                      data-category="${escapeHtml(category)}"
+                      data-id="${item.id}"
+                      aria-label="Edit item"
+                    >
+
+                      ✎
+
+                    </button>
+
+
+                    <button
+                      class="quick-action-button delete"
+                      data-delete-item
+                      data-category="${escapeHtml(category)}"
+                      data-id="${item.id}"
+                      aria-label="Delete item"
+                    >
+
+                      🗑
+
+                    </button>
+
 
                   </div>
 
                 </div>
 
+              `;
 
-                <div class="item-actions">
+            }
 
+          ).join("")
 
-                  <button
-                    class="qty-button"
-                    data-pack-minus
-                    data-category="${category}"
-                    data-id="${item.id}"
-                  >
-
-                    −
-
-                  </button>
-
-
-                  <button
-                    class="qty-button"
-                    data-pack-plus
-                    data-category="${category}"
-                    data-id="${item.id}"
-                  >
-
-                    +
-
-                  </button>
-
-
-                  <button
-                    class="edit-item-button"
-                    data-edit-item
-                    data-category="${category}"
-                    data-id="${item.id}"
-                  >
-
-                    ✎
-
-                  </button>
-
-
-                </div>
-
-              </div>
-
-            `;
-
-          }
-        ).join("")}
+        }
 
 
         <button
           class="add-item"
-          data-add-item="${category}"
+          data-add-item="${escapeHtml(category)}"
         >
 
           + Add item
@@ -2158,23 +3747,39 @@ function attachPackingEvents(
       "[data-pack-plus]"
     )
     .forEach(
+
       function (button) {
 
         button.onclick =
           function () {
 
+
             const item =
               findItem(
+
                 trip,
+
                 button.dataset.category,
+
                 button.dataset.id
+
               );
+
+
+            if (!item) {
+
+              return;
+
+            }
 
 
             item.packed =
               Math.min(
+
                 item.required,
+
                 item.packed + 1
+
               );
 
 
@@ -2185,6 +3790,7 @@ function attachPackingEvents(
           };
 
       }
+
     );
 
 
@@ -2193,23 +3799,39 @@ function attachPackingEvents(
       "[data-pack-minus]"
     )
     .forEach(
+
       function (button) {
 
         button.onclick =
           function () {
 
+
             const item =
               findItem(
+
                 trip,
+
                 button.dataset.category,
+
                 button.dataset.id
+
               );
+
+
+            if (!item) {
+
+              return;
+
+            }
 
 
             item.packed =
               Math.max(
+
                 0,
+
                 item.packed - 1
+
               );
 
 
@@ -2220,6 +3842,59 @@ function attachPackingEvents(
           };
 
       }
+
+    );
+
+
+  document
+    .querySelectorAll(
+      "[data-quick-buy]"
+    )
+    .forEach(
+
+      function (button) {
+
+        button.onclick =
+          function () {
+
+
+            const category =
+              button.dataset.category;
+
+
+            const item =
+              findItem(
+
+                trip,
+
+                category,
+
+                button.dataset.id
+
+              );
+
+
+            if (!item) {
+
+              return;
+
+            }
+
+
+            openQuickBuy(
+
+              trip,
+
+              category,
+
+              item
+
+            );
+
+          };
+
+      }
+
     );
 
 
@@ -2228,10 +3903,12 @@ function attachPackingEvents(
       "[data-edit-item]"
     )
     .forEach(
+
       function (button) {
 
         button.onclick =
           function () {
+
 
             const category =
               button.dataset.category;
@@ -2239,21 +3916,87 @@ function attachPackingEvents(
 
             const item =
               findItem(
+
                 trip,
+
                 category,
+
                 button.dataset.id
+
               );
 
 
+            if (!item) {
+
+              return;
+
+            }
+
+
             openItemEditor(
+
               trip,
+
               category,
+
               item
+
             );
 
           };
 
       }
+
+    );
+
+
+  document
+    .querySelectorAll(
+      "[data-delete-item]"
+    )
+    .forEach(
+
+      function (button) {
+
+        button.onclick =
+          function () {
+
+
+            const category =
+              button.dataset.category;
+
+
+            trip.items[
+              category
+            ] =
+              trip.items[
+                category
+              ].filter(
+
+                function (item) {
+
+                  return (
+                    item.id !==
+                    button.dataset.id
+                  );
+
+                }
+
+              );
+
+
+            saveData();
+
+            showToast(
+              "Item removed"
+            );
+
+            renderPackingList();
+
+          };
+
+      }
+
     );
 
 
@@ -2262,21 +4005,238 @@ function attachPackingEvents(
       "[data-add-item]"
     )
     .forEach(
+
       function (button) {
 
         button.onclick =
           function () {
 
             openItemEditor(
+
               trip,
+
               button.dataset.addItem,
+
               null
+
             );
 
           };
 
       }
+
     );
+
+}
+
+
+
+/* ==========================================
+   QUICK SHOPPING
+========================================== */
+
+function openQuickBuy(
+  trip,
+  category,
+  item
+) {
+
+  let quantity =
+    item.needToBuy > 0
+
+      ?
+
+      item.needToBuy
+
+      :
+
+      Math.max(
+
+        1,
+
+        item.required -
+        item.packed
+
+      );
+
+
+  modalOverlay.innerHTML = `
+
+    <div class="modal-sheet">
+
+      <h2 class="modal-title">
+
+        🛒 Add to Shopping List
+
+      </h2>
+
+
+      <p class="modal-description">
+
+        ${item.name}
+
+      </p>
+
+
+      <div class="modal-field">
+
+        <label class="field-label">
+
+          How many do you need to buy?
+
+        </label>
+
+
+        <div class="modal-counter">
+
+          <button id="quickBuyMinus">
+
+            −
+
+          </button>
+
+
+          <div
+            id="quickBuyValue"
+            class="modal-counter-value"
+          >
+
+            ${quantity}
+
+          </div>
+
+
+          <button id="quickBuyPlus">
+
+            +
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="button-row">
+
+        <button
+          id="quickBuyCancel"
+          class="secondary-button"
+        >
+
+          Cancel
+
+        </button>
+
+
+        <button
+          id="quickBuySave"
+          class="primary-button"
+        >
+
+          Add to Shopping
+
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  modalOverlay.classList.remove(
+    "hidden"
+  );
+
+
+  function refresh() {
+
+    document
+      .getElementById(
+        "quickBuyValue"
+      )
+      .textContent =
+        quantity;
+
+  }
+
+
+  document
+    .getElementById(
+      "quickBuyMinus"
+    )
+    .onclick =
+      function () {
+
+        quantity =
+          Math.max(
+            1,
+            quantity - 1
+          );
+
+        refresh();
+
+      };
+
+
+  document
+    .getElementById(
+      "quickBuyPlus"
+    )
+    .onclick =
+      function () {
+
+        quantity++;
+
+        refresh();
+
+      };
+
+
+  document
+    .getElementById(
+      "quickBuyCancel"
+    )
+    .onclick =
+      closeModal;
+
+
+  document
+    .getElementById(
+      "quickBuySave"
+    )
+    .onclick =
+      function () {
+
+
+        item.needToBuy =
+          quantity;
+
+
+        item.bought =
+          Math.min(
+
+            item.bought || 0,
+
+            quantity
+
+          );
+
+
+        saveData();
+
+        closeModal();
+
+
+        showToast(
+          "Added to Shopping List"
+        );
+
+
+        renderPackingList();
+
+      };
 
 }
 
@@ -2292,32 +4252,39 @@ function openItemEditor(
   existingItem
 ) {
 
-
-  const isEditing =
+  const editing =
     !!existingItem;
 
 
   const draft = {
 
     name:
-      existingItem
-      ? existingItem.name
-      : "",
+      editing
+      ?
+      existingItem.name
+      :
+      "",
 
     required:
-      existingItem
-      ? existingItem.required
-      : 1,
+      editing
+      ?
+      existingItem.required
+      :
+      1,
 
     packed:
-      existingItem
-      ? existingItem.packed
-      : 0,
+      editing
+      ?
+      existingItem.packed
+      :
+      0,
 
     needToBuy:
-      existingItem
-      ? existingItem.needToBuy
-      : 0
+      editing
+      ?
+      existingItem.needToBuy
+      :
+      0
 
   };
 
@@ -2329,9 +4296,11 @@ function openItemEditor(
       <h2 class="modal-title">
 
         ${
-          isEditing
-          ? "Edit Item"
-          : "Add Item"
+          editing
+          ?
+          "Edit Item"
+          :
+          "Add Item"
         }
 
       </h2>
@@ -2345,10 +4314,11 @@ function openItemEditor(
 
         </label>
 
+
         <input
           id="editorName"
           class="text-input"
-          value="${draft.name}"
+          value="${escapeHtml(draft.name)}"
         >
 
       </div>
@@ -2369,6 +4339,7 @@ function openItemEditor(
             −
           </button>
 
+
           <div
             id="requiredValue"
             class="modal-counter-value"
@@ -2377,6 +4348,7 @@ function openItemEditor(
             ${draft.required}
 
           </div>
+
 
           <button id="requiredPlus">
             +
@@ -2402,6 +4374,7 @@ function openItemEditor(
             −
           </button>
 
+
           <div
             id="packedValue"
             class="modal-counter-value"
@@ -2410,6 +4383,7 @@ function openItemEditor(
             ${draft.packed}
 
           </div>
+
 
           <button id="packedPlus">
             +
@@ -2435,6 +4409,7 @@ function openItemEditor(
             −
           </button>
 
+
           <div
             id="buyValue"
             class="modal-counter-value"
@@ -2443,6 +4418,7 @@ function openItemEditor(
             ${draft.needToBuy}
 
           </div>
+
 
           <button id="buyPlus">
             +
@@ -2470,6 +4446,7 @@ function openItemEditor(
           ${Object.keys(
             trip.items
           ).map(
+
             function (name) {
 
               return `
@@ -2477,8 +4454,10 @@ function openItemEditor(
                 <option
                   ${
                     name === category
-                    ? "selected"
-                    : ""
+                    ?
+                    "selected"
+                    :
+                    ""
                   }
                 >
 
@@ -2489,6 +4468,7 @@ function openItemEditor(
               `;
 
             }
+
           ).join("")}
 
         </select>
@@ -2497,30 +4477,6 @@ function openItemEditor(
 
 
       <div class="button-row">
-
-        ${
-          isEditing
-
-          ?
-
-          `
-
-          <button
-            id="deleteEditorItem"
-            class="delete-button"
-          >
-
-            Delete
-
-          </button>
-
-          `
-
-          :
-
-          ""
-
-        }
 
 
         <button
@@ -2554,140 +4510,181 @@ function openItemEditor(
   );
 
 
-  function refreshValues() {
+  function refresh() {
 
     document
-      .getElementById("requiredValue")
+      .getElementById(
+        "requiredValue"
+      )
       .textContent =
         draft.required;
 
 
     document
-      .getElementById("packedValue")
+      .getElementById(
+        "packedValue"
+      )
       .textContent =
         draft.packed;
 
 
     document
-      .getElementById("buyValue")
+      .getElementById(
+        "buyValue"
+      )
       .textContent =
         draft.needToBuy;
 
   }
 
 
-
   document
-    .getElementById("requiredMinus")
+    .getElementById(
+      "requiredMinus"
+    )
     .onclick =
       function () {
 
         draft.required =
           Math.max(
+
             1,
+
             draft.required - 1
+
           );
 
 
         draft.packed =
           Math.min(
+
             draft.packed,
+
             draft.required
+
           );
 
 
-        refreshValues();
+        refresh();
 
       };
 
 
   document
-    .getElementById("requiredPlus")
+    .getElementById(
+      "requiredPlus"
+    )
     .onclick =
       function () {
 
         draft.required++;
 
-        refreshValues();
+        refresh();
 
       };
 
 
   document
-    .getElementById("packedMinus")
+    .getElementById(
+      "packedMinus"
+    )
     .onclick =
       function () {
 
         draft.packed =
           Math.max(
+
             0,
+
             draft.packed - 1
+
           );
 
-        refreshValues();
+
+        refresh();
 
       };
 
 
   document
-    .getElementById("packedPlus")
+    .getElementById(
+      "packedPlus"
+    )
     .onclick =
       function () {
 
         draft.packed =
           Math.min(
+
             draft.required,
+
             draft.packed + 1
+
           );
 
-        refreshValues();
+
+        refresh();
 
       };
 
 
   document
-    .getElementById("buyMinus")
+    .getElementById(
+      "buyMinus"
+    )
     .onclick =
       function () {
 
         draft.needToBuy =
           Math.max(
+
             0,
+
             draft.needToBuy - 1
+
           );
 
-        refreshValues();
+
+        refresh();
 
       };
 
 
   document
-    .getElementById("buyPlus")
+    .getElementById(
+      "buyPlus"
+    )
     .onclick =
       function () {
 
         draft.needToBuy++;
 
-        refreshValues();
+        refresh();
 
       };
 
 
   document
-    .getElementById("cancelEditor")
+    .getElementById(
+      "cancelEditor"
+    )
     .onclick =
       closeModal;
 
 
   document
-    .getElementById("saveEditor")
+    .getElementById(
+      "saveEditor"
+    )
     .onclick =
       function () {
 
 
         const name =
           document
-            .getElementById("editorName")
+            .getElementById(
+              "editorName"
+            )
             .value
             .trim();
 
@@ -2705,11 +4702,14 @@ function openItemEditor(
 
         const targetCategory =
           document
-            .getElementById("editorCategory")
+            .getElementById(
+              "editorCategory"
+            )
             .value;
 
 
-        if (isEditing) {
+        if (editing) {
+
 
           trip.items[
             category
@@ -2717,6 +4717,7 @@ function openItemEditor(
             trip.items[
               category
             ].filter(
+
               function (item) {
 
                 return (
@@ -2725,6 +4726,7 @@ function openItemEditor(
                 );
 
               }
+
             );
 
 
@@ -2748,8 +4750,11 @@ function openItemEditor(
 
             bought:
               Math.min(
+
                 existingItem.bought || 0,
+
                 draft.needToBuy
+
               )
 
           });
@@ -2757,6 +4762,7 @@ function openItemEditor(
         }
 
         else {
+
 
           trip.items[
             targetCategory
@@ -2795,46 +4801,13 @@ function openItemEditor(
 
       };
 
-
-  if (isEditing) {
-
-    document
-      .getElementById(
-        "deleteEditorItem"
-      )
-      .onclick =
-        function () {
-
-          trip.items[
-            category
-          ] =
-            trip.items[
-              category
-            ].filter(
-              function (item) {
-
-                return (
-                  item.id !==
-                  existingItem.id
-                );
-
-              }
-            );
-
-
-          saveData();
-
-          closeModal();
-
-          renderPackingList();
-
-        };
-
-  }
-
 }
 
 
+
+/* ==========================================
+   MODAL
+========================================== */
 
 function closeModal() {
 
@@ -2842,11 +4815,17 @@ function closeModal() {
     "hidden"
   );
 
-  modalOverlay.innerHTML = "";
+
+  modalOverlay.innerHTML =
+    "";
 
 }
 
 
+
+/* ==========================================
+   ITEM LOOKUP
+========================================== */
 
 function findItem(
   trip,
@@ -2854,16 +4833,30 @@ function findItem(
   id
 ) {
 
-  return trip.items[
-    category
-  ].find(
+  const items =
+    trip.items[
+      category
+    ];
+
+
+  if (!items) {
+
+    return null;
+
+  }
+
+
+  return items.find(
+
     function (item) {
 
       return (
-        item.id === id
+        item.id ===
+        id
       );
 
     }
+
   );
 
 }
@@ -2878,7 +4871,6 @@ function calculateTotals(
   trip
 ) {
 
-
   const allItems =
     Object.values(
       trip.items
@@ -2889,7 +4881,11 @@ function calculateTotals(
 
     totalRequired:
       allItems.reduce(
-        function (sum, item) {
+
+        function (
+          sum,
+          item
+        ) {
 
           return (
             sum
@@ -2898,24 +4894,36 @@ function calculateTotals(
           );
 
         },
+
         0
+
       ),
+
 
     totalPacked:
       allItems.reduce(
-        function (sum, item) {
+
+        function (
+          sum,
+          item
+        ) {
 
           return (
             sum
             +
             Math.min(
+
               item.packed,
+
               item.required
+
             )
           );
 
         },
+
         0
+
       )
 
   };
@@ -2929,7 +4937,6 @@ function calculateTotals(
 ========================================== */
 
 function renderTrips() {
-
 
   screen.innerHTML = `
 
@@ -2970,6 +4977,7 @@ function renderTrips() {
       <div class="stack">
 
         ${data.trips.map(
+
           function (trip) {
 
 
@@ -3006,7 +5014,14 @@ function renderTrips() {
                   <div class="trip-small">
 
                     ${trip.duration}
-                    nights
+
+                    ${
+                      trip.duration === 1
+                      ?
+                      "day"
+                      :
+                      "days"
+                    }
 
                     ·
 
@@ -3017,6 +5032,7 @@ function renderTrips() {
                     ${totals.totalPacked}
                     /
                     ${totals.totalRequired}
+
                     packed
 
                   </div>
@@ -3029,8 +5045,7 @@ function renderTrips() {
                   ${
                     totals.totalRequired > 0
                     &&
-                    totals.totalPacked
-                    ===
+                    totals.totalPacked ===
                     totals.totalRequired
 
                     ?
@@ -3044,12 +5059,12 @@ function renderTrips() {
 
                 </span>
 
-
               </div>
 
             `;
 
           }
+
         ).join("")}
 
       </div>
@@ -3080,22 +5095,31 @@ function renderTrips() {
       "[data-open-trip]"
     )
     .forEach(
+
       function (row) {
 
         row.onclick =
           function () {
 
+
             state.activeTripId =
               row.dataset.openTrip;
 
 
-            navigate(
-              "packing"
-            );
+            state.history =
+              [];
+
+
+            state.page =
+              "packing";
+
+
+            render();
 
           };
 
       }
+
     );
 
 
@@ -3106,9 +5130,24 @@ function renderTrips() {
     .onclick =
       function () {
 
-        navigate(
-          "tripType"
-        );
+
+        state.newTrip =
+          null;
+
+
+        state.editingExistingTrip =
+          false;
+
+
+        state.history =
+          ["trips"];
+
+
+        state.page =
+          "tripType";
+
+
+        render();
 
       };
 
@@ -3122,25 +5161,29 @@ function renderTrips() {
 
 function renderShopping() {
 
-
   const shoppingTrips =
     data.trips
+
       .map(
+
         function (trip) {
 
 
-          const items = [];
+          const items =
+            [];
 
 
           Object.keys(
             trip.items
           ).forEach(
+
             function (category) {
 
 
               trip.items[
                 category
               ].forEach(
+
                 function (item) {
 
 
@@ -3149,9 +5192,6 @@ function renderShopping() {
                   ) {
 
                     items.push({
-
-                      tripId:
-                        trip.id,
 
                       category:
                         category,
@@ -3164,9 +5204,11 @@ function renderShopping() {
                   }
 
                 }
+
               );
 
             }
+
           );
 
 
@@ -3181,8 +5223,11 @@ function renderShopping() {
           };
 
         }
+
       )
+
       .filter(
+
         function (entry) {
 
           return (
@@ -3190,6 +5235,7 @@ function renderShopping() {
           );
 
         }
+
       );
 
 
@@ -3204,11 +5250,9 @@ function renderShopping() {
 
     <p class="page-subtitle">
 
-      Items marked “Need to buy”
-      from your active trips.
-
-      Buying an item does not
-      automatically mark it packed.
+      Check items while shopping.
+      Buying does not automatically
+      mark them packed.
 
     </p>
 
@@ -3231,8 +5275,8 @@ function renderShopping() {
       :
 
       shoppingTrips.map(
-        function (entry) {
 
+        function (entry) {
 
           return `
 
@@ -3241,94 +5285,96 @@ function renderShopping() {
               <div class="section-title">
 
                 ${entry.trip.emoji}
+
                 ${entry.trip.name}
 
               </div>
 
 
-              <div>
+              ${entry.items.map(
 
-                ${entry.items.map(
-                  function (entryItem) {
-
-
-                    const item =
-                      entryItem.item;
+                function (entryItem) {
 
 
-                    const complete =
-                      item.bought >=
-                      item.needToBuy;
+                  const item =
+                    entryItem.item;
 
 
-                    return `
+                  const complete =
+                    item.bought >=
+                    item.needToBuy;
 
-                      <div
-                        class="
-                          shopping-item
-                          ${
-                            complete
-                            ? "bought"
-                            : ""
-                          }
-                        "
+
+                  return `
+
+                    <div
+                      class="
+                        shopping-item
+                        ${
+                          complete
+                          ?
+                          "bought"
+                          :
+                          ""
+                        }
+                      "
+                    >
+
+
+                      <input
+                        type="checkbox"
+                        data-shopping-check
+                        data-trip="${entry.trip.id}"
+                        data-category="${escapeHtml(entryItem.category)}"
+                        data-id="${item.id}"
+                        ${
+                          complete
+                          ?
+                          "checked"
+                          :
+                          ""
+                        }
                       >
 
 
-                        <input
-                          type="checkbox"
-                          data-shopping-check
-                          data-trip="${entry.trip.id}"
-                          data-category="${entryItem.category}"
-                          data-id="${item.id}"
-                          ${
-                            complete
-                            ? "checked"
-                            : ""
-                          }
-                        >
+                      <div>
 
+                        <div class="shopping-name">
 
-                        <div>
-
-                          <div class="shopping-name">
-
-                            ${item.name}
-
-                          </div>
-
-
-                          <div class="shopping-small">
-
-                            ${entryItem.category}
-
-                          </div>
+                          ${item.name}
 
                         </div>
 
 
-                        <div class="shopping-qty">
+                        <div class="shopping-small">
 
-                          ×
-                          ${item.needToBuy}
+                          ${entryItem.category}
 
                         </div>
-
 
                       </div>
 
-                    `;
 
-                  }
-                ).join("")}
+                      <div class="shopping-qty">
 
-              </div>
+                        ×${item.needToBuy}
+
+                      </div>
+
+                    </div>
+
+                  `;
+
+                }
+
+              ).join("")}
 
             </section>
 
           `;
 
         }
+
       ).join("")
 
     }
@@ -3341,6 +5387,7 @@ function renderShopping() {
       "[data-shopping-check]"
     )
     .forEach(
+
       function (checkbox) {
 
         checkbox.onchange =
@@ -3349,6 +5396,7 @@ function renderShopping() {
 
             const trip =
               data.trips.find(
+
                 function (trip) {
 
                   return (
@@ -3357,38 +5405,46 @@ function renderShopping() {
                   );
 
                 }
+
               );
+
+
+            if (!trip) {
+
+              return;
+
+            }
 
 
             const item =
-              trip.items[
-                checkbox.dataset.category
-              ].find(
-                function (item) {
+              findItem(
 
-                  return (
-                    item.id ===
-                    checkbox.dataset.id
-                  );
+                trip,
 
-                }
+                checkbox.dataset.category,
+
+                checkbox.dataset.id
+
               );
 
 
-            if (
+            if (!item) {
+
+              return;
+
+            }
+
+
+            item.bought =
               checkbox.checked
-            ) {
 
-              item.bought =
-                item.needToBuy;
+              ?
 
-            }
+              item.needToBuy
 
-            else {
+              :
 
-              item.bought = 0;
-
-            }
+              0;
 
 
             saveData();
@@ -3398,6 +5454,7 @@ function renderShopping() {
           };
 
       }
+
     );
 
 }
@@ -3410,7 +5467,6 @@ function renderShopping() {
 
 function renderGear() {
 
-
   screen.innerHTML = `
 
     <h1 class="page-title">
@@ -3422,7 +5478,7 @@ function renderGear() {
 
     <p class="page-subtitle">
 
-      Save the equipment
+      Save equipment
       you already own.
 
     </p>
@@ -3432,6 +5488,7 @@ function renderGear() {
 
 
       ${data.gear.map(
+
         function (
           group,
           groupIndex
@@ -3457,6 +5514,7 @@ function renderGear() {
 
 
                 ${group.items.map(
+
                   function (
                     item,
                     itemIndex
@@ -3474,11 +5532,11 @@ function renderGear() {
 
 
                         <button
-                          class="edit-item-button"
+                          class="quick-action-button delete"
                           data-remove-gear="${groupIndex}:${itemIndex}"
                         >
 
-                          ×
+                          🗑
 
                         </button>
 
@@ -3487,6 +5545,7 @@ function renderGear() {
                     `;
 
                   }
+
                 ).join("")}
 
 
@@ -3499,7 +5558,6 @@ function renderGear() {
 
                 </button>
 
-
               </div>
 
             </section>
@@ -3507,8 +5565,8 @@ function renderGear() {
           `;
 
         }
-      ).join("")}
 
+      ).join("")}
 
     </div>
 
@@ -3534,6 +5592,7 @@ function renderGear() {
       "[data-add-gear]"
     )
     .forEach(
+
       function (button) {
 
         button.onclick =
@@ -3575,6 +5634,7 @@ function renderGear() {
           };
 
       }
+
     );
 
 
@@ -3583,6 +5643,7 @@ function renderGear() {
       "[data-remove-gear]"
     )
     .forEach(
+
       function (button) {
 
         button.onclick =
@@ -3625,6 +5686,7 @@ function renderGear() {
           };
 
       }
+
     );
 
 
@@ -3676,7 +5738,6 @@ function renderGear() {
 
 function renderSettings() {
 
-
   screen.innerHTML = `
 
     <h1 class="page-title">
@@ -3688,7 +5749,6 @@ function renderSettings() {
 
     <div class="card">
 
-
       <p>
 
         Prototype settings.
@@ -3698,8 +5758,8 @@ function renderSettings() {
 
       <p class="small-note">
 
-        Resetting clears all saved trips,
-        shopping items and test data.
+        Resetting clears
+        all test data.
 
       </p>
 
@@ -3712,7 +5772,6 @@ function renderSettings() {
         Reset Prototype
 
       </button>
-
 
     </div>
 
@@ -3727,25 +5786,20 @@ function renderSettings() {
       function () {
 
 
-        const confirmReset =
-          confirm(
-
-            "Delete all saved trips and reset the prototype?"
-
-          );
-
-
-        if (!confirmReset) {
+        if (
+          !confirm(
+            "Delete all saved trips and reset?"
+          )
+        ) {
 
           return;
 
         }
 
 
-        localStorage
-          .removeItem(
-            STORAGE_KEY
-          );
+        localStorage.removeItem(
+          STORAGE_KEY
+        );
 
 
         data =
@@ -3756,12 +5810,28 @@ function renderSettings() {
           );
 
 
+        state.page =
+          "home";
+
+
+        state.history =
+          [];
+
+
+        state.newTrip =
+          null;
+
+
+        state.activeTripId =
+          null;
+
+
         showToast(
           "Prototype reset"
         );
 
 
-        renderSettings();
+        render();
 
       };
 
@@ -3775,7 +5845,6 @@ function renderSettings() {
 
 function renderAbout() {
 
-
   screen.innerHTML = `
 
     <h1 class="page-title">
@@ -3787,14 +5856,11 @@ function renderAbout() {
 
     <div class="card">
 
-
       <p>
 
-        PackTrail helps you
-        prepare packing lists
-        for camping, vacations,
-        road trips and outdoor
-        adventures.
+        PackTrail helps prepare
+        packing and shopping lists
+        for trips and outdoor adventures.
 
       </p>
 
@@ -3803,11 +5869,7 @@ function renderAbout() {
 
         This is an early browser prototype.
 
-        We are testing the layout and workflow
-        before building the final mobile app.
-
       </p>
-
 
     </div>
 
@@ -3825,7 +5887,6 @@ function showToast(
   message
 ) {
 
-
   toast.textContent =
     message;
 
@@ -3835,16 +5896,72 @@ function showToast(
   );
 
 
-  setTimeout(
-    function () {
+  clearTimeout(
+    showToast.timer
+  );
 
-      toast.classList.add(
-        "hidden"
-      );
 
-    },
+  showToast.timer =
+    setTimeout(
 
-    1800
+      function () {
+
+        toast.classList.add(
+          "hidden"
+        );
+
+      },
+
+      1800
+
+    );
+
+}
+
+
+
+/* ==========================================
+   SAFE TEXT
+========================================== */
+
+function escapeHtml(
+  value
+) {
+
+  return String(
+    value || ""
+  ).replace(
+
+    /[&<>"']/g,
+
+    function (character) {
+
+      const map = {
+
+        "&":
+          "&amp;",
+
+        "<":
+          "&lt;",
+
+        ">":
+          "&gt;",
+
+        '"':
+          "&quot;",
+
+        "'":
+          "&#039;"
+
+      };
+
+
+      return map[
+        character
+      ];
+
+    }
+
   );
 
 }
