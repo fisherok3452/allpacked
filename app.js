@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v11";
+const STORAGE_KEY="allpacked_v14";
 
 const defaultData={
 trips:[],
@@ -274,7 +274,7 @@ function packCategory(t,c){
  <input class="pack-check" type="checkbox" data-check-pack data-category="${esc(c)}" data-id="${x.id}" ${done?"checked":""}>
  <div class="pack-item-main"><div class="item-name">${done?"✓ ":""}${x.name}</div><div class="item-meta">
  <span class="item-pill ${done?"complete":""}">${x.packed} of ${x.required} packed</span>
- ${x.needToBuy?`<span class="item-pill buy">🛒 ${x.bought} / ${x.needToBuy} bought</span>`:""}</div></div>
+ ${x.needToBuy?`<button class="item-pill buy buy-status-button" data-bought-status data-category="${esc(c)}" data-id="${x.id}">🛒 ${x.bought} / ${x.needToBuy} bought</button>`:""}</div></div>
  <div class="item-actions"><button class="quick-action-button shopping" data-buy data-category="${esc(c)}" data-id="${x.id}">🛒</button>
  <button class="quick-action-button edit" data-edit data-category="${esc(c)}" data-id="${x.id}">✎</button>
  <button class="quick-action-button delete" data-del data-category="${esc(c)}" data-id="${x.id}">🗑</button></div></div>`}).join("")}
@@ -289,6 +289,7 @@ function attachPacking(t){
    openPackedQuantity(t,b.dataset.category,x)
  });
  document.querySelectorAll("[data-buy]").forEach(b=>b.onclick=()=>openBuy(t,b.dataset.category,findItem(t,b.dataset.category,b.dataset.id)));
+ document.querySelectorAll("[data-bought-status]").forEach(b=>b.onclick=()=>openBoughtStatus(t,b.dataset.category,findItem(t,b.dataset.category,b.dataset.id)));
  document.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>openEditor(t,b.dataset.category,findItem(t,b.dataset.category,b.dataset.id)));
  document.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{
    const c=b.dataset.category;t.items[c]=t.items[c].filter(x=>x.id!==b.dataset.id);
@@ -308,6 +309,25 @@ function openPackedQuantity(t,c,x){
  qm.onclick=()=>{q=Math.max(0,q-1);ref()};qp.onclick=()=>{q=Math.min(x.required,q+1);ref()};
  qc.onclick=()=>{closeModal();renderPackingList()};
  qs.onclick=()=>{x.packed=q;saveData();closeModal();renderPackingList()}
+}
+
+function openBoughtStatus(t,c,x){
+ if(!x||!x.needToBuy)return;
+ modalOverlay.innerHTML=`<div class="modal-sheet">
+ <h2 class="modal-title">Is this item available now?</h2>
+ <p class="modal-description">${x.name}</p>
+ <p class="small-note">Choose Yes if you bought it or otherwise have it available now. All ${x.needToBuy} needed ${x.needToBuy===1?"item":"items"} will be marked as bought.</p>
+ <div class="button-row"><button id="availableNo" class="secondary-button">No</button><button id="availableYes" class="primary-button">Yes</button></div>
+ </div>`;
+ modalOverlay.classList.remove("hidden");
+ availableNo.onclick=closeModal;
+ availableYes.onclick=()=>{
+   x.bought=x.needToBuy;
+   saveData();
+   closeModal();
+   showToast(x.needToBuy===1?"Marked as bought":`${x.needToBuy} marked as bought`);
+   renderPackingList()
+ };
 }
 
 function openBuy(t,c,x){
@@ -383,7 +403,21 @@ function renderSettings(){
  screen.innerHTML='<h1 class="page-title">Settings</h1><div class="card"><p>Prototype settings.</p><p class="small-note">Resetting clears all test data, custom categories and custom items.</p><button id="resetPrototype" class="delete-button">Reset Prototype</button></div>';
  resetPrototype.onclick=()=>{if(confirm("Delete all saved trips and reset?")){localStorage.removeItem(STORAGE_KEY);data=structuredClone(defaultData);state={page:"home",history:[],newTrip:null,activeTripId:null,editingExistingTrip:false};render()}}
 }
-function renderAbout(){screen.innerHTML='<h1 class="page-title">About AllPacked</h1><div class="card"><p>AllPacked helps you prepare packing and shopping lists for trips, outings, and gatherings.</p><p class="small-note">This is an early browser prototype.</p></div>'}
+function renderAbout(){
+ screen.innerHTML=`<h1 class="page-title">About AllPacked</h1>
+ <p class="page-subtitle">Plan what you need, pack with confidence, and keep shopping in the same place.</p>
+ <div class="stack">
+   <div class="card">
+     <div class="about-feature"><span class="about-icon">✓</span><div><strong>Smart Packing Lists</strong><p>Get relevant suggestions based on your trip type, duration, season, activities, and number of people.</p></div></div>
+     <div class="about-feature"><span class="about-icon">🧳</span><div><strong>Flexible Trips</strong><p>Add, edit, remove, or reorganize items and categories so every list fits your plans.</p></div></div>
+     <div class="about-feature"><span class="about-icon">🛒</span><div><strong>Shopping List</strong><p>Keep everything you still need to buy in one place, then tap a trip name to return directly to its packing list.</p></div></div>
+     <div class="about-feature"><span class="about-icon">🔢</span><div><strong>Quantity Tracking</strong><p>Track partial progress such as 2 of 3 packed or 1 of 2 bought.</p></div></div>
+     <div class="about-feature"><span class="about-icon">＋</span><div><strong>Fully Customizable</strong><p>Add your own categories and items, rename trips, move items, and remove anything you do not need.</p></div></div>
+     <div class="about-feature"><span class="about-icon">↻</span><div><strong>Reusable</strong><p>Your custom categories and items are available again when planning future trips.</p></div></div>
+   </div>
+ </div>`;
+}
+
 function showToast(m){toast.textContent=m;toast.classList.remove("hidden");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toast.classList.add("hidden"),1800)}
 function esc(v){return String(v||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
 render();
