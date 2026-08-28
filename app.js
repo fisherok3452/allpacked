@@ -1,4 +1,4 @@
-const STORAGE_KEY="packtrail_v7";
+const STORAGE_KEY="allpacked_v9";
 
 const defaultData={
 trips:[],
@@ -14,7 +14,8 @@ const tripTypes=[
 {id:"camping",name:"Camping",emoji:"🏕"},{id:"vacation",name:"Vacation",emoji:"✈️"},
 {id:"roadtrip",name:"Road Trip",emoji:"🚗"},{id:"hiking",name:"Hiking",emoji:"🥾"},
 {id:"fishing",name:"Fishing",emoji:"🎣"},{id:"beach",name:"Beach",emoji:"🏖"},
-{id:"winter",name:"Winter Trip",emoji:"🎿"},{id:"other",name:"Other",emoji:"➕"}];
+{id:"winter",name:"Winter Trip",emoji:"🎿"},{id:"picnic",name:"Picnic",emoji:"🧺"},
+{id:"family",name:"Family Gathering",emoji:"👨‍👩‍👧‍👦"},{id:"other",name:"Other",emoji:"➕"}];
 
 const activities=["Fishing","Hiking","Swimming","Cooking","BBQ","Ski & Snowboard","Diving & Snorkeling","Rental Car","Cruise","City Trip","Business Trip","Formal Event","Photography","Theme Park","Cycling","Pets","Kids"];
 
@@ -62,6 +63,16 @@ const packingDatabase={
 "Cycling":[{name:"Bike helmet",qty:"people"},{name:"Bike gloves",qty:"people"},{name:"Water bottle",qty:"people"},{name:"Bike repair kit",qty:1}],
 "Pets":[{name:"Pet food",qty:1},{name:"Water bowl",qty:1},{name:"Leash",qty:1},{name:"Waste bags",qty:1},{name:"Pet bed / blanket",qty:1,minNights:1}],
 "Kids":[{name:"Kids clothing",qty:1},{name:"Favorite toy",qty:1},{name:"Kids snacks",qty:1},{name:"Wipes",qty:1},{name:"Entertainment",qty:1}],
+"Picnic":[
+{name:"Picnic blanket",qty:1},{name:"Cooler",qty:1},{name:"Food containers",qty:1},
+{name:"Plates",qty:"people"},{name:"Cups",qty:"people"},{name:"Cutlery",qty:"people"},
+{name:"Napkins / paper towels",qty:1},{name:"Trash bags",qty:1},{name:"Bottle opener / corkscrew",qty:1}
+],
+"Family Gathering":[
+{name:"Serving dishes / trays",qty:1},{name:"Serving utensils",qty:1},{name:"Tablecloth",qty:1},
+{name:"Folding chairs",qty:"people"},{name:"Cooler",qty:1},{name:"Food containers",qty:1},
+{name:"Napkins / paper towels",qty:1},{name:"Trash bags",qty:1},{name:"Outdoor games",qty:1}
+],
 "Other":[]
 };
 
@@ -108,7 +119,7 @@ function render(){
  backButton.textContent=isPacking?"✓":"←";
  backButton.classList.toggle("finish-button",isPacking);
  backButton.setAttribute("aria-label",isPacking?"Finish and return home":"Go back");
- topTitle.textContent={home:"PackTrail",tripType:"New Trip",tripDetails:"Trip Details",categories:"Categories",packing:"Packing List",trips:"My Trips",gear:"My Gear",shopping:"Shopping List",settings:"Settings",about:"About"}[state.page]||"PackTrail";
+ topTitle.textContent={home:"AllPacked",tripType:"New Trip",tripDetails:"Trip Details",categories:"Categories",packing:"Packing List",trips:"My Trips",gear:"My Gear",shopping:"Shopping List",settings:"Settings",about:"About"}[state.page]||"AllPacked";
  ({home:renderHome,tripType:renderTripTypes,tripDetails:renderTripDetails,categories:renderCategories,packing:renderPackingList,trips:renderTrips,gear:renderGear,shopping:renderShopping,settings:renderSettings,about:renderAbout}[state.page]||renderHome)();
  setTimeout(()=>window.scrollTo(0,0),0)
 }
@@ -122,7 +133,7 @@ function renderHome(){
  if(activeTrips.length)seeTripsButton.onclick=()=>{state.history=[];state.page="trips";render()};
  newTripButton.onclick=()=>{state.newTrip=null;state.editingExistingTrip=false;state.history=["home"];state.page="tripType";render()}
 }
-function renderTripTypes(){screen.innerHTML='<h1 class="page-title">What kind of trip are you taking?</h1><p class="page-subtitle">Choose the closest option. Everything can be customized later.</p><div class="trip-grid">'+tripTypes.map(t=>`<button class="trip-type" data-trip-type="${t.id}"><span class="trip-emoji">${t.emoji}</span><span class="trip-label">${t.name}</span></button>`).join("")+"</div>";document.querySelectorAll("[data-trip-type]").forEach(b=>b.onclick=()=>{const t=tripTypes.find(x=>x.id===b.dataset.tripType);state.newTrip={id:String(Date.now()),type:t.id,typeName:t.name,emoji:t.emoji,name:"My "+t.name+" Trip",duration:3,season:"Summer",people:2,activities:[],categories:[]};navigate("tripDetails")})}
+function renderTripTypes(){screen.innerHTML='<h1 class="page-title">What kind of trip are you taking?</h1><p class="page-subtitle">Choose the closest option. Everything can be customized later.</p><div class="trip-grid">'+tripTypes.map(t=>`<button class="trip-type" data-trip-type="${t.id}"><span class="trip-emoji">${t.emoji}</span><span class="trip-label">${t.name}</span></button>`).join("")+"</div>";document.querySelectorAll("[data-trip-type]").forEach(b=>b.onclick=()=>{const t=tripTypes.find(x=>x.id===b.dataset.tripType);state.newTrip={id:String(Date.now()),type:t.id,typeName:t.name,emoji:t.emoji,name:(t.id==="picnic"?"My Picnic":t.id==="family"?"My Family Gathering":"My "+t.name+" Trip"),duration:3,season:"Summer",people:2,activities:[],categories:[]};navigate("tripDetails")})}
 
 function renderTripDetails(){
  const t=state.newTrip;if(!t){state.page="tripType";return render()}
@@ -160,6 +171,12 @@ function suggestedCategories(t){
  if(t.type==="fishing")c.push("Fishing");
  if(t.type==="hiking")c.push("Hiking");
  if(t.type==="beach")c.unshift("Beach");
+ if(t.type==="picnic"){
+   c=["Picnic","Food & Drinks","Toiletries","Electronics"];
+ }
+ if(t.type==="family"){
+   c=["Family Gathering","Food & Drinks","Electronics"];
+ }
  if(t.type==="winter"||t.season==="Winter")c.push("Winter Gear");
 
  t.activities.forEach(a=>{
@@ -223,12 +240,31 @@ function renderPackingList(){
  const t=activeTrip();if(!t){state.page="trips";return render()}
  cleanEmptyCategories(t);saveData();
  const z=totals(t),p=z.required?Math.round(z.packed/z.required*100):0;
- screen.innerHTML=`<h1 class="page-title">${t.emoji} ${t.name}</h1><div class="trip-info">${t.duration} ${t.duration===1?"day":"days"} · ${t.season} · ${t.people} ${t.people===1?"person":"people"}</div>
+ screen.innerHTML=`<div class="trip-title-row"><h1 class="page-title">${t.emoji} ${t.name}</h1><button class="trip-name-edit" id="editTripNameButton" aria-label="Edit trip name">✎</button></div><div class="trip-info">${t.duration} ${t.duration===1?"day":"days"} · ${t.season} · ${t.people} ${t.people===1?"person":"people"}</div>
  <div class="progress"><div class="progress-bar" style="width:${p}%"></div></div><div class="progress-text">${z.packed} of ${z.required} packed · ${p}%</div>
  ${Object.keys(t.items).map(c=>packCategory(t,c)).join("")}
  <div class="button-row"><button id="addCategoryButton" class="secondary-button">+ Add Category</button></div>`;
  attachPacking(t);
+ editTripNameButton.onclick=()=>openTripNameEditor(t);
  addCategoryButton.onclick=()=>openAddCategory(t)
+}
+
+function openTripNameEditor(t){
+ modalOverlay.innerHTML=`<div class="modal-sheet"><h2 class="modal-title">Edit Trip Name</h2>
+ <div class="modal-field"><label class="field-label">Trip name</label><input id="tripNameEditor" class="text-input" value="${esc(t.name)}"></div>
+ <div class="button-row"><button id="tripNameCancel" class="secondary-button">Cancel</button><button id="tripNameSave" class="primary-button">Save</button></div></div>`;
+ modalOverlay.classList.remove("hidden");
+ tripNameEditor.focus();
+ tripNameEditor.select();
+ tripNameCancel.onclick=closeModal;
+ tripNameSave.onclick=()=>{
+   const name=tripNameEditor.value.trim();
+   if(!name)return showToast("Enter a trip name");
+   t.name=name;
+   saveData();
+   closeModal();
+   renderPackingList()
+ };
 }
 
 function packCategory(t,c){
@@ -276,7 +312,7 @@ function openPackedQuantity(t,c,x){
 
 function openBuy(t,c,x){
  let q=x.needToBuy||Math.max(1,x.required-x.packed);
- modalOverlay.innerHTML=`<div class="modal-sheet"><h2 class="modal-title">🛒 Add to Shopping List List</h2><p class="modal-description">${x.name}</p>
+ modalOverlay.innerHTML=`<div class="modal-sheet"><h2 class="modal-title">🛒 Add to Shopping List</h2><p class="modal-description">${x.name}</p>
  <div class="modal-field"><label class="field-label">How many do you need to buy?</label><div class="modal-counter"><button id="qm">−</button><div id="qv" class="modal-counter-value">${q}</div><button id="qp">+</button></div></div>
  <div class="button-row"><button id="qc" class="secondary-button">Cancel</button><button id="qs" class="primary-button">Add to Shopping List</button></div></div>`;
  modalOverlay.classList.remove("hidden");
@@ -326,7 +362,13 @@ function renderTrips(){
 function renderShopping(){
  const groups=data.trips.map(t=>({t,items:Object.entries(t.items).flatMap(([c,a])=>a.filter(x=>x.needToBuy>0).map(x=>({c,x})))})).filter(g=>g.items.length);
  screen.innerHTML=`<h1 class="page-title">Shopping List</h1><p class="page-subtitle">Check items while shopping. Buying does not automatically mark them packed.</p>
- ${groups.length?groups.map(g=>`<section class="shopping-trip"><div class="section-title">${g.t.emoji} ${g.t.name}</div>${g.items.map(({c,x})=>`<div class="shopping-item ${x.bought>=x.needToBuy?"bought":""}"><input type="checkbox" data-check data-trip="${g.t.id}" data-category="${esc(c)}" data-id="${x.id}" ${x.bought>=x.needToBuy?"checked":""}><div><div class="shopping-name">${x.name}</div><div class="shopping-small">${c}</div></div><div class="shopping-qty">×${x.needToBuy}</div></div>`).join("")}</section>`).join(""):'<div class="empty">Nothing to buy right now.</div>'}`;
+ ${groups.length?groups.map(g=>`<section class="shopping-trip"><button class="shopping-trip-link" data-open-shopping-trip="${g.t.id}">${g.t.emoji} ${g.t.name}<span>›</span></button>${g.items.map(({c,x})=>`<div class="shopping-item ${x.bought>=x.needToBuy?"bought":""}"><input type="checkbox" data-check data-trip="${g.t.id}" data-category="${esc(c)}" data-id="${x.id}" ${x.bought>=x.needToBuy?"checked":""}><div><div class="shopping-name">${x.name}</div><div class="shopping-small">${c}</div></div><div class="shopping-qty">×${x.needToBuy}</div></div>`).join("")}</section>`).join(""):'<div class="empty">Nothing to buy right now.</div>'}`;
+ document.querySelectorAll("[data-open-shopping-trip]").forEach(b=>b.onclick=()=>{
+   state.activeTripId=b.dataset.openShoppingTrip;
+   state.history=["shopping"];
+   state.page="packing";
+   render()
+ });
  document.querySelectorAll("[data-check]").forEach(b=>b.onchange=()=>{const t=data.trips.find(x=>x.id===b.dataset.trip),x=findItem(t,b.dataset.category,b.dataset.id);x.bought=b.checked?x.needToBuy:0;saveData();renderShopping()})
 }
 
@@ -341,7 +383,7 @@ function renderSettings(){
  screen.innerHTML='<h1 class="page-title">Settings</h1><div class="card"><p>Prototype settings.</p><p class="small-note">Resetting clears all test data, custom categories and custom items.</p><button id="resetPrototype" class="delete-button">Reset Prototype</button></div>';
  resetPrototype.onclick=()=>{if(confirm("Delete all saved trips and reset?")){localStorage.removeItem(STORAGE_KEY);data=structuredClone(defaultData);state={page:"home",history:[],newTrip:null,activeTripId:null,editingExistingTrip:false};render()}}
 }
-function renderAbout(){screen.innerHTML='<h1 class="page-title">About PackTrail</h1><div class="card"><p>PackTrail helps prepare packing and shopping lists for trips and outdoor adventures.</p><p class="small-note">This is an early browser prototype.</p></div>'}
+function renderAbout(){screen.innerHTML='<h1 class="page-title">About AllPacked</h1><div class="card"><p>AllPacked helps you prepare packing and shopping lists for trips, outings, and gatherings.</p><p class="small-note">This is an early browser prototype.</p></div>'}
 function showToast(m){toast.textContent=m;toast.classList.remove("hidden");clearTimeout(showToast.timer);showToast.timer=setTimeout(()=>toast.classList.add("hidden"),1800)}
 function esc(v){return String(v||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
 render();
