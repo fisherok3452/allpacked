@@ -327,6 +327,9 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 .buy-status-button:active{
   opacity:.6;
 }
+.shopping-trip-complete{
+  color:var(--green);
+}
 .about-feature{
   display:grid;
   grid-template-columns:38px 1fr;
@@ -360,4 +363,79 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
   color:var(--muted);
   font-size:14px;
   line-height:1.45;
+}
+
+
+/* AllPacked v0.15 — onboarding */
+.onboarding-sheet,
+.tip-sheet,
+.celebration-sheet{
+  text-align:center;
+}
+
+.onboarding-icon,
+.celebration-icon{
+  width:72px;
+  height:72px;
+  margin:2px auto 16px;
+  display:grid;
+  place-items:center;
+  border-radius:22px;
+  background:var(--light-green);
+  color:var(--green);
+  font-size:36px;
+  font-weight:800;
+}
+
+.celebration-icon{
+  background:#fff3dc;
+}
+
+.tip-icon{
+  width:52px;
+  height:52px;
+  margin:2px auto 14px;
+  display:grid;
+  place-items:center;
+  border-radius:16px;
+  background:#f1f0ea;
+  font-size:25px;
+}
+
+.onboarding-title{
+  margin-bottom:10px;
+}
+
+.onboarding-text{
+  margin:0 auto 8px;
+  max-width:420px;
+  color:var(--muted);
+  font-size:15px;
+  line-height:1.55;
+}
+
+.onboarding-progress{
+  display:flex;
+  justify-content:center;
+  gap:7px;
+  margin:0 0 18px;
+}
+
+.onboarding-progress span{
+  width:7px;
+  height:7px;
+  border-radius:999px;
+  background:#d8d5cc;
+}
+
+.onboarding-progress span.active{
+  width:22px;
+  background:var(--green);
+}
+
+.tip-sheet .modal-description,
+.celebration-sheet .modal-description{
+  max-width:420px;
+  margin-left:auto;
+  margin-right:auto;
 }
