@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v16";
+const STORAGE_KEY="allpacked_v17";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
