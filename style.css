@@ -604,3 +604,14 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 .list-expand-button{
   margin-bottom:2px;
 }
+
+
+/* AllPacked v0.28 â shopping quantity */
+.shopping-qty{
+  min-width:48px;
+  text-align:right;
+  color:var(--text);
+  font-size:14px;
+  font-weight:750;
+  white-space:nowrap;
+}
