@@ -502,3 +502,15 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
   content:none !important;
   display:none !important;
 }
+
+
+/* AllPacked v0.21 â transportation */
+.transport-choice{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+}
+.transport-button{
+  min-width:92px;
+  text-align:center;
+}
