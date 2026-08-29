@@ -112,7 +112,7 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 }
 
 
-/* AllPacked v0.11 — restore simple top navigation icons */
+/* AllPacked v0.11 â restore simple top navigation icons */
 .menu-button,
 .back-button,
 .back-button.finish-button{
@@ -152,7 +152,7 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 }
 
 
-/* AllPacked v0.12 — unified drawer typography and branding */
+/* AllPacked v0.12 â unified drawer typography and branding */
 .drawer{
   padding:
     calc(26px + env(safe-area-inset-top))
@@ -231,7 +231,7 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 }
 
 
-/* AllPacked v0.13 — final navigation/drawer class alignment */
+/* AllPacked v0.13 â final navigation/drawer class alignment */
 .icon-btn{
   display:none !important;
 }
@@ -366,7 +366,7 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 }
 
 
-/* AllPacked v0.15 — onboarding */
+/* AllPacked v0.15 â onboarding */
 .onboarding-sheet,
 .tip-sheet,
 .celebration-sheet{
@@ -438,4 +438,34 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
   max-width:420px;
   margin-left:auto;
   margin-right:auto;
+}
+
+
+/* AllPacked v0.16 â personal vs group packing */
+.packing-for-choice{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.packing-for-button{
+  min-height:48px;
+  padding:12px 14px;
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:#fff;
+  color:var(--text);
+  font-weight:700;
+}
+
+.packing-for-button.active{
+  border-color:var(--green);
+  background:var(--green);
+  color:#fff;
+}
+
+.group-size-block{
+  margin-top:20px;
+  padding-top:18px;
+  border-top:1px solid #eeece6;
 }
