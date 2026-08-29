@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v28";
+const STORAGE_KEY="allpacked_v29";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
@@ -879,7 +879,8 @@ function renderShopping(){
 
    return`<section class="shopping-trip">
      <div class="section-title shopping-trip-title-link ${shoppingDone?"shopping-trip-complete":""}" data-open-shopping-trip="${g.t.id}">
-       ${shoppingDone?"â ":""}${g.t.emoji} ${g.t.name}
+       <span>${g.t.emoji} ${g.t.name}</span>
+       ${shoppingDone?'<span class="shopping-complete-badge">Purchased</span>':""}
      </div>
 
      ${visibleItems.map(({c,x})=>`
