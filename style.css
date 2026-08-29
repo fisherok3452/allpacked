@@ -473,7 +473,7 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 
 
 
-/* AllPacked v0.19 â clean personal/group selector */
+/* AllPacked v0.20 â personal/group selection */
 .packing-for-choice{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -483,31 +483,22 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 .packing-for-choice .packing-for-button{
   min-height:48px;
   padding:11px 16px;
-  border:1px solid var(--border) !important;
+  border:1px solid var(--border);
   border-radius:15px;
-  background:#fff !important;
-  color:var(--text) !important;
+  background:#fff;
+  color:var(--text);
   font-weight:700;
-  box-shadow:none !important;
+  box-shadow:none;
 }
 
 .packing-for-choice .packing-for-button.active{
-  border:1px solid var(--green) !important;
-  background:var(--green) !important;
-  color:#fff !important;
-  box-shadow:none !important;
+  border-color:var(--green);
+  background:var(--green);
+  color:#fff;
 }
 
 .packing-for-choice .packing-for-button::before,
-.packing-for-choice .packing-for-button::after,
-.packing-for-choice .packing-for-button.active::before,
-.packing-for-choice .packing-for-button.active::after{
+.packing-for-choice .packing-for-button::after{
   content:none !important;
   display:none !important;
-}
-
-.group-size-block{
-  margin-top:20px;
-  padding-top:18px;
-  border-top:1px solid #eeece6;
 }
