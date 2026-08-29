@@ -615,3 +615,28 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
   font-weight:750;
   white-space:nowrap;
 }
+
+
+/* AllPacked v0.29 â completed shopping trip status */
+.shopping-trip-title-link{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.shopping-trip-title-link > span:first-child{
+  min-width:0;
+}
+
+.shopping-complete-badge{
+  flex:0 0 auto;
+  padding:5px 9px;
+  border-radius:999px;
+  background:var(--light-green);
+  color:var(--green);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:0;
+  text-transform:none;
+}
