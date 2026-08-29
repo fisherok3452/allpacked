@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v17";
+const STORAGE_KEY="allpacked_v18";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
@@ -267,8 +267,8 @@ function renderTripDetails(){
  <div class="card">
    <label class="field-label">Who are you packing for?</label>
    <div class="packing-for-choice">
-     <button class="packing-for-button ${t.packingFor==="personal"?"active":""}" data-packing-for="personal">Just me</button>
-     <button class="packing-for-button ${t.packingFor==="group"?"active":""}" data-packing-for="group">A group</button>
+     <button class="chip packing-for-button ${t.packingFor==="personal"?"active":""}" data-packing-for="personal" aria-pressed="${t.packingFor==="personal"}">Just me</button>
+     <button class="chip packing-for-button ${t.packingFor==="group"?"active":""}" data-packing-for="group" aria-pressed="${t.packingFor==="group"}">A group</button>
    </div>
    ${t.packingFor==="group"?`
      <div class="group-size-block">
