@@ -578,19 +578,29 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 }
 
 
-/* AllPacked v0.26 â compact More Categories */
-.show-more-categories-button{
+
+
+/* AllPacked v0.27 â expandable list controls */
+.show-more-categories-button,
+.list-expand-button{
   width:100%;
   margin-top:10px;
-  padding:13px 15px;
-  border:1px solid var(--border);
+  padding:14px 16px;
+  border:1px solid var(--green);
   border-radius:15px;
-  background:transparent;
+  background:#fff;
   color:var(--green);
   font-weight:750;
+  font-size:15px;
   text-align:center;
+  box-shadow:none;
 }
 
-.show-more-categories-button:active{
-  background:#f1efe9;
+.show-more-categories-button:active,
+.list-expand-button:active{
+  background:var(--light-green);
+}
+
+.list-expand-button{
+  margin-bottom:2px;
 }
