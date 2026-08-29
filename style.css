@@ -640,3 +640,35 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
   letter-spacing:0;
   text-transform:none;
 }
+
+
+/* AllPacked v0.30 â shopping completion icon */
+.shopping-complete-badge{
+  flex:0 0 auto;
+  width:28px;
+  height:28px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border-radius:999px;
+  background:transparent;
+}
+
+.shopping-complete-icon{
+  width:24px;
+  height:24px;
+  display:block;
+}
+
+.shopping-complete-icon circle{
+  fill:var(--green);
+  stroke:none;
+}
+
+.shopping-complete-icon path{
+  fill:none;
+  stroke:#fff;
+  stroke-width:2.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
