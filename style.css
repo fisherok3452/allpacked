@@ -504,3 +504,40 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
   background:#fff;
   color:var(--text);
 }
+
+
+/* AllPacked v0.18 â use the same selection style as Season and Activities */
+.packing-for-choice{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.packing-for-choice .packing-for-button{
+  min-width:120px;
+  min-height:46px;
+  padding:10px 18px;
+  border:1px solid var(--border);
+  border-radius:100px;
+  background:#fff;
+  color:var(--text);
+  font-weight:650;
+  box-shadow:none;
+}
+
+.packing-for-choice .packing-for-button.active{
+  border-color:var(--green);
+  background:var(--green);
+  color:#fff;
+  box-shadow:none;
+}
+
+.packing-for-choice .packing-for-button.active::after{
+  content:none;
+}
+
+.packing-for-choice .packing-for-button:not(.active){
+  border-color:var(--border);
+  background:#fff;
+  color:var(--text);
+}
