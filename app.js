@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v23";
+const STORAGE_KEY="allpacked_v25";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
@@ -277,7 +277,7 @@ function renderHome(){
  if(activeTrips.length)seeTripsButton.onclick=()=>{state.history=[];state.page="trips";render()};
  newTripButton.onclick=()=>{state.newTrip=null;state.editingExistingTrip=false;state.history=["home"];state.page="tripType";render()}
 }
-function renderTripTypes(){screen.innerHTML='<h1 class="page-title">What kind of trip are you taking?</h1><p class="page-subtitle">Choose the closest option. Everything can be customized later.</p><div class="trip-grid">'+tripTypes.map(t=>`<button class="trip-type" data-trip-type="${t.id}"><span class="trip-emoji">${t.emoji}</span><span class="trip-label">${t.name}</span></button>`).join("")+"</div>";document.querySelectorAll("[data-trip-type]").forEach(b=>b.onclick=()=>{const t=tripTypes.find(x=>x.id===b.dataset.tripType);state.newTrip={id:String(Date.now()),type:t.id,typeName:t.name,emoji:t.emoji,name:(t.id==="picnic"?"My Picnic":t.id==="family"?"My Family Gathering":"My "+t.name+" Trip"),duration:3,season:"Summer",packingFor:"personal",people:1,groupPeople:2,transport:"other",activities:[],categories:[]};navigate("tripDetails")})}
+function renderTripTypes(){screen.innerHTML='<h1 class="page-title">What kind of trip are you taking?</h1><p class="page-subtitle">Choose the closest option. Everything can be customized later.</p><div class="trip-grid">'+tripTypes.map(t=>`<button class="trip-type" data-trip-type="${t.id}"><span class="trip-emoji">${t.emoji}</span><span class="trip-label">${t.name}</span></button>`).join("")+"</div>";document.querySelectorAll("[data-trip-type]").forEach(b=>b.onclick=()=>{const t=tripTypes.find(x=>x.id===b.dataset.tripType);state.newTrip={id:String(Date.now()),type:t.id,typeName:t.name,emoji:t.emoji,name:(t.id==="picnic"?"My Picnic":t.id==="family"?"My Family Gathering":t.id==="business"?"My Business Trip":"My "+t.name+" Trip"),duration:3,season:"Summer",packingFor:"personal",people:1,groupPeople:2,transport:"other",activities:[],categories:[]};navigate("tripDetails")})}
 
 function renderTripDetails(){
  const t=state.newTrip;if(!t){state.page="tripType";return render()}
@@ -706,7 +706,18 @@ function openEditor(t,currentCategory,x){
  modalOverlay.classList.remove("hidden");
  const ref=()=>rv.textContent=d.required;rm.onclick=()=>{d.required=Math.max(1,d.required-1);d.packed=Math.min(d.packed,d.required);ref()};rp.onclick=()=>{d.required++;ref()};cancel.onclick=closeModal;
  ec.onchange=()=>{if(ec.value!=="__new__")return;const newName=prompt("New category name");if(!newName){ec.value=currentCategory&&currentOptions.includes(currentCategory)?currentCategory:"Other";return}if(!data.customLibrary[newName])data.customLibrary[newName]=[];if(!t.items[newName])t.items[newName]=[];const option=document.createElement("option");option.value=newName;option.textContent=newName;ec.appendChild(option);ec.value=newName;saveData()};
- save.onclick=()=>{const n=en.value.trim();if(!n)return showToast("Enter an item name");let target=ec.value;if(target==="__new__"){const newName=prompt("New category name");if(!newName)return;target=newName;if(!data.customLibrary[target])data.customLibrary[target]=[]}if(!target)target="Other";if(!t.items[target])t.items[target]=[];if(x)t.items[currentCategory]=t.items[currentCategory].filter(i=>i.id!==x.id);const newItem={...(x||{}),id:x?.id||String(Date.now())+Math.random(),name:n,required:d.required,packed:Math.min(d.packed,d.required),needToBuy:d.needToBuy,bought:Math.min(x?.bought||0,d.needToBuy)};t.items[target].push(newItem);if(t.items[currentCategory]&&t.items[currentCategory].length===0)delete t.items[currentCategory];persistCustomItem(target,n,d.required);t.categories=Object.keys(t.items);saveData();closeModal();renderPackingList()}
+ save.onclick=()=>{const n=en.value.trim();if(!n)return showToast("Enter an item name");let target=ec.value;if(target==="__new__"){const newName=prompt("New category name");if(!newName)return;target=newName;if(!data.customLibrary[target])data.customLibrary[target]=[]}if(!target)target="Other";if(!t.items[target])t.items[target]=[];
+ const originalIndex=x&&t.items[currentCategory]?t.items[currentCategory].findIndex(i=>i.id===x.id):-1;
+ const newItem={...(x||{}),id:x?.id||String(Date.now())+Math.random(),name:n,required:d.required,packed:Math.min(d.packed,d.required),needToBuy:d.needToBuy,bought:Math.min(x?.bought||0,d.needToBuy)};
+ if(x&&target===currentCategory&&originalIndex>=0){
+   // Editing within the same category: replace in place so the item never jumps.
+   t.items[currentCategory][originalIndex]=newItem;
+ }else{
+   // New item, or intentionally moved to another category.
+   if(x&&t.items[currentCategory])t.items[currentCategory].splice(originalIndex,1);
+   t.items[target].push(newItem);
+ }
+ if(t.items[currentCategory]&&t.items[currentCategory].length===0)delete t.items[currentCategory];persistCustomItem(target,n,d.required);t.categories=Object.keys(t.items);saveData();closeModal();renderPackingList()}
 }
 
 function persistCustomItem(category,name,required){
