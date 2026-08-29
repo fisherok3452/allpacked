@@ -471,73 +471,43 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 }
 
 
-/* AllPacked v0.17 â clearer packing-for selection */
-.packing-for-button{
-  position:relative;
-  transition:background .15s ease,border-color .15s ease,box-shadow .15s ease,color .15s ease;
-}
-
-.packing-for-button.active{
-  border:2px solid var(--green);
-  background:var(--light-green);
-  color:var(--green);
-  box-shadow:0 0 0 1px rgba(47,125,87,.08);
-}
-
-.packing-for-button.active::after{
-  content:"â";
-  display:inline-grid;
-  place-items:center;
-  width:20px;
-  height:20px;
-  margin-left:7px;
-  border-radius:999px;
-  background:var(--green);
-  color:#fff;
-  font-size:12px;
-  font-weight:800;
-  vertical-align:middle;
-}
-
-.packing-for-button:not(.active){
-  border:1px solid var(--border);
-  background:#fff;
-  color:var(--text);
-}
 
 
-/* AllPacked v0.18 â use the same selection style as Season and Activities */
+/* AllPacked v0.19 â clean personal/group selector */
 .packing-for-choice{
-  display:flex;
-  flex-wrap:wrap;
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap:10px;
 }
 
 .packing-for-choice .packing-for-button{
-  min-width:120px;
-  min-height:46px;
-  padding:10px 18px;
-  border:1px solid var(--border);
-  border-radius:100px;
-  background:#fff;
-  color:var(--text);
-  font-weight:650;
-  box-shadow:none;
+  min-height:48px;
+  padding:11px 16px;
+  border:1px solid var(--border) !important;
+  border-radius:15px;
+  background:#fff !important;
+  color:var(--text) !important;
+  font-weight:700;
+  box-shadow:none !important;
 }
 
 .packing-for-choice .packing-for-button.active{
-  border-color:var(--green);
-  background:var(--green);
-  color:#fff;
-  box-shadow:none;
+  border:1px solid var(--green) !important;
+  background:var(--green) !important;
+  color:#fff !important;
+  box-shadow:none !important;
 }
 
+.packing-for-choice .packing-for-button::before,
+.packing-for-choice .packing-for-button::after,
+.packing-for-choice .packing-for-button.active::before,
 .packing-for-choice .packing-for-button.active::after{
-  content:none;
+  content:none !important;
+  display:none !important;
 }
 
-.packing-for-choice .packing-for-button:not(.active){
-  border-color:var(--border);
-  background:#fff;
-  color:var(--text);
+.group-size-block{
+  margin-top:20px;
+  padding-top:18px;
+  border-top:1px solid #eeece6;
 }
