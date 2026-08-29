@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v27";
+const STORAGE_KEY="allpacked_v28";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
@@ -570,6 +570,46 @@ function includeItem(d,t){
  return true
 }
 function qty(q,t){const n=Math.max(0,t.duration-1);if(q==="people")return t.packingFor==="group"?Math.max(2,t.people||2):1;if(["shirts","underwear","socks"].includes(q))return Math.max(1,Math.min(n+1,8));if(q==="pants")return t.duration<=2?1:t.duration<=5?2:3;return q||1}
+
+function canonicalItemKey(name){
+ let s=String(name||"").toLowerCase().trim();
+
+ // Remove punctuation/format differences first.
+ s=s.replace(/&/g," and ");
+ s=s.replace(/[\/(),.-]/g," ");
+ s=s.replace(/\s+/g," ").trim();
+
+ // Common equivalent packing items used in different categories.
+ const aliases=[
+   [["plate","plates"],"plate"],
+   [["cup","cups","cup mug","cups mugs","mug","mugs"],"cup"],
+   [["cutlery","utensil","utensils"],"cutlery"],
+   [["lighter","lighters","lighter matches","matches lighter","matches"],"lighter"],
+   [["napkin","napkins","napkins paper towels","paper towel","paper towels"],"napkins"],
+   [["cooler","cooler bag"],"cooler"],
+   [["water bottle","water bottles","reusable water bottle","reusable water bottles"],"water bottle"],
+   [["sunscreen","sun screen"],"sunscreen"],
+   [["beach towel","beach towels"],"beach towel"],
+   [["swimsuit","swimsuits","swimwear"],"swimsuit"],
+   [["dress shoe","dress shoes"],"dress shoes"],
+   [["glove","gloves"],"gloves"],
+   [["warm hat","winter hat"],"warm hat"],
+   [["phone charger","phone chargers","mobile charger","mobile chargers"],"phone charger"],
+   [["car charger","vehicle charger"],"car charger"],
+   [["trash bag","trash bags","garbage bag","garbage bags"],"trash bags"],
+   [["food container","food containers"],"food containers"]
+ ];
+
+ for(const [variants,key] of aliases){
+   if(variants.includes(s))return key;
+ }
+
+ // Light singularization catches basic Plate/Plates-style differences.
+ if(s.endsWith("s")&&!s.endsWith("ss")&&s.length>3)s=s.slice(0,-1);
+
+ return s;
+}
+
 function createItems(t){
  const r={};
  const seenGlobal=new Set();
@@ -580,7 +620,7 @@ function createItems(t){
    r[c]=libraryForCategory(c)
      .filter(d=>includeItem(d,t))
      .filter(d=>{
-       const key=d.name.trim().toLowerCase();
+       const key=canonicalItemKey(d.name);
 
        if(seenLocal.has(key))return false;
        seenLocal.add(key);
@@ -849,7 +889,7 @@ function renderShopping(){
            <div class="shopping-name">${x.name}</div>
            <div class="shopping-small">${c}</div>
          </div>
-         <div class="shopping-qty">Ã${x.needToBuy}</div>
+         <div class="shopping-qty">Qty ${x.needToBuy}</div>
        </div>
      `).join("")}
 
