@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v20";
+const STORAGE_KEY="allpacked_v21";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
@@ -13,12 +13,12 @@ customLibrary:{}
 
 const tripTypes=[
 {id:"camping",name:"Camping",emoji:"\ud83c\udfd5"},{id:"vacation",name:"Vacation",emoji:"\u2708\ufe0f"},
-{id:"roadtrip",name:"Road Trip",emoji:"\ud83d\ude97"},{id:"hiking",name:"Hiking",emoji:"\ud83e\udd7e"},
+{id:"business",name:"Business Trip",emoji:"\ud83d\udcbc"},{id:"hiking",name:"Hiking",emoji:"\ud83e\udd7e"},
 {id:"fishing",name:"Fishing",emoji:"\ud83c\udfa3"},{id:"beach",name:"Beach",emoji:"\ud83c\udfd6"},
 {id:"winter",name:"Winter Trip",emoji:"\ud83c\udfbf"},{id:"picnic",name:"Picnic",emoji:"\ud83e\uddfa"},
 {id:"family",name:"Family Gathering",emoji:"\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\ud83d\udc66"},{id:"other",name:"Other",emoji:"\u2795"}];
 
-const activities=["Fishing","Hiking","Swimming","Cooking","BBQ","Ski & Snowboard","Diving & Snorkeling","Rental Car","Cruise","City Trip","Business Trip","Formal Event","Photography","Theme Park","Cycling","Pets","Kids"];
+const activities=["Fishing","Hiking","Swimming","Cooking","BBQ","Ski & Snowboard","Diving & Snorkeling","Rental Car","Cruise","City Trip","Formal Event","Photography","Theme Park","Cycling","Pets","Kids"];
 
 const packingDatabase={
 "Clothing":[
@@ -51,13 +51,13 @@ const packingDatabase={
 "Swimming":[{name:"Swimsuit",qty:"people"},{name:"Beach towel",qty:"people"},{name:"Water shoes",qty:"people"},{name:"Dry bag",qty:1}],
 "Beach":[{name:"Beach blanket",qty:1},{name:"Umbrella / shade",qty:1},{name:"Sunglasses",qty:"people"},{name:"Flip-flops",qty:"people"},{name:"Swimsuit",qty:"people"}],
 "Winter Gear":[{name:"Winter jacket",qty:"people"},{name:"Warm boots",qty:"people"},{name:"Gloves",qty:"people"},{name:"Warm hat",qty:"people"},{name:"Thermal base layer",qty:"people"},{name:"Hand warmers",qty:1}],
-"Road Trip":[{name:"Driver's licence",qty:1},{name:"Vehicle insurance",qty:1},{name:"Car charger",qty:1},{name:"Emergency roadside kit",qty:1},{name:"Phone mount",qty:1},{name:"Reusable water bottle",qty:"people"}],
+"Car Essentials":[{name:"Driver's licence",qty:1},{name:"Vehicle insurance",qty:1},{name:"Car charger",qty:1},{name:"Emergency roadside kit",qty:1},{name:"Phone mount",qty:1},{name:"Reusable water bottle",qty:"people"}],"Flight Essentials":[{name:"Boarding pass",qty:"people"},{name:"Carry-on bag",qty:1},{name:"Luggage tag",qty:1},{name:"Headphones",qty:"people"},{name:"Travel pillow",qty:1},{name:"Empty water bottle",qty:"people"}],
 "Ski & Snowboard":[{name:"Ski jacket",qty:"people"},{name:"Snow pants",qty:"people"},{name:"Ski socks",qty:"people"},{name:"Thermal base layer",qty:"people"},{name:"Gloves",qty:"people"},{name:"Goggles",qty:"people"},{name:"Helmet",qty:"people"},{name:"Ski / snowboard equipment",qty:"people"},{name:"Lift pass",qty:"people"},{name:"Equipment rental confirmation",qty:1}],
 "Diving & Snorkeling":[{name:"Mask",qty:"people"},{name:"Snorkel",qty:"people"},{name:"Fins",qty:"people"},{name:"Rash guard",qty:"people"},{name:"Dry bag",qty:1},{name:"Dive certification card",qty:1},{name:"Dive computer",qty:1},{name:"Underwater camera",qty:1},{name:"Dive booking confirmation",qty:1}],
 "Rental Car":[{name:"Driver's licence",qty:1},{name:"Credit card",qty:1},{name:"Rental confirmation",qty:1},{name:"Insurance documents",qty:1},{name:"Phone mount",qty:1},{name:"Car charger",qty:1},{name:"Offline map",qty:1}],
 "Cruise":[{name:"Cruise documents",qty:1},{name:"Passport",qty:"people"},{name:"Formal clothing",qty:"people"},{name:"Swimsuit",qty:"people"},{name:"Motion sickness medication",qty:1}],
 "City Trip":[{name:"Comfortable walking shoes",qty:"people"},{name:"Small backpack",qty:1},{name:"Transit card",qty:1},{name:"Offline map",qty:1},{name:"Reusable water bottle",qty:"people"}],
-"Business Trip":[{name:"Laptop",qty:1},{name:"Laptop charger",qty:1},{name:"Work documents",qty:1},{name:"Business clothing",qty:2},{name:"Notebook",qty:1}],
+"Business Trip":[{name:"Laptop",qty:1},{name:"Laptop charger",qty:1},{name:"Work phone / charger",qty:1},{name:"Work documents",qty:1},{name:"Business clothing",qty:2},{name:"Dress shoes",qty:1},{name:"Notebook",qty:1},{name:"Pen",qty:2},{name:"Business cards",qty:1},{name:"Presentation / meeting materials",qty:1}],
 "Formal Event":[{name:"Formal outfit",qty:"people"},{name:"Dress shoes",qty:"people"},{name:"Accessories",qty:"people"},{name:"Garment bag",qty:1}],
 "Photography":[{name:"Camera",qty:1},{name:"Camera charger",qty:1,minNights:1},{name:"Memory card",qty:1},{name:"Tripod",qty:1},{name:"Camera batteries",qty:2}],
 "Theme Park":[{name:"Tickets",qty:1},{name:"Portable charger",qty:1},{name:"Water bottle",qty:"people"},{name:"Comfortable shoes",qty:"people"},{name:"Small backpack",qty:1}],
@@ -74,6 +74,7 @@ const packingDatabase={
 {name:"Folding chairs",qty:"people"},{name:"Cooler",qty:1},{name:"Food containers",qty:1},
 {name:"Napkins / paper towels",qty:1},{name:"Trash bags",qty:1},{name:"Outdoor games",qty:1}
 ],
+"Makeup & Cosmetics":[{name:"Makeup bag",qty:1},{name:"Foundation / concealer",qty:1},{name:"Mascara",qty:1},{name:"Lipstick / lip balm",qty:1},{name:"Makeup brushes / sponge",qty:1},{name:"Makeup remover",qty:1},{name:"Face moisturizer",qty:1},{name:"Hair ties / clips",qty:1},{name:"Perfume / fragrance",qty:1}],
 "Other":[]
 };
 
@@ -249,7 +250,7 @@ function renderHome(){
  if(activeTrips.length)seeTripsButton.onclick=()=>{state.history=[];state.page="trips";render()};
  newTripButton.onclick=()=>{state.newTrip=null;state.editingExistingTrip=false;state.history=["home"];state.page="tripType";render()}
 }
-function renderTripTypes(){screen.innerHTML='<h1 class="page-title">What kind of trip are you taking?</h1><p class="page-subtitle">Choose the closest option. Everything can be customized later.</p><div class="trip-grid">'+tripTypes.map(t=>`<button class="trip-type" data-trip-type="${t.id}"><span class="trip-emoji">${t.emoji}</span><span class="trip-label">${t.name}</span></button>`).join("")+"</div>";document.querySelectorAll("[data-trip-type]").forEach(b=>b.onclick=()=>{const t=tripTypes.find(x=>x.id===b.dataset.tripType);state.newTrip={id:String(Date.now()),type:t.id,typeName:t.name,emoji:t.emoji,name:(t.id==="picnic"?"My Picnic":t.id==="family"?"My Family Gathering":"My "+t.name+" Trip"),duration:3,season:"Summer",packingFor:"personal",people:1,groupPeople:2,activities:[],categories:[]};navigate("tripDetails")})}
+function renderTripTypes(){screen.innerHTML='<h1 class="page-title">What kind of trip are you taking?</h1><p class="page-subtitle">Choose the closest option. Everything can be customized later.</p><div class="trip-grid">'+tripTypes.map(t=>`<button class="trip-type" data-trip-type="${t.id}"><span class="trip-emoji">${t.emoji}</span><span class="trip-label">${t.name}</span></button>`).join("")+"</div>";document.querySelectorAll("[data-trip-type]").forEach(b=>b.onclick=()=>{const t=tripTypes.find(x=>x.id===b.dataset.tripType);state.newTrip={id:String(Date.now()),type:t.id,typeName:t.name,emoji:t.emoji,name:(t.id==="picnic"?"My Picnic":t.id==="family"?"My Family Gathering":"My "+t.name+" Trip"),duration:3,season:"Summer",packingFor:"personal",people:1,groupPeople:2,transport:"other",activities:[],categories:[]};navigate("tripDetails")})}
 
 function renderTripDetails(){
  const t=state.newTrip;if(!t){state.page="tripType";return render()}
@@ -257,6 +258,7 @@ function renderTripDetails(){
  // Backward compatibility with trips created before this option existed.
  if(!t.packingFor)t.packingFor=(t.people&&t.people>1)?"group":"personal";
  if(!t.groupPeople)t.groupPeople=Math.max(2,t.people||2);
+ if(!t.transport)t.transport="other";
  if(t.packingFor==="personal")t.people=1;
 
  screen.innerHTML=`<h1 class="page-title">${t.emoji} ${t.typeName}</h1><p class="page-subtitle">Tell us a little about this trip.</p><div class="stack">
@@ -280,6 +282,15 @@ function renderTripDetails(){
        </div>
      </div>
    `:""}
+ </div>
+
+ <div class="card">
+   <label class="field-label">How are you getting there?</label>
+   <div class="transport-choice">
+     <button class="chip transport-button ${t.transport==="driving"?"active":""}" data-transport="driving">Driving</button>
+     <button class="chip transport-button ${t.transport==="flying"?"active":""}" data-transport="flying">Flying</button>
+     <button class="chip transport-button ${t.transport==="other"?"active":""}" data-transport="other">Other</button>
+   </div>
  </div>
 
  <div class="card"><label class="field-label">What will you do on this trip?</label><div class="chips">${activities.map(x=>`<button class="chip ${t.activities.includes(x)?"active":""}" data-activity="${x}">${x}</button>`).join("")}</div></div>
@@ -320,6 +331,12 @@ function renderTripDetails(){
    };
  }
 
+ document.querySelectorAll("[data-transport]").forEach(b=>b.onclick=()=>{
+   keep();
+   t.transport=b.dataset.transport;
+   renderTripDetails()
+ });
+
  document.querySelectorAll("[data-activity]").forEach(b=>b.onclick=()=>{
    keep();
    const a=b.dataset.activity;
@@ -343,30 +360,41 @@ function suggestedCategories(t){
  else if(["beach","camping","hiking","fishing"].includes(t.type))c.push("Toiletries");
 
  c.push("Electronics");
- if(overnight||["camping","hiking","fishing","roadtrip","beach"].includes(t.type))c.push("Health & Safety");
+
+ if(overnight||["camping","hiking","fishing","beach"].includes(t.type))c.push("Health & Safety");
 
  if(t.type==="camping")c.unshift("Camping Gear");
  if(t.type==="camping"&&overnight)c.push("Cooking","Food & Drinks");
- if(t.type==="roadtrip")c.push("Road Trip","Food & Drinks");
  if(t.type==="vacation")c.push("Travel Documents");
+ if(t.type==="business")c.push("Business Trip","Travel Documents");
  if(t.type==="fishing")c.push("Fishing");
  if(t.type==="hiking")c.push("Hiking");
  if(t.type==="beach")c.unshift("Beach");
+
  if(t.type==="picnic"){
    c=["Picnic","Food & Drinks","Toiletries","Electronics"];
  }
  if(t.type==="family"){
    c=["Family Gathering","Food & Drinks","Electronics"];
  }
+
  if(t.type==="winter"||t.season==="Winter")c.push("Winter Gear");
+
+ if(t.transport==="driving")c.push("Car Essentials");
+ if(t.transport==="flying"){
+   c.push("Flight Essentials");
+   if(!c.includes("Travel Documents"))c.push("Travel Documents");
+ }
 
  t.activities.forEach(a=>{
    if(allCategoryNames().includes(a))c.push(a);
    if(a==="BBQ")c.push("Food & Drinks");
    if(a==="Swimming"&&t.type!=="beach")c.push("Swimming");
  });
+
  return[...new Set(c)]
 }
+
 function categoryOption(c,on){return`<label class="category-option"><input type="checkbox" class="category-checkbox" value="${esc(c)}" ${on?"checked":""}><span class="category-name">${c}</span></label>`}
 
 function renderCategories(){
