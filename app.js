@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v21";
+const STORAGE_KEY="allpacked_v22";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
@@ -8,7 +8,8 @@ gear:[
 {category:"Fishing",items:["Fishing rod","Tackle box","Landing net"]},
 {category:"Electronics",items:["Power bank","Flashlight","USB-C charger"]}
 ],
-customLibrary:{}
+customLibrary:{},
+favoriteCategories:[]
 };
 
 const tripTypes=[
@@ -18,7 +19,7 @@ const tripTypes=[
 {id:"winter",name:"Winter Trip",emoji:"\ud83c\udfbf"},{id:"picnic",name:"Picnic",emoji:"\ud83e\uddfa"},
 {id:"family",name:"Family Gathering",emoji:"\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\ud83d\udc66"},{id:"other",name:"Other",emoji:"\u2795"}];
 
-const activities=["Fishing","Hiking","Swimming","Cooking","BBQ","Ski & Snowboard","Diving & Snorkeling","Rental Car","Cruise","City Trip","Formal Event","Photography","Theme Park","Cycling","Pets","Kids"];
+const activities=["Fishing","Hiking","Swimming","Cooking","BBQ","Ski & Snowboard","Diving & Snorkeling","Rental Car","Cruise","City Trip","Work Meeting","Formal Event","Photography","Theme Park","Cycling","Pets","Kids"];
 
 const packingDatabase={
 "Clothing":[
@@ -57,8 +58,8 @@ const packingDatabase={
 "Rental Car":[{name:"Driver's licence",qty:1},{name:"Credit card",qty:1},{name:"Rental confirmation",qty:1},{name:"Insurance documents",qty:1},{name:"Phone mount",qty:1},{name:"Car charger",qty:1},{name:"Offline map",qty:1}],
 "Cruise":[{name:"Cruise documents",qty:1},{name:"Passport",qty:"people"},{name:"Formal clothing",qty:"people"},{name:"Swimsuit",qty:"people"},{name:"Motion sickness medication",qty:1}],
 "City Trip":[{name:"Comfortable walking shoes",qty:"people"},{name:"Small backpack",qty:1},{name:"Transit card",qty:1},{name:"Offline map",qty:1},{name:"Reusable water bottle",qty:"people"}],
-"Business Trip":[{name:"Laptop",qty:1},{name:"Laptop charger",qty:1},{name:"Work phone / charger",qty:1},{name:"Work documents",qty:1},{name:"Business clothing",qty:2},{name:"Dress shoes",qty:1},{name:"Notebook",qty:1},{name:"Pen",qty:2},{name:"Business cards",qty:1},{name:"Presentation / meeting materials",qty:1}],
-"Formal Event":[{name:"Formal outfit",qty:"people"},{name:"Dress shoes",qty:"people"},{name:"Accessories",qty:"people"},{name:"Garment bag",qty:1}],
+"Business Trip":[{name:"Laptop",qty:1},{name:"Laptop charger",qty:1},{name:"Work phone / charger",qty:1},{name:"Work documents",qty:1},{name:"Notebook",qty:1},{name:"Pen",qty:2},{name:"Business cards",qty:1},{name:"Presentation / meeting materials",qty:1}],
+"Work Meeting":[{name:"Business outfit",qty:"people"},{name:"Dress shoes",qty:"people"},{name:"Meeting agenda",qty:1},{name:"Meeting notes / documents",qty:1},{name:"Name badge",qty:1}],"Formal Event":[{name:"Formal outfit",qty:"people"},{name:"Dress shoes",qty:"people"},{name:"Accessories",qty:"people"},{name:"Garment bag",qty:1}],
 "Photography":[{name:"Camera",qty:1},{name:"Camera charger",qty:1,minNights:1},{name:"Memory card",qty:1},{name:"Tripod",qty:1},{name:"Camera batteries",qty:2}],
 "Theme Park":[{name:"Tickets",qty:1},{name:"Portable charger",qty:1},{name:"Water bottle",qty:"people"},{name:"Comfortable shoes",qty:"people"},{name:"Small backpack",qty:1}],
 "Cycling":[{name:"Bike helmet",qty:"people"},{name:"Bike gloves",qty:"people"},{name:"Water bottle",qty:"people"},{name:"Bike repair kit",qty:1}],
@@ -99,6 +100,7 @@ function loadData(){
  try{
    const parsed=JSON.parse(s);
    if(!parsed.customLibrary)parsed.customLibrary={};
+   if(!parsed.favoriteCategories)parsed.favoriteCategories=[];
    return parsed;
  }catch{return structuredClone(defaultData)}
 }
@@ -129,6 +131,20 @@ backButton.onclick=()=>{if(state.page==="packing"){state.history=[];state.newTri
 
 function allCategoryNames(){return [...new Set([...Object.keys(packingDatabase),...Object.keys(data.customLibrary||{})])]}
 function libraryForCategory(c){return [...(packingDatabase[c]||[]),...(data.customLibrary[c]||[])]}
+
+function isFavoriteCategory(c){
+ return (data.favoriteCategories||[]).includes(c);
+}
+function toggleFavoriteCategory(c){
+ if(!data.favoriteCategories)data.favoriteCategories=[];
+ if(isFavoriteCategory(c)){
+   data.favoriteCategories=data.favoriteCategories.filter(x=>x!==c);
+ }else{
+   data.favoriteCategories.push(c);
+ }
+ saveData();
+}
+
 
 
 function showFirstLaunchOnboarding(){
@@ -395,23 +411,89 @@ function suggestedCategories(t){
  return[...new Set(c)]
 }
 
-function categoryOption(c,on){return`<label class="category-option"><input type="checkbox" class="category-checkbox" value="${esc(c)}" ${on?"checked":""}><span class="category-name">${c}</span></label>`}
+function categoryOption(c,on){
+ return`<div class="category-option-row">
+   <label class="category-option">
+     <input type="checkbox" class="category-checkbox" value="${esc(c)}" ${on?"checked":""}>
+     <span class="category-name">${c}</span>
+   </label>
+   <button class="favorite-category-button ${isFavoriteCategory(c)?"active":""}" data-favorite-category="${esc(c)}" aria-label="${isFavoriteCategory(c)?"Remove from favorites":"Add to favorites"}">${isFavoriteCategory(c)?"â":"â"}</button>
+ </div>`
+}
 
 function renderCategories(){
  const t=state.newTrip;if(!t){state.page="tripType";return render()}
- const rec=suggestedCategories(t),sel=t.categories?.length?t.categories:rec,all=allCategoryNames();
- screen.innerHTML=`<h1 class="page-title">What do you need to pack?</h1><p class="page-subtitle">Remove anything you do not need before generating the list.</p>
- <div class="section-title">Recommended</div><div class="stack">${rec.map(c=>categoryOption(c,sel.includes(c))).join("")}</div>
- <div class="section-title">More Categories</div><div class="stack">${all.filter(c=>!rec.includes(c)).map(c=>categoryOption(c,sel.includes(c))).join("")}</div>
+
+ const rec=suggestedCategories(t);
+ const favorites=(data.favoriteCategories||[]).filter(c=>allCategoryNames().includes(c));
+ const selected=t.categories&&t.categories.length?t.categories:[...new Set([...rec,...favorites])];
+
+ const favoriteSet=new Set(favorites);
+ const recommendedWithoutFavorites=rec.filter(c=>!favoriteSet.has(c));
+
+ let more=allCategoryNames().filter(c=>!rec.includes(c)&&!favoriteSet.has(c));
+
+ // Makeup & Cosmetics should always be the first visible optional category.
+ more=more.sort((a,b)=>{
+   if(a==="Makeup & Cosmetics")return -1;
+   if(b==="Makeup & Cosmetics")return 1;
+   return a.localeCompare(b);
+ });
+
+ screen.innerHTML=`<h1 class="page-title">What do you need to pack?</h1>
+ <p class="page-subtitle">Remove anything you do not need before generating the list.</p>
+
+ ${favorites.length?`
+   <div class="section-title">Favorites</div>
+   <div class="stack">${favorites.map(c=>categoryOption(c,selected.includes(c))).join("")}</div>
+ `:""}
+
+ ${recommendedWithoutFavorites.length?`
+   <div class="section-title">Recommended</div>
+   <div class="stack">${recommendedWithoutFavorites.map(c=>categoryOption(c,selected.includes(c))).join("")}</div>
+ `:""}
+
+ <div class="section-title">More Categories</div>
+ <div class="stack">${more.map(c=>categoryOption(c,selected.includes(c))).join("")}</div>
+
  <div class="button-row"><button id="createPackingList" class="primary-button">${state.editingExistingTrip?"Update List":"Create List"}</button></div>`;
+
+ document.querySelectorAll("[data-favorite-category]").forEach(b=>b.onclick=e=>{
+   e.preventDefault();
+   e.stopPropagation();
+   const category=b.dataset.favoriteCategory;
+   const becomingFavorite=!isFavoriteCategory(category);
+   toggleFavoriteCategory(category);
+
+   if(becomingFavorite&&!hasOnboardingFlag("favoriteCategoryTip")){
+     showOneTimeTip(
+       "favoriteCategoryTip",
+       "Favorite Category",
+       "Favorite categories will be automatically selected when you plan future trips. You can still uncheck them for any individual trip.",
+       "Got it",
+       ()=>renderCategories()
+     );
+   }else{
+     renderCategories()
+   }
+ });
+
  createPackingList.onclick=()=>{
    t.categories=[...document.querySelectorAll(".category-checkbox:checked")].map(x=>x.value);
    if(!t.categories.length)return showToast("Choose at least one category");
    const items=createItems(t);
    if(state.editingExistingTrip){
      const old=data.trips.find(x=>x.id===t.id);preserve(old,items);Object.assign(old,t,{items});state.activeTripId=old.id
-   }else{t.items=items;data.trips.unshift(t);state.activeTripId=t.id}
-   saveData();state.editingExistingTrip=false;state.newTrip=null;state.page="packing";render()
+   }else{
+     t.items=items;
+     data.trips.unshift(t);
+     state.activeTripId=t.id
+   }
+   saveData();
+   state.editingExistingTrip=false;
+   state.newTrip=null;
+   state.page="packing";
+   render()
  }
 }
 
@@ -429,12 +511,37 @@ function includeItem(d,t){
 function qty(q,t){const n=Math.max(0,t.duration-1);if(q==="people")return t.packingFor==="group"?Math.max(2,t.people||2):1;if(["shirts","underwear","socks"].includes(q))return Math.max(1,Math.min(n+1,8));if(q==="pants")return t.duration<=2?1:t.duration<=5?2:3;return q||1}
 function createItems(t){
  const r={};
+ const seenGlobal=new Set();
+
  t.categories.forEach(c=>{
-   const seen=new Set();
-   r[c]=libraryForCategory(c).filter(d=>includeItem(d,t)).filter(d=>{const k=d.name.toLowerCase();if(seen.has(k))return false;seen.add(k);return true}).map(d=>({id:String(Date.now())+Math.random(),name:d.name,required:qty(d.qty,t),packed:0,needToBuy:0,bought:0}));
+   const seenLocal=new Set();
+
+   r[c]=libraryForCategory(c)
+     .filter(d=>includeItem(d,t))
+     .filter(d=>{
+       const key=d.name.trim().toLowerCase();
+
+       if(seenLocal.has(key))return false;
+       seenLocal.add(key);
+
+       if(seenGlobal.has(key))return false;
+       seenGlobal.add(key);
+
+       return true
+     })
+     .map(d=>({
+       id:String(Date.now())+Math.random(),
+       name:d.name,
+       required:qty(d.qty,t),
+       packed:0,
+       needToBuy:0,
+       bought:0
+     }));
  });
+
  return r
 }
+
 function preserve(old,items){if(!old)return;Object.keys(items).forEach(c=>items[c].forEach(n=>{const o=(old.items[c]||[]).find(x=>x.name===n.name);if(o){n.packed=Math.min(o.packed||0,n.required);n.needToBuy=o.needToBuy||0;n.bought=Math.min(o.bought||0,n.needToBuy)}}))}
 function activeTrip(){return data.trips.find(t=>t.id===state.activeTripId)}
 function totals(t){const a=Object.values(t.items).flat();return{required:a.reduce((s,x)=>s+x.required,0),packed:a.reduce((s,x)=>s+Math.min(x.packed,x.required),0)}}
