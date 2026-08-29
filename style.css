@@ -514,3 +514,40 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
   min-width:92px;
   text-align:center;
 }
+
+
+/* AllPacked v0.22 â favorite categories */
+.category-option-row{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 46px;
+  gap:8px;
+  align-items:stretch;
+}
+
+.category-option-row .category-option{
+  min-width:0;
+}
+
+.favorite-category-button{
+  width:46px;
+  min-height:50px;
+  display:grid;
+  place-items:center;
+  padding:0;
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:#fff;
+  color:#a7a39a;
+  font-size:24px;
+  line-height:1;
+}
+
+.favorite-category-button.active{
+  border-color:#e7c977;
+  background:#fff8df;
+  color:#b98700;
+}
+
+.favorite-category-button:active{
+  opacity:.6;
+}
