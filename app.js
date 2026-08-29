@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v22";
+const STORAGE_KEY="allpacked_v23";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
@@ -135,6 +135,17 @@ function libraryForCategory(c){return [...(packingDatabase[c]||[]),...(data.cust
 function isFavoriteCategory(c){
  return (data.favoriteCategories||[]).includes(c);
 }
+
+function favoriteStarSvg(filled){
+ return filled
+   ? `<svg class="favorite-star-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 2.8l2.8 5.68 6.27.91-4.54 4.42 1.07 6.24L12 17.1l-5.6 2.95 1.07-6.24L2.93 9.39l6.27-.91L12 2.8z"></path>
+      </svg>`
+   : `<svg class="favorite-star-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 2.8l2.8 5.68 6.27.91-4.54 4.42 1.07 6.24L12 17.1l-5.6 2.95 1.07-6.24L2.93 9.39l6.27-.91L12 2.8z"></path>
+      </svg>`;
+}
+
 function toggleFavoriteCategory(c){
  if(!data.favoriteCategories)data.favoriteCategories=[];
  if(isFavoriteCategory(c)){
@@ -417,7 +428,7 @@ function categoryOption(c,on){
      <input type="checkbox" class="category-checkbox" value="${esc(c)}" ${on?"checked":""}>
      <span class="category-name">${c}</span>
    </label>
-   <button class="favorite-category-button ${isFavoriteCategory(c)?"active":""}" data-favorite-category="${esc(c)}" aria-label="${isFavoriteCategory(c)?"Remove from favorites":"Add to favorites"}">${isFavoriteCategory(c)?"â":"â"}</button>
+   <button class="favorite-category-button ${isFavoriteCategory(c)?"active":""}" data-favorite-category="${esc(c)}" aria-label="${isFavoriteCategory(c)?"Remove from favorites":"Add to favorites"}">${favoriteStarSvg(isFavoriteCategory(c))}</button>
  </div>`
 }
 
