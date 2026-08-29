@@ -1,32 +1,5 @@
-const STORAGE_KEY="allpacked_v19";
+const STORAGE_KEY="allpacked_v20";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
-
-(function(){
- const old=document.getElementById("allpacked-runtime-fixes");
- if(old)old.remove();
- const s=document.createElement("style");
- s.id="allpacked-runtime-fixes";
- s.textContent=`
- .packing-for-choice .packing-for-button::before,
- .packing-for-choice .packing-for-button::after{
-   content:none !important;
-   display:none !important;
- }
- .packing-for-choice .packing-for-button{
-   border:1px solid var(--border) !important;
-   background:#fff !important;
-   color:var(--text) !important;
-   box-shadow:none !important;
- }
- .packing-for-choice .packing-for-button.active{
-   border:1px solid var(--green) !important;
-   background:var(--green) !important;
-   color:#fff !important;
- }
- `;
- document.head.appendChild(s);
-})();
-
 
 const defaultData={
 trips:[],
@@ -39,11 +12,11 @@ customLibrary:{}
 };
 
 const tripTypes=[
-{id:"camping",name:"Camping",emoji:"ð"},{id:"vacation",name:"Vacation",emoji:"âï¸"},
-{id:"roadtrip",name:"Road Trip",emoji:"ð"},{id:"hiking",name:"Hiking",emoji:"ð¥¾"},
-{id:"fishing",name:"Fishing",emoji:"ð£"},{id:"beach",name:"Beach",emoji:"ð"},
-{id:"winter",name:"Winter Trip",emoji:"ð¿"},{id:"picnic",name:"Picnic",emoji:"ð§º"},
-{id:"family",name:"Family Gathering",emoji:"ð¨âð©âð§âð¦"},{id:"other",name:"Other",emoji:"â"}];
+{id:"camping",name:"Camping",emoji:"\ud83c\udfd5"},{id:"vacation",name:"Vacation",emoji:"\u2708\ufe0f"},
+{id:"roadtrip",name:"Road Trip",emoji:"\ud83d\ude97"},{id:"hiking",name:"Hiking",emoji:"\ud83e\udd7e"},
+{id:"fishing",name:"Fishing",emoji:"\ud83c\udfa3"},{id:"beach",name:"Beach",emoji:"\ud83c\udfd6"},
+{id:"winter",name:"Winter Trip",emoji:"\ud83c\udfbf"},{id:"picnic",name:"Picnic",emoji:"\ud83e\uddfa"},
+{id:"family",name:"Family Gathering",emoji:"\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\ud83d\udc66"},{id:"other",name:"Other",emoji:"\u2795"}];
 
 const activities=["Fishing","Hiking","Swimming","Cooking","BBQ","Ski & Snowboard","Diving & Snorkeling","Rental Car","Cruise","City Trip","Business Trip","Formal Event","Photography","Theme Park","Cycling","Pets","Kids"];
 
@@ -163,21 +136,21 @@ function showFirstLaunchOnboarding(){
  let step=0;
  const steps=[
    {
-     icon:"â",
+     icon:"\u2713",
      title:"Welcome to AllPacked",
      text:"Never forget what to pack again. Create smart packing lists for vacations, camping, road trips, picnics, and more.",
      button:"Next"
    },
    {
-     icon:"ð§³",
+     icon:"\ud83e\uddf3",
      title:"Smart Packing Lists",
      text:"Tell us about your trip and AllPacked will suggest what to bring based on the trip type, season, duration, activities, and number of people.",
      button:"Next"
    },
    {
-     icon:"ð",
+     icon:"\ud83d\uded2",
      title:"Everything Stays Organized",
-     text:"Track what you packed, what you still need, and everything you need to buy â all in one place.",
+     text:"Track what you packed, what you still need, and everything you need to buy \u2014 all in one place.",
      button:"Start Planning"
    }
  ];
@@ -219,7 +192,7 @@ function showOneTimeTip(flag,title,text,buttonText="Got it",afterClose=null){
    return false;
  }
  modalOverlay.innerHTML=`<div class="modal-sheet tip-sheet">
-   <div class="tip-icon">ð¡</div>
+   <div class="tip-icon">\ud83d\udca1</div>
    <h2 class="modal-title">${title}</h2>
    <p class="modal-description">${text}</p>
    <div class="button-row"><button id="tipConfirm" class="primary-button">${buttonText}</button></div>
@@ -241,7 +214,7 @@ function maybeCelebrateTrip(t){
  if(hasOnboardingFlag(flag))return false;
 
  modalOverlay.innerHTML=`<div class="modal-sheet celebration-sheet">
-   <div class="celebration-icon">ð</div>
+   <div class="celebration-icon">\ud83c\udf89</div>
    <h2 class="modal-title">You're AllPacked!</h2>
    <p class="modal-description">${t.name} is 100% packed. Have a great time!</p>
    <div class="button-row"><button id="celebrationDone" class="primary-button">Done</button></div>
@@ -259,7 +232,7 @@ function render(){
  const noBack=["home","trips","gear","shopping","settings","about"];
  backButton.classList.toggle("hidden",noBack.includes(state.page));
  const isPacking=state.page==="packing";
- backButton.textContent=isPacking?"â":"â";
+ backButton.textContent=isPacking?"\u2713":"\u2190";
  backButton.classList.toggle("finish-button",isPacking);
  backButton.setAttribute("aria-label",isPacking?"Finish and return home":"Go back");
  topTitle.textContent={home:"AllPacked",tripType:"New Trip",tripDetails:"Trip Details",categories:"Categories",packing:"Packing List",trips:"My Trips",gear:"My Gear",shopping:"Shopping List",settings:"Settings",about:"About"}[state.page]||"AllPacked";
@@ -288,7 +261,7 @@ function renderTripDetails(){
 
  screen.innerHTML=`<h1 class="page-title">${t.emoji} ${t.typeName}</h1><p class="page-subtitle">Tell us a little about this trip.</p><div class="stack">
  <div class="card"><label class="field-label">Trip name</label><input id="tripName" class="text-input" value="${esc(t.name)}"></div>
- <div class="card"><label class="field-label">Duration</label><div class="counter"><button id="minusDuration">â</button><div class="counter-value">${t.duration} ${t.duration===1?"day":"days"}</div><button id="plusDuration">+</button></div>${t.duration===1?'<p class="small-note">1-day trip is treated as no overnight stay.</p>':""}</div>
+ <div class="card"><label class="field-label">Duration</label><div class="counter"><button id="minusDuration">\u2212</button><div class="counter-value">${t.duration} ${t.duration===1?"day":"days"}</div><button id="plusDuration">+</button></div>${t.duration===1?'<p class="small-note">1-day trip is treated as no overnight stay.</p>':""}</div>
  <div class="card"><label class="field-label">Season</label><div class="chips">${["Spring","Summer","Fall","Winter"].map(x=>`<button class="chip ${t.season===x?"active":""}" data-season="${x}">${x}</button>`).join("")}</div></div>
 
  <div class="card">
@@ -301,7 +274,7 @@ function renderTripDetails(){
      <div class="group-size-block">
        <label class="field-label">How many people are you packing for?</label>
        <div class="counter">
-         <button id="minusPeople">â</button>
+         <button id="minusPeople">\u2212</button>
          <div class="counter-value">${t.people}</div>
          <button id="plusPeople">+</button>
        </div>
@@ -448,8 +421,8 @@ function renderPackingList(){
  const t=activeTrip();if(!t){state.page="trips";return render()}
  cleanEmptyCategories(t);saveData();
  const z=totals(t),p=z.required?Math.round(z.packed/z.required*100):0;
- screen.innerHTML=`<div class="trip-title-row"><h1 class="page-title">${t.emoji} ${t.name}</h1><button class="trip-name-edit" id="editTripNameButton" aria-label="Edit trip name">â</button></div><div class="trip-info">${t.duration} ${t.duration===1?"day":"days"} Â· ${t.season} Â· ${t.packingFor==="group"?`${t.people} people`:"Just me"}</div>
- <div class="progress"><div class="progress-bar" style="width:${p}%"></div></div><div class="progress-text">${z.packed} of ${z.required} packed Â· ${p}%</div>
+ screen.innerHTML=`<div class="trip-title-row"><h1 class="page-title">${t.emoji} ${t.name}</h1><button class="trip-name-edit" id="editTripNameButton" aria-label="Edit trip name">\u270e</button></div><div class="trip-info">${t.duration} ${t.duration===1?"day":"days"} \u00b7 ${t.season} \u00b7 ${t.packingFor==="group"?`${t.people} people`:"Just me"}</div>
+ <div class="progress"><div class="progress-bar" style="width:${p}%"></div></div><div class="progress-text">${z.packed} of ${z.required} packed \u00b7 ${p}%</div>
  ${Object.keys(t.items).map(c=>packCategory(t,c)).join("")}
  <div class="button-row"><button id="addCategoryButton" class="secondary-button">+ Add Category</button></div>`;
  attachPacking(t);
@@ -480,12 +453,12 @@ function packCategory(t,c){
  return`<section class="pack-category"><div class="pack-category-header"><div class="pack-category-title">${c}</div><div class="category-count">${pk} / ${rq}</div></div>
  <div class="pack-items">${a.map(x=>{const done=x.packed>=x.required;return`<div class="pack-item ${done?"completed":""}">
  <input class="pack-check" type="checkbox" data-check-pack data-category="${esc(c)}" data-id="${x.id}" ${done?"checked":""}>
- <div class="pack-item-main"><div class="item-name">${done?"â ":""}${x.name}</div><div class="item-meta">
+ <div class="pack-item-main"><div class="item-name">${done?"\u2713 ":""}${x.name}</div><div class="item-meta">
  <span class="item-pill ${done?"complete":""}">${x.packed} of ${x.required} packed</span>
- ${x.needToBuy?`<button class="item-pill buy buy-status-button" data-bought-status data-category="${esc(c)}" data-id="${x.id}">ð ${x.bought} / ${x.needToBuy} bought</button>`:""}</div></div>
- <div class="item-actions"><button class="quick-action-button shopping" data-buy data-category="${esc(c)}" data-id="${x.id}">ð</button>
- <button class="quick-action-button edit" data-edit data-category="${esc(c)}" data-id="${x.id}">â</button>
- <button class="quick-action-button delete" data-del data-category="${esc(c)}" data-id="${x.id}">ð</button></div></div>`}).join("")}
+ ${x.needToBuy?`<button class="item-pill buy buy-status-button" data-bought-status data-category="${esc(c)}" data-id="${x.id}">\ud83d\uded2 ${x.bought} / ${x.needToBuy} bought</button>`:""}</div></div>
+ <div class="item-actions"><button class="quick-action-button shopping" data-buy data-category="${esc(c)}" data-id="${x.id}">\ud83d\uded2</button>
+ <button class="quick-action-button edit" data-edit data-category="${esc(c)}" data-id="${x.id}">\u270e</button>
+ <button class="quick-action-button delete" data-del data-category="${esc(c)}" data-id="${x.id}">\ud83d\uddd1</button></div></div>`}).join("")}
  <button class="add-item" data-add="${esc(c)}">+ Add item</button></div></section>`
 }
 
@@ -530,7 +503,7 @@ function attachPacking(t){
 function openPackedQuantity(t,c,x){
  let q=x.required;
  modalOverlay.innerHTML=`<div class="modal-sheet"><h2 class="modal-title">How many did you pack?</h2><p class="modal-description">${x.name}</p>
- <div class="modal-counter"><button id="qm">â</button><div id="qv" class="modal-counter-value">${q} of ${x.required} packed</div><button id="qp">+</button></div>
+ <div class="modal-counter"><button id="qm">\u2212</button><div id="qv" class="modal-counter-value">${q} of ${x.required} packed</div><button id="qp">+</button></div>
  <div class="button-row"><button id="qc" class="secondary-button">Cancel</button><button id="qs" class="primary-button">OK</button></div></div>`;
  modalOverlay.classList.remove("hidden");
  const ref=()=>qv.textContent=q+" of "+x.required+" packed";
@@ -568,8 +541,8 @@ function openBoughtStatus(t,c,x){
 
 function openBuy(t,c,x){
  let q=x.needToBuy||Math.max(1,x.required-x.packed);
- modalOverlay.innerHTML=`<div class="modal-sheet"><h2 class="modal-title">ð Add to Shopping List</h2><p class="modal-description">${x.name}</p>
- <div class="modal-field"><label class="field-label">How many do you need to buy?</label><div class="modal-counter"><button id="qm">â</button><div id="qv" class="modal-counter-value">${q}</div><button id="qp">+</button></div></div>
+ modalOverlay.innerHTML=`<div class="modal-sheet"><h2 class="modal-title">\ud83d\uded2 Add to Shopping List</h2><p class="modal-description">${x.name}</p>
+ <div class="modal-field"><label class="field-label">How many do you need to buy?</label><div class="modal-counter"><button id="qm">\u2212</button><div id="qv" class="modal-counter-value">${q}</div><button id="qp">+</button></div></div>
  <div class="button-row"><button id="qc" class="secondary-button">Cancel</button><button id="qs" class="primary-button">Add to Shopping List</button></div></div>`;
  modalOverlay.classList.remove("hidden");
  const ref=()=>qv.textContent=q;qm.onclick=()=>{q=Math.max(1,q-1);ref()};qp.onclick=()=>{q++;ref()};qc.onclick=closeModal;
@@ -581,7 +554,7 @@ function openEditor(t,currentCategory,x){
  const currentOptions=[...new Set([...Object.keys(t.items),...allCategoryNames()])];
  modalOverlay.innerHTML=`<div class="modal-sheet"><h2 class="modal-title">${x?"Edit Item":"Add Item"}</h2>
  <div class="modal-field"><label class="field-label">Item name</label><input id="en" class="text-input" value="${esc(d.name)}"></div>
- <div class="modal-field"><label class="field-label">Required quantity</label><div class="modal-counter"><button id="rm">â</button><div id="rv" class="modal-counter-value">${d.required}</div><button id="rp">+</button></div></div>
+ <div class="modal-field"><label class="field-label">Required quantity</label><div class="modal-counter"><button id="rm">\u2212</button><div id="rv" class="modal-counter-value">${d.required}</div><button id="rp">+</button></div></div>
  <div class="modal-field"><label class="field-label">Category</label><select id="ec" class="select-input"><option value="__new__">+ New Category</option>${currentOptions.map(n=>`<option value="${esc(n)}" ${n===currentCategory?"selected":""}>${n}</option>`).join("")}</select></div>
  <div class="button-row"><button id="cancel" class="secondary-button">Cancel</button><button id="save" class="primary-button">Save</button></div></div>`;
  modalOverlay.classList.remove("hidden");
@@ -624,7 +597,7 @@ function openAddCategory(t){
 function closeModal(){modalOverlay.classList.add("hidden");modalOverlay.innerHTML=""}
 
 function renderTrips(){
- screen.innerHTML=`<h1 class="page-title">My Trips</h1><p class="page-subtitle">Choose a trip to continue packing.</p>${data.trips.length?`<div class="stack">${data.trips.map(t=>{const z=totals(t);return`<div class="trip-row"><div class="trip-icon" data-trip="${t.id}">${t.emoji}</div><div class="trip-main" data-trip="${t.id}"><div class="trip-name">${t.name}</div><div class="trip-small">${t.duration} ${t.duration===1?"day":"days"} Â· ${t.season} Â· ${z.packed} / ${z.required} packed</div></div><div class="trip-row-actions"><span class="badge" data-trip="${t.id}">${z.required&&z.packed===z.required?"Packed":"Active"}</span><button class="trip-delete-button" data-delete-trip="${t.id}">ð</button></div></div>`}).join("")}</div>`:'<div class="empty">No saved trips yet.</div>'}<div class="button-row"><button id="newTripFromTrips" class="primary-button">+ New Trip</button></div>`;
+ screen.innerHTML=`<h1 class="page-title">My Trips</h1><p class="page-subtitle">Choose a trip to continue packing.</p>${data.trips.length?`<div class="stack">${data.trips.map(t=>{const z=totals(t);return`<div class="trip-row"><div class="trip-icon" data-trip="${t.id}">${t.emoji}</div><div class="trip-main" data-trip="${t.id}"><div class="trip-name">${t.name}</div><div class="trip-small">${t.duration} ${t.duration===1?"day":"days"} \u00b7 ${t.season} \u00b7 ${z.packed} / ${z.required} packed</div></div><div class="trip-row-actions"><span class="badge" data-trip="${t.id}">${z.required&&z.packed===z.required?"Packed":"Active"}</span><button class="trip-delete-button" data-delete-trip="${t.id}">\ud83d\uddd1</button></div></div>`}).join("")}</div>`:'<div class="empty">No saved trips yet.</div>'}<div class="button-row"><button id="newTripFromTrips" class="primary-button">+ New Trip</button></div>`;
  document.querySelectorAll("[data-trip]").forEach(r=>r.onclick=()=>{state.activeTripId=r.dataset.trip;state.page="packing";render()});
  document.querySelectorAll("[data-delete-trip]").forEach(b=>b.onclick=e=>{e.stopPropagation();const trip=data.trips.find(t=>t.id===b.dataset.deleteTrip);if(!trip)return;if(!confirm(`Delete "${trip.name}"?`))return;data.trips=data.trips.filter(t=>t.id!==trip.id);if(state.activeTripId===trip.id)state.activeTripId=null;saveData();showToast("Trip deleted");renderTrips()});
  newTripFromTrips.onclick=()=>{state.newTrip=null;state.editingExistingTrip=false;state.history=["trips"];state.page="tripType";render()}
@@ -641,7 +614,7 @@ function renderShopping(){
 
  const groups=data.trips.map(t=>({t,items:Object.entries(t.items).flatMap(([c,a])=>a.filter(x=>x.needToBuy>0).map(x=>({c,x})))})).filter(g=>g.items.length);
  screen.innerHTML=`<h1 class="page-title">Shopping List</h1><p class="page-subtitle">Check items while shopping. Buying does not automatically mark them packed.</p>
- ${groups.length?groups.map(g=>{const shoppingDone=g.items.every(({x})=>(x.bought||0)>=x.needToBuy);return`<section class="shopping-trip"><div class="section-title shopping-trip-title-link ${shoppingDone?"shopping-trip-complete":""}" data-open-shopping-trip="${g.t.id}">${shoppingDone?"â ":""}${g.t.emoji} ${g.t.name}</div>${g.items.map(({c,x})=>`<div class="shopping-item ${x.bought>=x.needToBuy?"bought":""}"><input type="checkbox" data-check data-trip="${g.t.id}" data-category="${esc(c)}" data-id="${x.id}" ${x.bought>=x.needToBuy?"checked":""}><div><div class="shopping-name">${x.name}</div><div class="shopping-small">${c}</div></div><div class="shopping-qty">Ã${x.needToBuy}</div></div>`).join("")}</section>`}).join(""):'<div class="empty">Nothing to buy right now.</div>'}`;
+ ${groups.length?groups.map(g=>{const shoppingDone=g.items.every(({x})=>(x.bought||0)>=x.needToBuy);return`<section class="shopping-trip"><div class="section-title shopping-trip-title-link ${shoppingDone?"shopping-trip-complete":""}" data-open-shopping-trip="${g.t.id}">${shoppingDone?"\u2713 ":""}${g.t.emoji} ${g.t.name}</div>${g.items.map(({c,x})=>`<div class="shopping-item ${x.bought>=x.needToBuy?"bought":""}"><input type="checkbox" data-check data-trip="${g.t.id}" data-category="${esc(c)}" data-id="${x.id}" ${x.bought>=x.needToBuy?"checked":""}><div><div class="shopping-name">${x.name}</div><div class="shopping-small">${c}</div></div><div class="shopping-qty">\u00d7${x.needToBuy}</div></div>`).join("")}</section>`}).join(""):'<div class="empty">Nothing to buy right now.</div>'}`;
  document.querySelectorAll("[data-open-shopping-trip]").forEach(b=>b.onclick=()=>{
    state.activeTripId=b.dataset.openShoppingTrip;
    state.history=["shopping"];
@@ -652,7 +625,7 @@ function renderShopping(){
 }
 
 function renderGear(){
- screen.innerHTML=`<h1 class="page-title">My Gear</h1><p class="page-subtitle">Save equipment you already own.</p><div class="stack">${data.gear.map((g,gi)=>`<section class="pack-category"><div class="pack-category-header"><div class="pack-category-title">${g.category}</div></div><div class="pack-items">${g.items.map((x,ii)=>`<div class="gear-row"><div class="trip-main">${x}</div><button class="quick-action-button delete" data-rg="${gi}:${ii}">ð</button></div>`).join("")}<button class="add-item" data-ag="${gi}">+ Add gear</button></div></section>`).join("")}</div><div class="button-row"><button id="addGearCategory" class="secondary-button">+ Add Category</button></div>`;
+ screen.innerHTML=`<h1 class="page-title">My Gear</h1><p class="page-subtitle">Save equipment you already own.</p><div class="stack">${data.gear.map((g,gi)=>`<section class="pack-category"><div class="pack-category-header"><div class="pack-category-title">${g.category}</div></div><div class="pack-items">${g.items.map((x,ii)=>`<div class="gear-row"><div class="trip-main">${x}</div><button class="quick-action-button delete" data-rg="${gi}:${ii}">\ud83d\uddd1</button></div>`).join("")}<button class="add-item" data-ag="${gi}">+ Add gear</button></div></section>`).join("")}</div><div class="button-row"><button id="addGearCategory" class="secondary-button">+ Add Category</button></div>`;
  document.querySelectorAll("[data-ag]").forEach(b=>b.onclick=()=>{const n=prompt("Gear name");if(n){data.gear[+b.dataset.ag].items.push(n);saveData();renderGear()}});
  document.querySelectorAll("[data-rg]").forEach(b=>b.onclick=()=>{const[g,i]=b.dataset.rg.split(":").map(Number);data.gear[g].items.splice(i,1);saveData();renderGear()});
  addGearCategory.onclick=()=>{const n=prompt("Category name");if(n){data.gear.push({category:n,items:[]});saveData();renderGear()}}
@@ -668,27 +641,27 @@ function renderAbout(){
  <div class="stack">
    <div class="card">
      <div class="about-feature">
-       <span class="about-icon">â</span>
+       <span class="about-icon">\u2713</span>
        <div><strong>Smart Packing Lists</strong><p>Get relevant suggestions based on your trip type, duration, season, activities, and number of people.</p></div>
      </div>
      <div class="about-feature">
-       <span class="about-icon">ð§³</span>
+       <span class="about-icon">\ud83e\uddf3</span>
        <div><strong>Flexible Trips</strong><p>Add, edit, move, or remove items and categories so each packing list fits your plans.</p></div>
      </div>
      <div class="about-feature">
-       <span class="about-icon">ð</span>
+       <span class="about-icon">\ud83d\uded2</span>
        <div><strong>Shopping List</strong><p>Keep everything you still need to buy in one place and jump directly back to the related trip.</p></div>
      </div>
      <div class="about-feature">
-       <span class="about-icon">ð¢</span>
+       <span class="about-icon">\ud83d\udd22</span>
        <div><strong>Quantity Tracking</strong><p>Track partial progress such as 2 of 3 packed or 1 of 2 bought.</p></div>
      </div>
      <div class="about-feature">
-       <span class="about-icon">ï¼</span>
+       <span class="about-icon">\uff0b</span>
        <div><strong>Fully Customizable</strong><p>Create your own categories and items, rename trips, and remove anything you do not need.</p></div>
      </div>
      <div class="about-feature">
-       <span class="about-icon">â»</span>
+       <span class="about-icon">\u21bb</span>
        <div><strong>Reusable</strong><p>Your custom categories and items are available again when you plan future trips.</p></div>
      </div>
    </div>
