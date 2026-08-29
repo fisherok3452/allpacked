@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v29";
+const STORAGE_KEY="allpacked_v30";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
@@ -17,7 +17,7 @@ const tripTypes=[
 {id:"business",name:"Business Trip",emoji:"\ud83d\udcbc"},{id:"hiking",name:"Hiking",emoji:"\ud83e\udd7e"},
 {id:"fishing",name:"Fishing",emoji:"\ud83c\udfa3"},{id:"beach",name:"Beach",emoji:"\ud83c\udfd6"},
 {id:"winter",name:"Winter Trip",emoji:"\ud83c\udfbf"},{id:"picnic",name:"Picnic",emoji:"\ud83e\uddfa"},
-{id:"family",name:"Family Gathering",emoji:"\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\ud83d\udc66"},{id:"other",name:"Other",emoji:"\u2795"}];
+{id:"family",name:"Family Gathering",emoji:"\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\ud83d\udc66"},{id:"other",name:"Other",emoji:"\ud83e\udded"}];
 
 const activities=["Fishing","Hiking","Swimming","Cooking","BBQ","Ski & Snowboard","Diving & Snorkeling","Rental Car","Cruise","City Trip","Work Meeting","Formal Event","Photography","Theme Park","Cycling","Pets","Kids"];
 
@@ -850,6 +850,13 @@ function renderTrips(){
  newTripFromTrips.onclick=()=>{state.newTrip=null;state.editingExistingTrip=false;state.history=["trips"];state.page="tripType";render()}
 }
 
+function shoppingCheckSvg(){
+ return `<svg class="shopping-complete-icon" viewBox="0 0 24 24" aria-hidden="true">
+   <circle cx="12" cy="12" r="10"></circle>
+   <path d="M7.5 12.2l3 3 6-6.3"></path>
+ </svg>`;
+}
+
 function renderShopping(){
  if(!hasOnboardingFlag("shoppingListTip")){
    setTimeout(()=>showOneTimeTip(
@@ -880,7 +887,7 @@ function renderShopping(){
    return`<section class="shopping-trip">
      <div class="section-title shopping-trip-title-link ${shoppingDone?"shopping-trip-complete":""}" data-open-shopping-trip="${g.t.id}">
        <span>${g.t.emoji} ${g.t.name}</span>
-       ${shoppingDone?'<span class="shopping-complete-badge">Purchased</span>':""}
+       ${shoppingDone?`<span class="shopping-complete-badge" aria-label="Shopping complete">${shoppingCheckSvg()}</span>`:""}
      </div>
 
      ${visibleItems.map(({c,x})=>`
