@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v30";
+const STORAGE_KEY="allpacked_v31";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
@@ -17,7 +17,7 @@ const tripTypes=[
 {id:"business",name:"Business Trip",emoji:"\ud83d\udcbc"},{id:"hiking",name:"Hiking",emoji:"\ud83e\udd7e"},
 {id:"fishing",name:"Fishing",emoji:"\ud83c\udfa3"},{id:"beach",name:"Beach",emoji:"\ud83c\udfd6"},
 {id:"winter",name:"Winter Trip",emoji:"\ud83c\udfbf"},{id:"picnic",name:"Picnic",emoji:"\ud83e\uddfa"},
-{id:"family",name:"Family Gathering",emoji:"\ud83d\udc68\u200d\ud83d\udc69\u200d\ud83d\udc67\u200d\ud83d\udc66"},{id:"other",name:"Other",emoji:"\ud83e\udded"}];
+{id:"family",name:"Party",emoji:"🎉"},{id:"other",name:"Other",emoji:"\ud83e\udded"}];
 
 const activities=["Fishing","Hiking","Swimming","Cooking","BBQ","Ski & Snowboard","Diving & Snorkeling","Rental Car","Cruise","City Trip","Work Meeting","Formal Event","Photography","Theme Park","Cycling","Pets","Kids"];
 
@@ -70,7 +70,7 @@ const packingDatabase={
 {name:"Plates",qty:"people"},{name:"Cups",qty:"people"},{name:"Cutlery",qty:"people"},
 {name:"Napkins / paper towels",qty:1},{name:"Trash bags",qty:1},{name:"Bottle opener / corkscrew",qty:1}
 ],
-"Family Gathering":[
+"Party":[
 {name:"Serving dishes / trays",qty:1},{name:"Serving utensils",qty:1},{name:"Tablecloth",qty:1},
 {name:"Folding chairs",qty:"people"},{name:"Cooler",qty:1},{name:"Food containers",qty:1},
 {name:"Napkins / paper towels",qty:1},{name:"Trash bags",qty:1},{name:"Outdoor games",qty:1}
@@ -277,7 +277,7 @@ function renderHome(){
  if(activeTrips.length)seeTripsButton.onclick=()=>{state.history=[];state.page="trips";render()};
  newTripButton.onclick=()=>{state.newTrip=null;state.editingExistingTrip=false;state.history=["home"];state.page="tripType";render()}
 }
-function renderTripTypes(){screen.innerHTML='<h1 class="page-title">What kind of trip are you taking?</h1><p class="page-subtitle">Choose the closest option. Everything can be customized later.</p><div class="trip-grid">'+tripTypes.map(t=>`<button class="trip-type" data-trip-type="${t.id}"><span class="trip-emoji">${t.emoji}</span><span class="trip-label">${t.name}</span></button>`).join("")+"</div>";document.querySelectorAll("[data-trip-type]").forEach(b=>b.onclick=()=>{const t=tripTypes.find(x=>x.id===b.dataset.tripType);state.newTrip={id:String(Date.now()),type:t.id,typeName:t.name,emoji:t.emoji,name:(t.id==="picnic"?"My Picnic":t.id==="family"?"My Family Gathering":t.id==="business"?"My Business Trip":"My "+t.name+" Trip"),duration:3,season:"Summer",packingFor:"personal",people:1,groupPeople:2,transport:"other",activities:[],categories:[]};navigate("tripDetails")})}
+function renderTripTypes(){screen.innerHTML='<h1 class="page-title">What kind of trip are you taking?</h1><p class="page-subtitle">Choose the closest option. Everything can be customized later.</p><div class="trip-grid">'+tripTypes.map(t=>`<button class="trip-type" data-trip-type="${t.id}"><span class="trip-emoji">${t.emoji}</span><span class="trip-label">${t.name}</span></button>`).join("")+"</div>";document.querySelectorAll("[data-trip-type]").forEach(b=>b.onclick=()=>{const t=tripTypes.find(x=>x.id===b.dataset.tripType);state.newTrip={id:String(Date.now()),type:t.id,typeName:t.name,emoji:t.emoji,name:(t.id==="picnic"?"My Picnic":t.id==="family"?"My Party":t.id==="business"?"My Business Trip":"My "+t.name+" Trip"),duration:3,season:"Summer",packingFor:"personal",people:1,groupPeople:2,transport:"other",activities:[],categories:[]};navigate("tripDetails")})}
 
 function renderTripDetails(){
  const t=state.newTrip;if(!t){state.page="tripType";return render()}
@@ -402,7 +402,7 @@ function suggestedCategories(t){
    c=["Picnic","Food & Drinks","Toiletries","Electronics"];
  }
  if(t.type==="family"){
-   c=["Family Gathering","Food & Drinks","Electronics"];
+   c=["Party","Food & Drinks","Electronics"];
  }
 
  if(t.type==="winter"||t.season==="Winter")c.push("Winter Gear");
