@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v15";
+const STORAGE_KEY="allpacked_v16";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
@@ -249,25 +249,90 @@ function renderHome(){
  if(activeTrips.length)seeTripsButton.onclick=()=>{state.history=[];state.page="trips";render()};
  newTripButton.onclick=()=>{state.newTrip=null;state.editingExistingTrip=false;state.history=["home"];state.page="tripType";render()}
 }
-function renderTripTypes(){screen.innerHTML='<h1 class="page-title">What kind of trip are you taking?</h1><p class="page-subtitle">Choose the closest option. Everything can be customized later.</p><div class="trip-grid">'+tripTypes.map(t=>`<button class="trip-type" data-trip-type="${t.id}"><span class="trip-emoji">${t.emoji}</span><span class="trip-label">${t.name}</span></button>`).join("")+"</div>";document.querySelectorAll("[data-trip-type]").forEach(b=>b.onclick=()=>{const t=tripTypes.find(x=>x.id===b.dataset.tripType);state.newTrip={id:String(Date.now()),type:t.id,typeName:t.name,emoji:t.emoji,name:(t.id==="picnic"?"My Picnic":t.id==="family"?"My Family Gathering":"My "+t.name+" Trip"),duration:3,season:"Summer",people:2,activities:[],categories:[]};navigate("tripDetails")})}
+function renderTripTypes(){screen.innerHTML='<h1 class="page-title">What kind of trip are you taking?</h1><p class="page-subtitle">Choose the closest option. Everything can be customized later.</p><div class="trip-grid">'+tripTypes.map(t=>`<button class="trip-type" data-trip-type="${t.id}"><span class="trip-emoji">${t.emoji}</span><span class="trip-label">${t.name}</span></button>`).join("")+"</div>";document.querySelectorAll("[data-trip-type]").forEach(b=>b.onclick=()=>{const t=tripTypes.find(x=>x.id===b.dataset.tripType);state.newTrip={id:String(Date.now()),type:t.id,typeName:t.name,emoji:t.emoji,name:(t.id==="picnic"?"My Picnic":t.id==="family"?"My Family Gathering":"My "+t.name+" Trip"),duration:3,season:"Summer",packingFor:"personal",people:1,groupPeople:2,activities:[],categories:[]};navigate("tripDetails")})}
 
 function renderTripDetails(){
  const t=state.newTrip;if(!t){state.page="tripType";return render()}
+
+ // Backward compatibility with trips created before this option existed.
+ if(!t.packingFor)t.packingFor=(t.people&&t.people>1)?"group":"personal";
+ if(!t.groupPeople)t.groupPeople=Math.max(2,t.people||2);
+ if(t.packingFor==="personal")t.people=1;
+
  screen.innerHTML=`<h1 class="page-title">${t.emoji} ${t.typeName}</h1><p class="page-subtitle">Tell us a little about this trip.</p><div class="stack">
  <div class="card"><label class="field-label">Trip name</label><input id="tripName" class="text-input" value="${esc(t.name)}"></div>
  <div class="card"><label class="field-label">Duration</label><div class="counter"><button id="minusDuration">−</button><div class="counter-value">${t.duration} ${t.duration===1?"day":"days"}</div><button id="plusDuration">+</button></div>${t.duration===1?'<p class="small-note">1-day trip is treated as no overnight stay.</p>':""}</div>
  <div class="card"><label class="field-label">Season</label><div class="chips">${["Spring","Summer","Fall","Winter"].map(x=>`<button class="chip ${t.season===x?"active":""}" data-season="${x}">${x}</button>`).join("")}</div></div>
- <div class="card"><label class="field-label">People</label><div class="counter"><button id="minusPeople">−</button><div class="counter-value">${t.people}</div><button id="plusPeople">+</button></div></div>
+
+ <div class="card">
+   <label class="field-label">Who are you packing for?</label>
+   <div class="packing-for-choice">
+     <button class="packing-for-button ${t.packingFor==="personal"?"active":""}" data-packing-for="personal">Just me</button>
+     <button class="packing-for-button ${t.packingFor==="group"?"active":""}" data-packing-for="group">A group</button>
+   </div>
+   ${t.packingFor==="group"?`
+     <div class="group-size-block">
+       <label class="field-label">How many people are you packing for?</label>
+       <div class="counter">
+         <button id="minusPeople">−</button>
+         <div class="counter-value">${t.people}</div>
+         <button id="plusPeople">+</button>
+       </div>
+     </div>
+   `:""}
+ </div>
+
  <div class="card"><label class="field-label">What will you do on this trip?</label><div class="chips">${activities.map(x=>`<button class="chip ${t.activities.includes(x)?"active":""}" data-activity="${x}">${x}</button>`).join("")}</div></div>
  </div><div class="button-row"><button id="continueDetails" class="primary-button">Continue</button></div>`;
+
  const keep=()=>t.name=document.getElementById("tripName").value;
+
  minusDuration.onclick=()=>{keep();t.duration=Math.max(1,t.duration-1);renderTripDetails()};
  plusDuration.onclick=()=>{keep();t.duration++;renderTripDetails()};
- minusPeople.onclick=()=>{keep();t.people=Math.max(1,t.people-1);renderTripDetails()};
- plusPeople.onclick=()=>{keep();t.people++;renderTripDetails()};
+
  document.querySelectorAll("[data-season]").forEach(b=>b.onclick=()=>{keep();t.season=b.dataset.season;renderTripDetails()});
- document.querySelectorAll("[data-activity]").forEach(b=>b.onclick=()=>{keep();const a=b.dataset.activity;t.activities=t.activities.includes(a)?t.activities.filter(x=>x!==a):[...t.activities,a];renderTripDetails()});
- continueDetails.onclick=()=>{t.name=tripName.value.trim()||"My Trip";t.categories=suggestedCategories(t);navigate("categories")}
+
+ document.querySelectorAll("[data-packing-for]").forEach(b=>b.onclick=()=>{
+   keep();
+   if(b.dataset.packingFor==="personal"){
+     if(t.packingFor==="group")t.groupPeople=Math.max(2,t.people||2);
+     t.packingFor="personal";
+     t.people=1;
+   }else{
+     t.packingFor="group";
+     t.people=Math.max(2,t.groupPeople||2);
+   }
+   renderTripDetails()
+ });
+
+ if(t.packingFor==="group"){
+   minusPeople.onclick=()=>{
+     keep();
+     t.people=Math.max(2,t.people-1);
+     t.groupPeople=t.people;
+     renderTripDetails()
+   };
+   plusPeople.onclick=()=>{
+     keep();
+     t.people++;
+     t.groupPeople=t.people;
+     renderTripDetails()
+   };
+ }
+
+ document.querySelectorAll("[data-activity]").forEach(b=>b.onclick=()=>{
+   keep();
+   const a=b.dataset.activity;
+   t.activities=t.activities.includes(a)?t.activities.filter(x=>x!==a):[...t.activities,a];
+   renderTripDetails()
+ });
+
+ continueDetails.onclick=()=>{
+   t.name=tripName.value.trim()||"My Trip";
+   if(t.packingFor==="personal")t.people=1;
+   t.categories=suggestedCategories(t);
+   navigate("categories")
+ }
 }
 
 function suggestedCategories(t){
@@ -333,7 +398,7 @@ function includeItem(d,t){
  if(d.outdoors&&!["camping","hiking","fishing"].includes(t.type)&&t.duration===1)return false;
  return true
 }
-function qty(q,t){const n=Math.max(0,t.duration-1);if(q==="people")return t.people;if(["shirts","underwear","socks"].includes(q))return Math.max(1,Math.min(n+1,8));if(q==="pants")return t.duration<=2?1:t.duration<=5?2:3;return q||1}
+function qty(q,t){const n=Math.max(0,t.duration-1);if(q==="people")return t.packingFor==="group"?Math.max(2,t.people||2):1;if(["shirts","underwear","socks"].includes(q))return Math.max(1,Math.min(n+1,8));if(q==="pants")return t.duration<=2?1:t.duration<=5?2:3;return q||1}
 function createItems(t){
  const r={};
  t.categories.forEach(c=>{
@@ -356,7 +421,7 @@ function renderPackingList(){
  const t=activeTrip();if(!t){state.page="trips";return render()}
  cleanEmptyCategories(t);saveData();
  const z=totals(t),p=z.required?Math.round(z.packed/z.required*100):0;
- screen.innerHTML=`<div class="trip-title-row"><h1 class="page-title">${t.emoji} ${t.name}</h1><button class="trip-name-edit" id="editTripNameButton" aria-label="Edit trip name">✎</button></div><div class="trip-info">${t.duration} ${t.duration===1?"day":"days"} · ${t.season} · ${t.people} ${t.people===1?"person":"people"}</div>
+ screen.innerHTML=`<div class="trip-title-row"><h1 class="page-title">${t.emoji} ${t.name}</h1><button class="trip-name-edit" id="editTripNameButton" aria-label="Edit trip name">✎</button></div><div class="trip-info">${t.duration} ${t.duration===1?"day":"days"} · ${t.season} · ${t.packingFor==="group"?`${t.people} people`:"Just me"}</div>
  <div class="progress"><div class="progress-bar" style="width:${p}%"></div></div><div class="progress-text">${z.packed} of ${z.required} packed · ${p}%</div>
  ${Object.keys(t.items).map(c=>packCategory(t,c)).join("")}
  <div class="button-row"><button id="addCategoryButton" class="secondary-button">+ Add Category</button></div>`;
