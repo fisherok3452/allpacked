@@ -576,3 +576,21 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
   fill:currentColor;
   stroke:currentColor;
 }
+
+
+/* AllPacked v0.26 â compact More Categories */
+.show-more-categories-button{
+  width:100%;
+  margin-top:10px;
+  padding:13px 15px;
+  border:1px solid var(--border);
+  border-radius:15px;
+  background:transparent;
+  color:var(--green);
+  font-weight:750;
+  text-align:center;
+}
+
+.show-more-categories-button:active{
+  background:#f1efe9;
+}
