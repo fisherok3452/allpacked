@@ -551,3 +551,28 @@ button,input,select{font:inherit}button{cursor:pointer;-webkit-tap-highlight-col
 .favorite-category-button:active{
   opacity:.6;
 }
+
+
+/* AllPacked v0.23 â encoding-safe favorite star */
+.favorite-category-button{
+  overflow:hidden;
+}
+
+.favorite-star-icon{
+  width:24px;
+  height:24px;
+  display:block;
+  pointer-events:none;
+}
+
+.favorite-star-icon path{
+  fill:transparent;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linejoin:round;
+}
+
+.favorite-category-button.active .favorite-star-icon path{
+  fill:currentColor;
+  stroke:currentColor;
+}
