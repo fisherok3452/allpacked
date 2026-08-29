@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v25";
+const STORAGE_KEY="allpacked_v26";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
@@ -80,7 +80,7 @@ const packingDatabase={
 };
 
 let data=loadData();
-let state={page:"home",history:[],newTrip:null,activeTripId:null,editingExistingTrip:false};
+let state={page:"home",history:[],newTrip:null,activeTripId:null,editingExistingTrip:false,showAllCategories:false};
 
 const screen=document.getElementById("screen");
 const menuButton=document.getElementById("menuBtn");
@@ -432,6 +432,24 @@ function categoryOption(c,on){
  </div>`
 }
 
+
+function contextualMoreCategory(t,excluded){
+ const priorities={
+   camping:["BBQ","Fishing","Photography"],
+   vacation:["Photography","Formal Event","Rental Car"],
+   business:["Work Meeting","Formal Event","Rental Car"],
+   hiking:["Photography","Swimming","Cycling"],
+   fishing:["BBQ","Photography","Swimming"],
+   beach:["Swimming","Photography","BBQ"],
+   winter:["Ski & Snowboard","Photography","Formal Event"],
+   picnic:["BBQ","Photography","Pets"],
+   family:["BBQ","Kids","Photography"],
+   other:["Photography","Formal Event","Pets"]
+ };
+ const list=priorities[t.type]||["Photography"];
+ return list.find(c=>allCategoryNames().includes(c)&&!excluded.has(c))||null;
+}
+
 function renderCategories(){
  const t=state.newTrip;if(!t){state.page="tripType";return render()}
 
@@ -442,14 +460,27 @@ function renderCategories(){
  const favoriteSet=new Set(favorites);
  const recommendedWithoutFavorites=rec.filter(c=>!favoriteSet.has(c));
 
- let more=allCategoryNames().filter(c=>!rec.includes(c)&&!favoriteSet.has(c));
+ let allMore=allCategoryNames().filter(c=>!rec.includes(c)&&!favoriteSet.has(c));
 
- // Makeup & Cosmetics should always be the first visible optional category.
- more=more.sort((a,b)=>{
+ allMore=allMore.sort((a,b)=>{
    if(a==="Makeup & Cosmetics")return -1;
    if(b==="Makeup & Cosmetics")return 1;
    return a.localeCompare(b);
  });
+
+ const excluded=new Set([...rec,...favorites]);
+ const contextual=contextualMoreCategory(t,excluded);
+
+ const compactNames=["Makeup & Cosmetics","Kids","Other"];
+ if(contextual)compactNames.push(contextual);
+
+ const compactMore=[];
+ compactNames.forEach(name=>{
+   if(allMore.includes(name)&&!compactMore.includes(name))compactMore.push(name)
+ });
+
+ const visibleMore=state.showAllCategories?allMore:compactMore;
+ const hiddenCount=Math.max(0,allMore.length-compactMore.length);
 
  screen.innerHTML=`<h1 class="page-title">What do you need to pack?</h1>
  <p class="page-subtitle">Remove anything you do not need before generating the list.</p>
@@ -465,7 +496,13 @@ function renderCategories(){
  `:""}
 
  <div class="section-title">More Categories</div>
- <div class="stack">${more.map(c=>categoryOption(c,selected.includes(c))).join("")}</div>
+ <div class="stack">${visibleMore.map(c=>categoryOption(c,selected.includes(c))).join("")}</div>
+
+ ${hiddenCount>0?`
+   <button id="toggleMoreCategories" class="show-more-categories-button">
+     ${state.showAllCategories?"Show Fewer Categories":`See More Categories (${hiddenCount})`}
+   </button>
+ `:""}
 
  <div class="button-row"><button id="createPackingList" class="primary-button">${state.editingExistingTrip?"Update List":"Create List"}</button></div>`;
 
@@ -489,20 +526,33 @@ function renderCategories(){
    }
  });
 
+ if(hiddenCount>0){
+   toggleMoreCategories.onclick=()=>{
+     state.showAllCategories=!state.showAllCategories;
+     renderCategories()
+   };
+ }
+
  createPackingList.onclick=()=>{
    t.categories=[...document.querySelectorAll(".category-checkbox:checked")].map(x=>x.value);
    if(!t.categories.length)return showToast("Choose at least one category");
    const items=createItems(t);
+
    if(state.editingExistingTrip){
-     const old=data.trips.find(x=>x.id===t.id);preserve(old,items);Object.assign(old,t,{items});state.activeTripId=old.id
+     const old=data.trips.find(x=>x.id===t.id);
+     preserve(old,items);
+     Object.assign(old,t,{items});
+     state.activeTripId=old.id
    }else{
      t.items=items;
      data.trips.unshift(t);
      state.activeTripId=t.id
    }
+
    saveData();
    state.editingExistingTrip=false;
    state.newTrip=null;
+   state.showAllCategories=false;
    state.page="packing";
    render()
  }
@@ -790,7 +840,7 @@ function renderGear(){
 
 function renderSettings(){
  screen.innerHTML='<h1 class="page-title">Settings</h1><div class="card"><p>Prototype settings.</p><p class="small-note">Resetting clears all test data, custom categories and custom items.</p><button id="resetPrototype" class="delete-button">Reset Prototype</button></div>';
- resetPrototype.onclick=()=>{if(confirm("Delete all saved trips and reset?")){localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(ONBOARDING_KEY);data=structuredClone(defaultData);state={page:"home",history:[],newTrip:null,activeTripId:null,editingExistingTrip:false};render()}}
+ resetPrototype.onclick=()=>{if(confirm("Delete all saved trips and reset?")){localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(ONBOARDING_KEY);data=structuredClone(defaultData);state={page:"home",history:[],newTrip:null,activeTripId:null,editingExistingTrip:false,showAllCategories:false};render()}}
 }
 function renderAbout(){
  screen.innerHTML=`<h1 class="page-title">About AllPacked</h1>
