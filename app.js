@@ -1,4 +1,4 @@
-const STORAGE_KEY="allpacked_v26";
+const STORAGE_KEY="allpacked_v27";
 const ONBOARDING_KEY="allpacked_onboarding_v1";
 
 const defaultData={
@@ -80,7 +80,7 @@ const packingDatabase={
 };
 
 let data=loadData();
-let state={page:"home",history:[],newTrip:null,activeTripId:null,editingExistingTrip:false,showAllCategories:false};
+let state={page:"home",history:[],newTrip:null,activeTripId:null,editingExistingTrip:false,showAllCategories:false,expandedShoppingTrips:{}};
 
 const screen=document.getElementById("screen");
 const menuButton=document.getElementById("menuBtn");
@@ -819,16 +819,68 @@ function renderShopping(){
    ),0);
  }
 
- const groups=data.trips.map(t=>({t,items:Object.entries(t.items).flatMap(([c,a])=>a.filter(x=>x.needToBuy>0).map(x=>({c,x})))})).filter(g=>g.items.length);
- screen.innerHTML=`<h1 class="page-title">Shopping List</h1><p class="page-subtitle">Check items while shopping. Buying does not automatically mark them packed.</p>
- ${groups.length?groups.map(g=>{const shoppingDone=g.items.every(({x})=>(x.bought||0)>=x.needToBuy);return`<section class="shopping-trip"><div class="section-title shopping-trip-title-link ${shoppingDone?"shopping-trip-complete":""}" data-open-shopping-trip="${g.t.id}">${shoppingDone?"\u2713 ":""}${g.t.emoji} ${g.t.name}</div>${g.items.map(({c,x})=>`<div class="shopping-item ${x.bought>=x.needToBuy?"bought":""}"><input type="checkbox" data-check data-trip="${g.t.id}" data-category="${esc(c)}" data-id="${x.id}" ${x.bought>=x.needToBuy?"checked":""}><div><div class="shopping-name">${x.name}</div><div class="shopping-small">${c}</div></div><div class="shopping-qty">\u00d7${x.needToBuy}</div></div>`).join("")}</section>`}).join(""):'<div class="empty">Nothing to buy right now.</div>'}`;
+ const groups=data.trips
+   .map(t=>({
+     t,
+     items:Object.entries(t.items).flatMap(([c,a])=>
+       a.filter(x=>x.needToBuy>0).map(x=>({c,x}))
+     )
+   }))
+   .filter(g=>g.items.length);
+
+ screen.innerHTML=`<h1 class="page-title">Shopping List</h1>
+ <p class="page-subtitle">Check items while shopping. Buying does not automatically mark them packed.</p>
+
+ ${groups.length?groups.map(g=>{
+   const shoppingDone=g.items.every(({x})=>(x.bought||0)>=x.needToBuy);
+   const expanded=!!state.expandedShoppingTrips[g.t.id];
+   const visibleItems=expanded?g.items:g.items.slice(0,4);
+   const hiddenCount=Math.max(0,g.items.length-4);
+
+   return`<section class="shopping-trip">
+     <div class="section-title shopping-trip-title-link ${shoppingDone?"shopping-trip-complete":""}" data-open-shopping-trip="${g.t.id}">
+       ${shoppingDone?"â ":""}${g.t.emoji} ${g.t.name}
+     </div>
+
+     ${visibleItems.map(({c,x})=>`
+       <div class="shopping-item ${x.bought>=x.needToBuy?"bought":""}">
+         <input type="checkbox" data-check data-trip="${g.t.id}" data-category="${esc(c)}" data-id="${x.id}" ${x.bought>=x.needToBuy?"checked":""}>
+         <div>
+           <div class="shopping-name">${x.name}</div>
+           <div class="shopping-small">${c}</div>
+         </div>
+         <div class="shopping-qty">Ã${x.needToBuy}</div>
+       </div>
+     `).join("")}
+
+     ${hiddenCount>0?`
+       <button class="list-expand-button" data-toggle-shopping-trip="${g.t.id}">
+         ${expanded?"Show Fewer Items":`See More Items (${hiddenCount})`}
+       </button>
+     `:""}
+   </section>`
+ }).join(""):'<div class="empty">Nothing to buy right now.</div>'}`;
+
  document.querySelectorAll("[data-open-shopping-trip]").forEach(b=>b.onclick=()=>{
    state.activeTripId=b.dataset.openShoppingTrip;
    state.history=["shopping"];
    state.page="packing";
    render()
  });
- document.querySelectorAll("[data-check]").forEach(b=>b.onchange=()=>{const t=data.trips.find(x=>x.id===b.dataset.trip),x=findItem(t,b.dataset.category,b.dataset.id);x.bought=b.checked?x.needToBuy:0;saveData();renderShopping()})
+
+ document.querySelectorAll("[data-toggle-shopping-trip]").forEach(b=>b.onclick=()=>{
+   const id=b.dataset.toggleShoppingTrip;
+   state.expandedShoppingTrips[id]=!state.expandedShoppingTrips[id];
+   renderShopping()
+ });
+
+ document.querySelectorAll("[data-check]").forEach(b=>b.onchange=()=>{
+   const t=data.trips.find(x=>x.id===b.dataset.trip);
+   const x=findItem(t,b.dataset.category,b.dataset.id);
+   x.bought=b.checked?x.needToBuy:0;
+   saveData();
+   renderShopping()
+ })
 }
 
 function renderGear(){
@@ -840,7 +892,7 @@ function renderGear(){
 
 function renderSettings(){
  screen.innerHTML='<h1 class="page-title">Settings</h1><div class="card"><p>Prototype settings.</p><p class="small-note">Resetting clears all test data, custom categories and custom items.</p><button id="resetPrototype" class="delete-button">Reset Prototype</button></div>';
- resetPrototype.onclick=()=>{if(confirm("Delete all saved trips and reset?")){localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(ONBOARDING_KEY);data=structuredClone(defaultData);state={page:"home",history:[],newTrip:null,activeTripId:null,editingExistingTrip:false,showAllCategories:false};render()}}
+ resetPrototype.onclick=()=>{if(confirm("Delete all saved trips and reset?")){localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(ONBOARDING_KEY);data=structuredClone(defaultData);state={page:"home",history:[],newTrip:null,activeTripId:null,editingExistingTrip:false,showAllCategories:false,expandedShoppingTrips:{}};render()}}
 }
 function renderAbout(){
  screen.innerHTML=`<h1 class="page-title">About AllPacked</h1>
