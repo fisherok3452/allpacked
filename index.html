@@ -1,106 +1,43 @@
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#f7f5ef">
-  <title>AllPacked Prototype</title>
-  <link rel="stylesheet" href="style.css?v=23">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AllPacked — Plan. Pack. Go.</title>
+  <meta name="description" content="AllPacked helps you organize trips, packing lists, and shopping items in one simple place.">
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-<div id="app">
-
-  <header class="topbar">
-
-    <button id="menuBtn" class="menu-button" aria-label="Open menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-
-    <div id="topTitle" class="top-title">
-      AllPacked
+<header>
+  <div class="wrap nav">
+    <div class="brand"><span class="logo">✓</span>AllPacked</div>
+    <nav><a href="support.html">Support</a><a href="privacy.html">Privacy</a></nav>
+  </div>
+</header>
+<main>
+  <section class="hero wrap">
+    <div class="logo">✓</div>
+    <h1>AllPacked</h1>
+    <p class="tag">Plan. Pack. Go.</p>
+    <p class="lead">A simple trip-packing companion that helps you create packing lists, track progress, and keep everything you still need to buy in one place.</p>
+    <div class="actions">
+      <a class="btn primary" href="support.html">Get Support</a>
+      <a class="btn secondary" href="privacy.html">Privacy Policy</a>
     </div>
-
-    <button id="backBtn" class="back-button hidden" aria-label="Go back">
-      ←
-    </button>
-
-  </header>
-
-
-  <main id="screen" class="screen"></main>
-
-
-  <div id="drawerOverlay" class="drawer-overlay hidden"></div>
-
-
-  <aside id="drawer" class="drawer">
-
-    <div class="drawer-header">
-
-      <div class="logo">
-        ✓
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <h2>Built to make packing easier</h2>
+      <div class="grid">
+        <div class="card"><div class="icon">🧳</div><h3>Trip packing lists</h3><p>Create and manage packing lists for different kinds of trips.</p></div>
+        <div class="card"><div class="icon">✅</div><h3>Track your progress</h3><p>See what is packed, what is still missing, and when you are ready to go.</p></div>
+        <div class="card"><div class="icon">🛒</div><h3>Shopping list</h3><p>Keep items you still need to buy separate from items you already packed.</p></div>
       </div>
-
-      <div>
-
-        <div class="drawer-title">
-          AllPacked
-        </div>
-
-        <div class="drawer-subtitle">
-          Plan. Pack. Go.
-        </div>
-
-      </div>
-
     </div>
-
-
-    <nav class="drawer-nav">
-
-      <button data-nav="home">
-        Home
-      </button>
-
-      <button data-nav="trips">
-        My Trips
-      </button>
-
-      <button data-nav="shopping">
-        Shopping List
-      </button>
-
-      <div class="drawer-divider"></div>
-
-      <button data-nav="settings">
-        Settings
-      </button>
-
-      <button data-nav="about">
-        About
-      </button>
-
-    </nav>
-
-
-    <div class="drawer-footer">
-      Prototype v0.31
-    </div>
-
-  </aside>
-
-
-  <div id="modalOverlay" class="modal-overlay hidden"></div>
-
-  <div id="toast" class="toast hidden"></div>
-
-</div>
-
-<script src="app.js?v=23"></script>
-
+  </section>
+  <section class="section"><div class="wrap"><div class="notice"><strong>AllPacked is free to use.</strong> Optional tips may be available inside the app for users who want to support future development. Tips are voluntary and do not unlock or restrict app features.</div></div></section>
+</main>
+<footer><div class="wrap"><a href="support.html">Support</a><a href="privacy.html">Privacy Policy</a><div style="margin-top:12px">© 2026 AllPacked</div></div></footer>
 </body>
 </html>
